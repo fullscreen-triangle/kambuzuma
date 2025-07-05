@@ -1,0 +1,221 @@
+# Benguela Biological Quantum Computing - Main Configuration
+# ============================================================
+
+[system]
+name = "Benguela Biological Quantum Computer"
+version = "0.1.0"
+mode = "production"  # development, staging, production
+log_level = "info"   # trace, debug, info, warn, error
+
+[quantum]
+# Quantum processing parameters
+coherence_time_ms = 5.0
+decoherence_threshold = 0.95
+entanglement_fidelity_min = 0.85
+measurement_timeout_us = 100
+error_correction_enabled = true
+
+# Quantum gate timings (microseconds)
+[quantum.gates]
+x_gate_time = 50
+cnot_gate_time = 120
+hadamard_gate_time = 80
+phase_gate_time = 30
+measurement_time = 10
+
+[biological]
+# Cell culture parameters
+cell_density_per_cm2 = 1000000
+culture_temperature_c = 37.0
+culture_ph = 7.4
+co2_percentage = 5.0
+humidity_percentage = 95.0
+
+# ATP energy constraints
+atp_energy_kj_per_mol = 30.5
+atp_synthesis_rate_per_s = 1000
+atp_consumption_per_operation = 50
+cell_death_threshold_atp = 100
+
+# Patch-clamp parameters
+[biological.patch_clamp]
+sampling_rate_hz = 100000
+voltage_resolution_uv = 10
+current_resolution_pa = 1
+seal_resistance_minimum_gohm = 1.0
+
+[hardware]
+# Hardware interface configuration
+usb_timeout_ms = 5000
+serial_baud_rate = 115200
+i2c_frequency_hz = 400000
+
+# National Instruments DAQmx
+[hardware.nidaqmx]
+device_name = "Dev1"
+analog_input_channels = ["ai0", "ai1", "ai2", "ai3"]
+analog_output_channels = ["ao0", "ao1"]
+digital_input_port = "port0"
+digital_output_port = "port1"
+sample_rate = 100000
+
+# Temperature control
+[hardware.temperature]
+target_temperature_c = 37.0
+tolerance_c = 0.1
+pid_kp = 1.0
+pid_ki = 0.1
+pid_kd = 0.01
+heating_element_pin = 18
+cooling_element_pin = 19
+temperature_sensor_pin = 4
+
+[networking]
+# API configuration
+[networking.api]
+host = "0.0.0.0"
+port = 8080
+max_connections = 1000
+request_timeout_s = 30
+
+# Quantum interface
+[networking.quantum_interface]
+host = "0.0.0.0"
+port = 8081
+max_qubits_per_request = 1000
+
+# Hardware interface
+[networking.hardware_interface]
+host = "0.0.0.0"
+port = 8082
+device_timeout_s = 10
+
+[database]
+# PostgreSQL configuration
+[database.postgres]
+host = "localhost"
+port = 5432
+database = "benguela"
+user = "benguela"
+password = "benguela_pass"
+max_connections = 100
+connection_timeout_s = 30
+
+# Redis configuration
+[database.redis]
+host = "localhost"
+port = 6379
+database = 0
+max_connections = 100
+connection_timeout_s = 5
+
+# InfluxDB for time-series data
+[database.influxdb]
+host = "localhost"
+port = 8086
+org = "benguela-org"
+bucket = "quantum-measurements"
+token = "benguela_influx_token"
+
+[monitoring]
+# Prometheus metrics
+[monitoring.prometheus]
+enabled = true
+host = "0.0.0.0"
+port = 9090
+scrape_interval_s = 15
+
+# Grafana dashboards
+[monitoring.grafana]
+enabled = true
+host = "0.0.0.0"
+port = 3000
+admin_password = "benguela_admin"
+
+# Performance metrics
+[monitoring.metrics]
+quantum_coherence_monitoring = true
+atp_consumption_tracking = true
+temperature_logging = true
+current_measurement_logging = true
+error_rate_tracking = true
+
+[safety]
+# Emergency shutdown configuration
+emergency_shutdown_enabled = true
+max_temperature_c = 45.0
+min_temperature_c = 30.0
+max_current_ma = 1000
+min_atp_threshold = 50
+cell_viability_threshold = 0.95
+
+# Safety check intervals (seconds)
+temperature_check_interval = 5
+current_monitoring_interval = 1
+cell_viability_check_interval = 60
+emergency_response_timeout = 2
+
+# Backup and recovery
+[backup]
+enabled = true
+backup_interval_hours = 6
+backup_retention_days = 30
+backup_location = "/opt/benguela/backups"
+quantum_state_backup = true
+database_backup = true
+configuration_backup = true
+
+[orchestration]
+# Neural network stages
+[orchestration.stages]
+query_processing_neurons = 100
+semantic_analysis_neurons = 75
+domain_knowledge_neurons = 200
+logical_reasoning_neurons = 125
+creative_synthesis_neurons = 100
+evaluation_neurons = 75
+integration_neurons = 50
+output_generation_neurons = 25
+
+# Processing parameters
+max_concurrent_tasks = 1000
+task_timeout_s = 300
+quantum_current_threshold_pa = 10
+thought_current_monitoring = true
+
+# Bayesian network orchestration
+[orchestration.bayesian]
+learning_rate = 0.01
+convergence_threshold = 0.001
+max_iterations = 1000
+prior_knowledge_weight = 0.1
+
+[development]
+# Development mode settings
+debug_mode = false
+hardware_simulation = false
+quantum_simulation = false
+mock_cell_cultures = false
+detailed_logging = true
+
+[deployment]
+# Production deployment settings
+container_name = "benguela-core"
+restart_policy = "unless-stopped"
+health_check_enabled = true
+health_check_interval_s = 30
+startup_timeout_s = 300
+
+# Resource limits
+[deployment.resources]
+memory_limit_gb = 32
+cpu_limit_cores = 16
+gpu_required = true
+storage_limit_gb = 1000
+
+# Environment variables
+[deployment.environment]
+BENGUELA_MODE = "production"
+RUST_LOG = "benguela=info"
+PYTHONPATH = "/opt/benguela"
+CUDA_VISIBLE_DEVICES = "0,1" 

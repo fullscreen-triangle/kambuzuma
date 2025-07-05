@@ -1,0 +1,193 @@
+# Benguela Biological Quantum Computing - Comprehensive .gitignore
+
+# Rust
+/target/
+Cargo.lock
+*.pdb
+*.exe
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+conda-meta/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Scientific data and results
+*.h5
+*.hdf5
+*.mat
+*.csv
+*.tsv
+*.xlsx
+*.parquet
+results/
+data/raw/
+data/processed/
+experiments/
+simulations/
+recordings/
+
+# Hardware calibration and configuration
+calibration/*.dat
+calibration/*.bin
+hardware/configs/*.json
+hardware/drivers/
+*.dll
+*.so.*
+
+# Quantum state data
+quantum_states/
+coherence_data/
+entanglement_logs/
+decoherence_measurements/
+
+# Biological data
+cell_cultures/
+patch_clamp_data/
+electrophysiology/
+*.abf
+*.axgx
+*.smr
+
+# Logs and monitoring
+logs/
+*.log
+*.out
+monitoring/
+metrics/
+traces/
+
+# Database files
+*.db
+*.sqlite3
+*.sqlite
+
+# Configuration files with secrets
+.env.local
+.env.production
+secrets.toml
+private_keys/
+certificates/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Deployment artifacts
+deploy/
+k8s/secrets/
+terraform.tfstate*
+.terraform/
+*.tfvars
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+scratch/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+
+# Compiled binaries
+benguela
+benguela-cli
+benguela-daemon
+*.exe
+*.bin
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Documentation build
+docs/_build/
+site/
+
+# Scientific software cache
+.matplotlib/
+.cache/
+.local/
+
+# Hardware drivers and libraries
+drivers/
+libs/
+vendor/
+
+# Large model files
+models/*.bin
+models/*.safetensors
+weights/
+checkpoints/
+
+# Profiling data
+*.prof
+profile_* 
