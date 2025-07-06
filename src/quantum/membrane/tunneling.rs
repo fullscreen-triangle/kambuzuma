@@ -257,6 +257,96 @@ pub enum TunnelingError {
     ParameterError(String),
 }
 
+/// Tunneling configuration
+#[derive(Debug, Clone)]
+pub struct TunnelingConfig {
+    /// Tunneling parameters
+    pub parameters: TunnelingParameters,
+    
+    /// Update frequency (Hz)
+    pub update_frequency: f64,
+    
+    /// Cache size limit
+    pub cache_size_limit: usize,
+    
+    /// Biological constraint checking enabled
+    pub biological_constraints_enabled: bool,
+}
+
+/// Tunneling state information
+#[derive(Debug, Clone)]
+pub struct TunnelingState {
+    /// Current quantum state
+    pub quantum_state: QuantumState,
+    
+    /// Current transmission coefficient
+    pub transmission_coefficient: f64,
+    
+    /// Current reflection coefficient
+    pub reflection_coefficient: f64,
+    
+    /// Energy consumption rate
+    pub energy_consumption_rate: f64,
+    
+    /// Biological constraint status
+    pub biological_constraints_valid: bool,
+}
+
+impl MembraneQuantumTunneling {
+    /// Get current state
+    pub async fn get_state(&self) -> Result<TunnelingState, TunnelingError> {
+        let quantum_state = self.quantum_state().await;
+        let transmission_coefficient = self.transmission_coefficient().await?;
+        let reflection_coefficient = self.reflection_coefficient().await?;
+        let energy_consumption_rate = self.calculate_energy_consumption_rate().await?;
+        let biological_constraints_valid = self.validate_biological_constraints().await.is_ok();
+        
+        Ok(TunnelingState {
+            quantum_state,
+            transmission_coefficient,
+            reflection_coefficient,
+            energy_consumption_rate,
+            biological_constraints_valid,
+        })
+    }
+    
+    /// Calculate energy consumption rate
+    async fn calculate_energy_consumption_rate(&self) -> Result<f64, TunnelingError> {
+        let params = self.parameters.read().await;
+        let state = self.quantum_state.read().await;
+        
+        // Energy consumption based on tunneling probability and quantum state evolution
+        let base_consumption = 1e-21; // Joules per second (very small for quantum processes)
+        let tunneling_factor = self.tunneling_probability().await;
+        let coherence_factor = state.probability_density;
+        
+        Ok(base_consumption * tunneling_factor * coherence_factor)
+    }
+}
+
+impl Default for TunnelingConfig {
+    fn default() -> Self {
+        Self {
+            parameters: TunnelingParameters::default(),
+            update_frequency: 1e6, // 1 MHz
+            cache_size_limit: 1000,
+            biological_constraints_enabled: true,
+        }
+    }
+}
+
+impl TunnelingConfig {
+    /// Validate configuration
+    pub fn is_valid(&self) -> bool {
+        self.update_frequency > 0.0 &&
+        self.cache_size_limit > 0 &&
+        self.parameters.barrier_height > 0.0 &&
+        self.parameters.membrane_thickness > 0.0 &&
+        self.parameters.effective_mass > 0.0 &&
+        self.parameters.temperature > 0.0
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
