@@ -473,7 +473,7 @@ PHYSICAL REALITY CHECKS:
 **The "harvesting" terminology refers to physically capturing quantum states at the moment of decoherence** - this is experimental quantum mechanics, not computational abstraction.
 
 
-### Key Evidence to Show Your Friend:
+
 
 1. **Patch-clamp recordings** showing real quantum tunneling currents
 2. **ATP consumption** - real energy depletion limits computation
