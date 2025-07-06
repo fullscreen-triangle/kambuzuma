@@ -33,7 +33,7 @@ pub mod quantum;
 pub mod neural;
 pub mod metacognition;
 pub mod autonomous;
-pub mod biological;
+pub mod biological_validation;
 pub mod mathematics;
 pub mod interfaces;
 pub mod utils;
@@ -96,7 +96,7 @@ pub struct KambuzumaConfig {
     pub autonomous_config: autonomous::AutonomousConfig,
     
     /// Biological validation parameters
-    pub biological_config: biological::BiologicalConfig,
+    pub biological_config: biological_validation::BiologicalValidationConfig,
     
     /// Performance constraints
     pub performance_config: PerformanceConfig,
@@ -147,7 +147,7 @@ impl Default for KambuzumaConfig {
             neural_config: neural::NeuralConfig::default(),
             metacognitive_config: metacognition::MetacognitiveConfig::default(),
             autonomous_config: autonomous::AutonomousConfig::default(),
-            biological_config: biological::BiologicalConfig::default(),
+            biological_config: biological_validation::BiologicalValidationConfig::default(),
             performance_config: PerformanceConfig::default(),
         }
     }
@@ -195,7 +195,7 @@ pub struct KambuzumaSystem {
     autonomous_subsystem: autonomous::AutonomousSubsystem,
     
     /// Biological validation subsystem
-    biological_subsystem: biological::BiologicalSubsystem,
+    biological_subsystem: biological_validation::BiologicalValidationSubsystem,
     
     /// System metrics and monitoring
     metrics: utils::monitoring::SystemMetrics,
@@ -215,7 +215,7 @@ impl KambuzumaSystem {
         let neural_subsystem = neural::NeuralSubsystem::new(&config.neural_config)?;
         let metacognitive_subsystem = metacognition::MetacognitiveSubsystem::new(&config.metacognitive_config)?;
         let autonomous_subsystem = autonomous::AutonomousSubsystem::new(&config.autonomous_config)?;
-        let biological_subsystem = biological::BiologicalSubsystem::new(&config.biological_config)?;
+        let biological_subsystem = biological_validation::BiologicalValidationSubsystem::new(&config.biological_config)?;
         
         // Initialize metrics system
         let metrics = utils::monitoring::SystemMetrics::new()?;
@@ -462,7 +462,7 @@ pub struct SystemState {
     pub autonomous_state: autonomous::AutonomousState,
     
     /// Biological subsystem state
-    pub biological_state: biological::BiologicalState,
+    pub biological_state: biological_validation::BiologicalValidationState,
     
     /// System metrics
     pub metrics: utils::monitoring::SystemMetrics,
