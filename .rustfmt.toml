@@ -1,0 +1,79 @@
+# Rustfmt configuration for Kambuzuma biological quantum computing system
+# Optimized for readability of complex quantum mechanical and biological code
+
+# Edition and basic settings
+edition = "2021"
+hard_tabs = false
+tab_spaces = 4
+
+# Line length for complex quantum equations and biological formulations
+max_width = 120
+comment_width = 100
+wrap_comments = true
+
+# Function and control flow formatting
+fn_args_layout = "Tall"
+brace_style = "SameLineWhere"
+control_brace_style = "AlwaysSameLine"
+
+# Import and use statement organization
+imports_layout = "Vertical" 
+imports_granularity = "Crate"
+reorder_imports = true
+group_imports = "StdExternalCrate"
+
+# Struct and enum formatting for quantum states and biological data
+struct_field_align_threshold = 20
+enum_discrim_align_threshold = 20
+struct_lit_single_line = false
+
+# Array and slice formatting for quantum state vectors
+array_width = 100
+chain_width = 80
+
+# Expression formatting for complex quantum calculations
+binop_separator = "Front"
+combine_control_expr = false
+match_arm_blocks = false
+match_block_trailing_comma = true
+
+# Where clause formatting for complex trait bounds
+where_single_line = false
+force_explicit_abi = true
+
+# Comment and documentation formatting
+normalize_comments = true
+normalize_doc_attributes = true
+format_doc_comments = true
+
+# String and literal formatting
+format_strings = true
+format_macro_matchers = true
+format_macro_bodies = true
+
+# Newline and whitespace settings
+blank_lines_upper_bound = 2
+blank_lines_lower_bound = 0
+empty_item_single_line = false
+newline_style = "Unix"
+
+# Special handling for complex biological and quantum code
+space_before_colon = false
+space_after_colon = true
+spaces_around_ranges = false
+type_punctuation_density = "Wide"
+
+# Configuration for biological validation and quantum processing modules
+unstable_features = true
+skip_children = false
+hide_parse_errors = false
+
+# Specialized formatting for mathematical expressions
+overflow_delimited_expr = true
+indent_style = "Block"
+trailing_comma = "Vertical"
+trailing_semicolon = false
+
+# Module and item organization
+reorder_modules = true
+reorder_impl_items = true 

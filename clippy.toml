@@ -1,0 +1,44 @@
+# Clippy configuration for Kambuzuma biological quantum computing system
+# High performance and safety requirements for quantum processing
+
+# Cognitive complexity threshold for biological neural processing functions
+cognitive-complexity-threshold = 50
+
+# Allow higher complexity for quantum state calculations
+type-complexity-threshold = 500
+
+# Strict mode for biological safety constraints
+# Ensure memory safety for real-time quantum processing
+avoid-breaking-exported-api = true
+msrv = "1.75.0"
+
+# Performance-critical sections (disable some pedantic lints)
+# Quantum tunneling calculations require precise floating-point operations
+blacklisted-names = ["foo", "bar", "baz", "tmp"]
+
+# Enable additional lints for biological validation
+extra-lints = [
+    "clippy::pedantic",
+    "clippy::nursery", 
+    "clippy::cargo",
+    "clippy::restriction"
+]
+
+# Biological quantum computing specific configurations
+allow-expect-in-tests = true
+allow-unwrap-in-tests = true
+
+# Quantum state precision requirements
+too-many-arguments-threshold = 15
+trivial-copy-size-limit = 256
+
+# ATP energy tracking and biological constraints
+enum-variant-size-threshold = 500
+literal-representation-threshold = 512
+
+# Neural processing pipeline configurations
+single-char-binding-names-threshold = 5
+too-many-lines-threshold = 200
+
+# Molecular dynamics and quantum coherence calculations may need higher limits
+vec-box-size-threshold = 8192 

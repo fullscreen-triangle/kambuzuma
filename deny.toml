@@ -1,0 +1,86 @@
+# Cargo-deny configuration for Kambuzuma biological quantum computing system
+# Enhanced security and dependency auditing for quantum processing
+
+[graph]
+targets = [
+    { triple = "x86_64-unknown-linux-gnu" },
+    { triple = "x86_64-apple-darwin" },
+    { triple = "aarch64-apple-darwin" },
+]
+all-features = true
+
+[advisories]
+vulnerability = "deny"
+unmaintained = "warn"
+yanked = "deny"
+notice = "warn"
+ignore = [
+    # Add specific advisory IDs to ignore if needed
+]
+
+[licenses]
+unlicensed = "deny"
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-DFS-2016",
+    "CC0-1.0",
+]
+deny = [
+    "GPL-2.0",
+    "GPL-3.0",
+    "AGPL-1.0",
+    "AGPL-3.0",
+]
+copyleft = "deny"
+allow-osi-fsf-free = "neither"
+default = "deny"
+confidence-threshold = 0.8
+
+[licenses.private]
+ignore = false
+registries = []
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+
+# Deny specific crates that could compromise biological safety or quantum coherence
+deny = [
+    # Memory-unsafe alternatives
+    { name = "openssl-sys", version = "*" },  # Use rustls instead
+    
+    # Potentially problematic for real-time quantum processing
+    { name = "lazy_static", version = "*" },  # Use once_cell instead
+]
+
+# Skip certain dependencies that are essential for biological quantum computing
+skip = [
+    # Scientific computing dependencies might trigger false positives
+    { name = "nalgebra", version = "*" },
+    { name = "ndarray", version = "*" },
+    { name = "rayon", version = "*" },
+]
+
+# Skip trees for complex scientific dependencies
+skip-tree = [
+    # Complex scientific dependency trees
+    { name = "plotly", version = "*" },
+    { name = "candle-core", version = "*" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = [
+    # Allow specific git dependencies for biological quantum computing
+    "https://github.com/huggingface/candle.git",
+] 
