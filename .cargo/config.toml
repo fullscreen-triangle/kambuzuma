@@ -1,0 +1,137 @@
+[build]
+# Default target for biological quantum computing
+# Optimized for x86_64 with AVX2 support for quantum calculations
+target = "x86_64-unknown-linux-gnu"
+jobs = 4
+
+# Incremental compilation for faster development
+incremental = true
+
+# Optimize for biological quantum computing performance
+[target.x86_64-unknown-linux-gnu]
+rustflags = [
+    "-C", "target-cpu=native",
+    "-C", "opt-level=3",
+    "-C", "lto=thin",
+    "-C", "codegen-units=1",
+    "-C", "panic=abort",
+    "-C", "force-frame-pointers=yes",
+    # Enable SIMD for quantum calculations
+    "-C", "target-feature=+avx2,+fma",
+    # Memory safety for real-time biological processing
+    "-D", "warnings",
+    "-D", "unsafe_code",
+]
+
+[target.x86_64-apple-darwin]
+rustflags = [
+    "-C", "target-cpu=native",
+    "-C", "opt-level=3",
+    "-C", "lto=thin",
+    "-C", "codegen-units=1",
+    "-C", "panic=abort",
+    "-C", "force-frame-pointers=yes",
+    # Apple Silicon optimizations
+    "-C", "target-feature=+neon",
+    "-D", "warnings",
+    "-D", "unsafe_code",
+]
+
+[target.aarch64-apple-darwin]
+rustflags = [
+    "-C", "target-cpu=native",
+    "-C", "opt-level=3",
+    "-C", "lto=thin",
+    "-C", "codegen-units=1",
+    "-C", "panic=abort",
+    "-C", "force-frame-pointers=yes",
+    # Apple Silicon M1/M2 optimizations
+    "-C", "target-feature=+neon,+fp-armv8",
+    "-D", "warnings",
+    "-D", "unsafe_code",
+]
+
+# Alternative registry for biological computing packages
+[registries]
+biopkg = { index = "https://github.com/rust-bio/registry-index" }
+
+# Source replacement for faster builds
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"
+
+# Profile configurations for biological quantum computing
+[profile.dev]
+opt-level = 1
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+rpath = false
+
+[profile.release]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+lto = "thin"
+panic = "abort"
+incremental = false
+codegen-units = 1
+rpath = false
+
+# Specialized profile for biological validation
+[profile.biological]
+inherits = "release"
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+
+# Specialized profile for quantum computing
+[profile.quantum]
+inherits = "release"
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+
+# Benchmarking profile
+[profile.bench]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+lto = "thin"
+panic = "abort"
+incremental = false
+codegen-units = 1
+
+# Test profile optimized for biological testing
+[profile.test]
+opt-level = 1
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+
+# Environment variables for biological quantum computing
+[env]
+RUST_BACKTRACE = "1"
+RUST_LOG = "kambuzuma=debug,biological_validation=trace"
+QUANTUM_COHERENCE_THRESHOLD = "0.95"
+ATP_ENERGY_CONSTRAINT = "30.5"
+MEMBRANE_TEMPERATURE = "310.15"
+BIOLOGICAL_VALIDATION_STRICT = "true"
+
+# Git configuration for dependency management
+[git]
+fetch-with-cli = true 
