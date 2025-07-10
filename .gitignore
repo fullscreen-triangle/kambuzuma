@@ -1,48 +1,9 @@
-# Benguela Biological Quantum Computing - Comprehensive .gitignore
-
-# Rust
+# Rust/Cargo build artifacts
 /target/
+**/*.rs.bk
 Cargo.lock
-*.pdb
-*.exe
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-.conda/
-conda-meta/
-
-# IDEs and editors
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
@@ -51,79 +12,69 @@ conda-meta/
 .DS_Store
 Thumbs.db
 
-# Jupyter Notebooks
-.ipynb_checkpoints
-*.ipynb
+# Biological quantum computing specific data files
+/data/quantum_states/
+/data/membrane_recordings/
+/data/atp_measurements/
+/logs/quantum_coherence/
+/logs/neural_processing/
+/cache/molecular_dynamics/
 
-# Scientific data and results
-*.h5
+# Scientific computing outputs
 *.hdf5
 *.mat
-*.csv
-*.tsv
-*.xlsx
-*.parquet
-results/
-data/raw/
-data/processed/
-experiments/
-simulations/
-recordings/
+*.npz
+/results/
+/experiments/
+/plots/
+/figures/
 
-# Hardware calibration and configuration
-calibration/*.dat
-calibration/*.bin
-hardware/configs/*.json
-hardware/drivers/
-*.dll
-*.so.*
-
-# Quantum state data
-quantum_states/
-coherence_data/
-entanglement_logs/
-decoherence_measurements/
-
-# Biological data
-cell_cultures/
-patch_clamp_data/
-electrophysiology/
-*.abf
-*.axgx
-*.smr
-
-# Logs and monitoring
-logs/
-*.log
-*.out
-monitoring/
-metrics/
-traces/
-
-# Database files
-*.db
-*.sqlite3
-*.sqlite
-
-# Configuration files with secrets
+# Configuration and secrets
+.env
 .env.local
 .env.production
-secrets.toml
-private_keys/
-certificates/
+config/local.toml
+config/secrets.toml
+*.pem
+*.key
 
-# Docker
-.dockerignore
-docker-compose.override.yml
+# Build and compilation artifacts
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+*.exe
 
-# Deployment artifacts
-deploy/
-k8s/secrets/
-terraform.tfstate*
-.terraform/
-*.tfvars
+# Documentation build outputs
+/target/doc/
+/docs/_build/
+/docs/site/
+*.pdf
+*.aux
+*.log
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
 
-# OS generated files
+# Testing artifacts
+/coverage/
+/target/llvm-cov-target/
+*.profraw
+*.profdata
+
+# Benchmarking results
+/target/criterion/
+/benches/results/
+
+# Temporary files
+/tmp/
+/temp/
+*.tmp
+*.temp
+
+# OS specific
 .DS_Store
 .DS_Store?
 ._*
@@ -132,62 +83,41 @@ terraform.tfstate*
 ehthumbs.db
 Thumbs.db
 
-# Temporary files
-*.tmp
-*.temp
-temp/
-tmp/
-scratch/
-
 # Backup files
 *.bak
 *.backup
 *~
 
-# Archive files
-*.zip
-*.tar.gz
-*.rar
-
-# Compiled binaries
-benguela
-benguela-cli
-benguela-daemon
-*.exe
-*.bin
-
-# Coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
-# Documentation build
-docs/_build/
-site/
-
-# Scientific software cache
-.matplotlib/
-.cache/
+# Local development
 .local/
+local/
 
-# Hardware drivers and libraries
-drivers/
-libs/
-vendor/
+# Container and virtualization
+.docker/
+.vagrant/
 
-# Large model files
-models/*.bin
-models/*.safetensors
-weights/
-checkpoints/
+# Package managers
+node_modules/
+.npm/
+.yarn/
 
-# Profiling data
-*.prof
-profile_* 
+# Python virtual environments (if any Python tools are used)
+venv/
+.venv/
+env/
+.env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Scientific data formats
+*.nc
+*.hdf
+*.h5
+*.fits
+
+# Quantum computing simulation outputs
+/simulations/
+/quantum_traces/
+/coherence_data/ 
