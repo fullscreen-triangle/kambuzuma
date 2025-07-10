@@ -37,6 +37,7 @@ pub mod biological_validation;
 pub mod mathematics;
 pub mod interfaces;
 pub mod utils;
+pub mod truth_approximation;
 
 // Re-export core types for convenience
 pub use quantum::membrane::tunneling::{MembraneQuantumTunneling, TunnelingParameters, QuantumState};
@@ -197,6 +198,9 @@ pub struct KambuzumaSystem {
     /// Biological validation subsystem
     biological_subsystem: biological_validation::BiologicalValidationSubsystem,
     
+    /// Truth approximation subsystem
+    truth_approximation_subsystem: truth_approximation::TruthApproximationEngine,
+    
     /// System metrics and monitoring
     metrics: utils::monitoring::SystemMetrics,
 }
@@ -216,6 +220,7 @@ impl KambuzumaSystem {
         let metacognitive_subsystem = metacognition::MetacognitiveSubsystem::new(&config.metacognitive_config)?;
         let autonomous_subsystem = autonomous::AutonomousSubsystem::new(&config.autonomous_config)?;
         let biological_subsystem = biological_validation::BiologicalValidationSubsystem::new(&config.biological_config)?;
+        let truth_approximation_subsystem = truth_approximation::TruthApproximationEngine::new()?;
         
         // Initialize metrics system
         let metrics = utils::monitoring::SystemMetrics::new()?;
@@ -227,6 +232,7 @@ impl KambuzumaSystem {
             metacognitive_subsystem,
             autonomous_subsystem,
             biological_subsystem,
+            truth_approximation_subsystem,
             metrics,
         })
     }
@@ -241,6 +247,7 @@ impl KambuzumaSystem {
         self.metacognitive_subsystem.start().await?;
         self.autonomous_subsystem.start().await?;
         self.biological_subsystem.start().await?;
+        self.truth_approximation_subsystem.start().await?;
         
         // Start metrics collection
         self.metrics.start().await?;
@@ -254,6 +261,7 @@ impl KambuzumaSystem {
         tracing::info!("Stopping Kambuzuma system...");
         
         // Stop subsystems in reverse order
+        self.truth_approximation_subsystem.stop().await?;
         self.biological_subsystem.stop().await?;
         self.autonomous_subsystem.stop().await?;
         self.metacognitive_subsystem.stop().await?;
@@ -300,6 +308,7 @@ impl KambuzumaSystem {
         let metacognitive_state = self.metacognitive_subsystem.get_state().await?;
         let autonomous_state = self.autonomous_subsystem.get_state().await?;
         let biological_state = self.biological_subsystem.get_state().await?;
+        let truth_approximation_state = self.truth_approximation_subsystem.get_state().await?;
         let metrics = self.metrics.get_current_metrics().await?;
         
         Ok(SystemState {
@@ -308,6 +317,7 @@ impl KambuzumaSystem {
             metacognitive_state,
             autonomous_state,
             biological_state,
+            truth_approximation_state,
             metrics,
         })
     }
@@ -463,6 +473,9 @@ pub struct SystemState {
     
     /// Biological subsystem state
     pub biological_state: biological_validation::BiologicalValidationState,
+    
+    /// Truth approximation subsystem state
+    pub truth_approximation_state: truth_approximation::TruthApproximationState,
     
     /// System metrics
     pub metrics: utils::monitoring::SystemMetrics,

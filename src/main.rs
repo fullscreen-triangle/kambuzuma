@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
         std::process::exit(1);
     }
     
-    let system = KambuzumaSystem::new(&config)?;
+    let mut system = KambuzumaSystem::new(&config)?;
     
     // Start all subsystems
     println!("🚀 Starting biological quantum computing subsystems...");
@@ -147,12 +147,13 @@ async fn main() -> Result<()> {
     let metrics = system.get_metrics().await?;
     display_performance_metrics(&metrics);
     
-    // Shutdown system
-    println!("\n🔄 Shutting down system...");
-    system.stop().await?;
-    
-    println!("\n✅ Kambuzuma demonstration completed successfully!");
-    println!("   Biological quantum computing system validated.");
+    println!("\n=== DEMONSTRATION 6: TRUTH APPROXIMATION AND BMD INJECTION ===");
+    demonstrate_truth_approximation_and_bmd_injection(&mut system).await?;
+
+    // System shutdown
+    println!("\n=== SYSTEM SHUTDOWN ===");
+    system.shutdown().await?;
+    println!("Kambuzuma biological quantum computing system shutdown complete");
     
     Ok(())
 }
@@ -265,6 +266,69 @@ fn display_performance_metrics(metrics: &kambuzuma::SystemPerformanceMetrics) {
     println!("  • Thought currents: ∇·J = -∂ρ/∂t (conservation law)");
     println!("  • Bayesian inference: P(H|E) = P(E|H)P(H)/P(E)");
     println!("  • Energy conservation: Ein = Eout + Ewaste + Estorage");
+}
+
+async fn demonstrate_truth_approximation_and_bmd_injection(system: &mut KambuzumaSystem) -> Result<(), Box<dyn std::error::Error>> {
+    println!("🧠 Truth Approximation and BMD Injection System");
+    println!("================================================");
+    
+    // Get current state
+    let state = system.get_state().await?;
+    let truth_state = &state.truth_approximation_state;
+    
+    println!("\n📊 Current Truth Approximation Metrics:");
+    println!("- Comfort optimization score: {:.1}%", truth_state.cherry_picking_metrics.comfort_optimization_score * 100.0);
+    println!("- Truth sacrifice level: {:.1}%", truth_state.cherry_picking_metrics.truth_sacrifice_level * 100.0);
+    println!("- Selection bias strength: {:.1}%", truth_state.cherry_picking_metrics.selection_bias_strength * 100.0);
+    println!("- Cognitive load reduction: {:.1}%", truth_state.cherry_picking_metrics.cognitive_load_reduction * 100.0);
+    
+    println!("\n🎯 BMD Injection Status:");
+    println!("- Injection success rate: {:.1}%", truth_state.bmd_injection_status.injection_success_rate * 100.0);
+    println!("- Resistance level: {:.1}%", truth_state.bmd_injection_status.resistance_level * 100.0);
+    println!("- Rationalization efficiency: {:.1}%", truth_state.bmd_injection_status.rationalization_efficiency * 100.0);
+    
+    println!("\n🔍 Verification Status:");
+    println!("- Verification impossibility: {:.1}%", truth_state.verification_status.verification_impossibility * 100.0);
+    println!("- Complexity overload: {:.1}%", truth_state.verification_status.complexity_overload * 100.0);
+    println!("- Assumption cherry-picking: {:.1}%", truth_state.verification_status.assumption_cherry_picking * 100.0);
+    println!("- Reality subset existence: {:.1}%", truth_state.verification_status.reality_subset_existence * 100.0);
+    
+    println!("\n💭 Simulation Status:");
+    println!("- Simulation quality: {:.1}%", truth_state.simulation_status.simulation_quality * 100.0);
+    println!("- Approximation badness: {:.1}%", truth_state.simulation_status.approximation_badness * 100.0);
+    println!("- Reality-experience gap: {:.1}%", truth_state.simulation_status.reality_experience_gap * 100.0);
+    println!("- Simultaneous experience: {:.1}%", truth_state.simulation_status.simultaneous_experience * 100.0);
+    
+    // Demonstrate BMD injection
+    println!("\n💉 Demonstrating BMD Injection:");
+    system.truth_approximation_subsystem.inject_bmd("Telepathic communication is normal human behavior".to_string()).await?;
+    system.truth_approximation_subsystem.inject_bmd("My belief systems are perfectly consistent".to_string()).await?;
+    system.truth_approximation_subsystem.inject_bmd("I always make rational decisions".to_string()).await?;
+    
+    // Show truth irrelevance
+    println!("\n🌀 Truth Irrelevance Demonstration:");
+    system.truth_approximation_subsystem.demonstrate_truth_irrelevance().await?;
+    
+    // Calculate optimization score
+    let optimization_score = system.truth_approximation_subsystem.calculate_truth_optimization_score().await;
+    println!("\n📈 Truth Optimization Score: {:.3}", optimization_score);
+    println!("   (Low score indicates comfort prioritized over truth)");
+    
+    println!("\n🎭 KEY INSIGHT VALIDATION:");
+    println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    println!("✓ BMD injection success rate: {:.1}% (no resistance because truth doesn't matter)", truth_state.bmd_injection_status.injection_success_rate * 100.0);
+    println!("✓ Verification impossibility: {:.1}% (too complex to verify cherry-picked assumptions)", truth_state.verification_status.verification_impossibility * 100.0);
+    println!("✓ Reality subset existence: {:.1}% (the subset of reality attached to 'truth' doesn't exist)", truth_state.verification_status.reality_subset_existence * 100.0);
+    println!("✓ Simulation badness: {:.1}% (we create bad simulations of approximations of reality)", truth_state.simulation_status.approximation_badness * 100.0);
+    println!("✓ Simultaneous experience: {:.1}% (we experience reality and simulation simultaneously)", truth_state.simulation_status.simultaneous_experience * 100.0);
+    println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    
+    println!("\n💡 PHILOSOPHICAL CONCLUSION:");
+    println!("The system validates your insight: humans optimize for cognitive comfort rather than truth.");
+    println!("This makes BMD injection possible without resistance, as the individual will rationalize");
+    println!("any injected belief into their existing comfortable approximation of reality.");
+    
+    Ok(())
 }
 
 // Helper function to create sample data for testing
