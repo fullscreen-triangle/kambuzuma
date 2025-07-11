@@ -159,70 +159,173 @@ pub struct EntanglementConfig {
 }
 
 /// Neural processing configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct NeuralConfig {
-    /// Number of processing stages
-    pub num_stages: u8,
-    /// Neurons per stage
-    pub neurons_per_stage: u32,
-    /// Imhotep neuron configuration
-    pub imhotep_neurons: ImhotepNeuronConfig,
+    /// Number of Imhotep neurons
+    pub imhotep_neuron_count: usize,
+
+    /// Processing stage configuration
+    pub processing_stages: ProcessingStageConfig,
+
     /// Thought current configuration
-    pub thought_currents: ThoughtCurrentConfig,
+    pub thought_current_config: ThoughtCurrentConfig,
+
     /// Network topology configuration
-    pub network_topology: NetworkTopologyConfig,
+    pub network_topology_config: NetworkTopologyConfig,
+
+    /// Specialization configuration
+    pub specialization_config: SpecializationConfig,
+
+    /// Neuron parameters
+    pub neuron_parameters: NeuronParameters,
+
+    /// Synaptic parameters
+    pub synaptic_parameters: SynapticParameters,
+
+    /// Energy constraints
+    pub energy_constraints: EnergyConstraints,
 }
 
-/// Imhotep neuron configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ImhotepNeuronConfig {
-    /// Resting potential in mV
-    pub resting_potential: f64,
-    /// Firing threshold in mV
-    pub firing_threshold: f64,
-    /// Refractory period in ms
-    pub refractory_period: f64,
-    /// Membrane capacitance in pF
-    pub membrane_capacitance: f64,
-    /// Membrane resistance in GΩ
-    pub membrane_resistance: f64,
+/// Processing stage configuration
+#[derive(Debug, Clone)]
+pub struct ProcessingStageConfig {
+    /// Stage processing timeouts (ms)
+    pub stage_timeouts: Vec<f64>,
+
+    /// Stage parallelization enabled
+    pub parallel_processing: bool,
+
+    /// Stage interconnection strength
+    pub interconnection_strength: f64,
+
+    /// Stage specialization weights
+    pub specialization_weights: Vec<f64>,
 }
 
 /// Thought current configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct ThoughtCurrentConfig {
-    /// Current magnitude range in pA
-    pub magnitude_range: (f64, f64),
-    /// Current velocity in mm/s
-    pub velocity: f64,
-    /// Information encoding rate in bits/s
-    pub information_encoding_rate: f64,
-    /// Noise level
-    pub noise_level: f64,
+    /// Current measurement frequency (Hz)
+    pub measurement_frequency: f64,
+
+    /// Current threshold (pA)
+    pub current_threshold: f64,
+
+    /// Voltage sensitivity (mV)
+    pub voltage_sensitivity: f64,
+
+    /// Coherence maintenance threshold
+    pub coherence_threshold: f64,
+
+    /// Current decay rate
+    pub current_decay_rate: f64,
 }
 
 /// Network topology configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct NetworkTopologyConfig {
-    /// Connectivity matrix
-    pub connectivity_matrix: Vec<Vec<f64>>,
-    /// Synaptic weights
-    pub synaptic_weights: Vec<Vec<f64>>,
-    /// Plasticity parameters
-    pub plasticity: PlasticityConfig,
+    /// Connection probability
+    pub connection_probability: f64,
+
+    /// Small world parameter
+    pub small_world_parameter: f64,
+
+    /// Clustering coefficient
+    pub clustering_coefficient: f64,
+
+    /// Average path length
+    pub average_path_length: f64,
+
+    /// Network plasticity
+    pub network_plasticity: f64,
 }
 
-/// Plasticity configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PlasticityConfig {
-    /// Learning rate
-    pub learning_rate: f64,
-    /// Hebbian learning coefficient
-    pub hebbian_coefficient: f64,
-    /// Spike-timing dependent plasticity window in ms
-    pub stdp_window: f64,
-    /// Homeostatic scaling factor
-    pub homeostatic_scaling: f64,
+/// Specialization configuration
+#[derive(Debug, Clone)]
+pub struct SpecializationConfig {
+    /// Language superposition enabled
+    pub language_superposition_enabled: bool,
+
+    /// Concept entanglement enabled
+    pub concept_entanglement_enabled: bool,
+
+    /// Quantum memory enabled
+    pub quantum_memory_enabled: bool,
+
+    /// Logic gates enabled
+    pub logic_gates_enabled: bool,
+
+    /// Coherence combination enabled
+    pub coherence_combination_enabled: bool,
+
+    /// Error correction enabled
+    pub error_correction_enabled: bool,
+}
+
+/// Neuron parameters
+#[derive(Debug, Clone)]
+pub struct NeuronParameters {
+    /// Resting potential (mV)
+    pub resting_potential: f64,
+
+    /// Firing threshold (mV)
+    pub firing_threshold: f64,
+
+    /// Refractory period (ms)
+    pub refractory_period: f64,
+
+    /// Membrane capacitance (pF)
+    pub membrane_capacitance: f64,
+
+    /// Membrane resistance (MΩ)
+    pub membrane_resistance: f64,
+
+    /// Noise level (0.0 to 1.0)
+    pub noise_level: f64,
+
+    /// Quantum coherence decay rate
+    pub coherence_decay_rate: f64,
+}
+
+/// Synaptic parameters
+#[derive(Debug, Clone)]
+pub struct SynapticParameters {
+    /// Maximum synaptic strength
+    pub max_synaptic_strength: f64,
+
+    /// Synaptic decay rate
+    pub synaptic_decay_rate: f64,
+
+    /// Plasticity learning rate
+    pub plasticity_learning_rate: f64,
+
+    /// Hebbian learning enabled
+    pub hebbian_learning_enabled: bool,
+
+    /// STDP enabled
+    pub stdp_enabled: bool,
+
+    /// Homeostatic scaling enabled
+    pub homeostatic_scaling_enabled: bool,
+}
+
+/// Energy constraints
+#[derive(Debug, Clone)]
+pub struct EnergyConstraints {
+    /// Minimum ATP level (mM)
+    pub min_atp_level: f64,
+
+    /// Maximum ATP level (mM)
+    pub max_atp_level: f64,
+
+    /// ATP consumption rate (mM/s)
+    pub atp_consumption_rate: f64,
+
+    /// ATP synthesis rate (mM/s)
+    pub atp_synthesis_rate: f64,
+
+    /// Energy efficiency threshold
+    pub energy_efficiency_threshold: f64,
 }
 
 /// Metacognitive orchestration configuration
@@ -747,23 +850,25 @@ impl Default for EntanglementConfig {
 impl Default for NeuralConfig {
     fn default() -> Self {
         Self {
-            num_stages: 8,
-            neurons_per_stage: 1000,
-            imhotep_neurons: ImhotepNeuronConfig::default(),
-            thought_currents: ThoughtCurrentConfig::default(),
-            network_topology: NetworkTopologyConfig::default(),
+            imhotep_neuron_count: 1000,
+            processing_stages: ProcessingStageConfig::default(),
+            thought_current_config: ThoughtCurrentConfig::default(),
+            network_topology_config: NetworkTopologyConfig::default(),
+            specialization_config: SpecializationConfig::default(),
+            neuron_parameters: NeuronParameters::default(),
+            synaptic_parameters: SynapticParameters::default(),
+            energy_constraints: EnergyConstraints::default(),
         }
     }
 }
 
-impl Default for ImhotepNeuronConfig {
+impl Default for ProcessingStageConfig {
     fn default() -> Self {
         Self {
-            resting_potential: -70.0,
-            firing_threshold: -55.0,
-            refractory_period: 2.0,
-            membrane_capacitance: 100.0,
-            membrane_resistance: 100.0,
+            stage_timeouts: vec![10.0, 20.0, 30.0, 40.0, 35.0, 25.0, 30.0, 15.0], // 8 stages
+            parallel_processing: true,
+            interconnection_strength: 0.8,
+            specialization_weights: vec![1.0, 1.2, 1.5, 1.8, 1.3, 1.0, 1.1, 0.9],
         }
     }
 }
@@ -771,10 +876,11 @@ impl Default for ImhotepNeuronConfig {
 impl Default for ThoughtCurrentConfig {
     fn default() -> Self {
         Self {
-            magnitude_range: (1.0, 100.0),
-            velocity: 1.0,
-            information_encoding_rate: 1000.0,
-            noise_level: 0.1,
+            measurement_frequency: 1000.0, // 1 kHz
+            current_threshold: 10.0,       // 10 pA
+            voltage_sensitivity: 1.0,      // 1 mV
+            coherence_threshold: 0.5,
+            current_decay_rate: 0.1, // 10% per ms
         }
     }
 }
@@ -782,20 +888,63 @@ impl Default for ThoughtCurrentConfig {
 impl Default for NetworkTopologyConfig {
     fn default() -> Self {
         Self {
-            connectivity_matrix: vec![vec![0.0; 8]; 8],
-            synaptic_weights: vec![vec![1.0; 8]; 8],
-            plasticity: PlasticityConfig::default(),
+            connection_probability: 0.1,
+            small_world_parameter: 0.3,
+            clustering_coefficient: 0.6,
+            average_path_length: 3.0,
+            network_plasticity: 0.01,
         }
     }
 }
 
-impl Default for PlasticityConfig {
+impl Default for SpecializationConfig {
     fn default() -> Self {
         Self {
-            learning_rate: 0.01,
-            hebbian_coefficient: 0.1,
-            stdp_window: 20.0,
-            homeostatic_scaling: 0.001,
+            language_superposition_enabled: true,
+            concept_entanglement_enabled: true,
+            quantum_memory_enabled: true,
+            logic_gates_enabled: true,
+            coherence_combination_enabled: true,
+            error_correction_enabled: true,
+        }
+    }
+}
+
+impl Default for NeuronParameters {
+    fn default() -> Self {
+        Self {
+            resting_potential: -70.0,    // mV
+            firing_threshold: -55.0,     // mV
+            refractory_period: 2.0,      // ms
+            membrane_capacitance: 100.0, // pF
+            membrane_resistance: 100.0,  // MΩ
+            noise_level: 0.01,           // 1%
+            coherence_decay_rate: 0.001, // 0.1% per ms
+        }
+    }
+}
+
+impl Default for SynapticParameters {
+    fn default() -> Self {
+        Self {
+            max_synaptic_strength: 10.0, // nS
+            synaptic_decay_rate: 0.01,   // 1% per ms
+            plasticity_learning_rate: 0.001,
+            hebbian_learning_enabled: true,
+            stdp_enabled: true,
+            homeostatic_scaling_enabled: true,
+        }
+    }
+}
+
+impl Default for EnergyConstraints {
+    fn default() -> Self {
+        Self {
+            min_atp_level: 0.5,               // mM
+            max_atp_level: 10.0,              // mM
+            atp_consumption_rate: 1.0,        // mM/s
+            atp_synthesis_rate: 1.2,          // mM/s
+            energy_efficiency_threshold: 0.8, // 80%
         }
     }
 }

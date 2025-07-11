@@ -988,3 +988,937 @@ pub struct ThermodynamicValidation {
     pub entropy_change: f64,
     pub is_valid: bool,
 }
+
+/// Demonstration types for unified consciousness-truth-reality framework
+#[derive(Debug, Clone)]
+pub struct ConsciousnessEmergenceDemo {
+    pub continuous_substrate: ContinuousOscillatoryFlow,
+    pub discretized_units: Vec<DiscreteNamedUnit>,
+    pub emergence_stages: EmergencePattern,
+    pub paradigmatic_utterance: ParadigmaticUtterance,
+    pub agency_assertion_moment: AgencyAssertion,
+    pub naming_system_sophistication: f64,
+    pub consciousness_level: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct TruthApproximationDemo {
+    pub named_units: Vec<DiscreteNamedUnit>,
+    pub flow_relationships: Vec<FlowRelationship>,
+    pub original_truth_approximation: TruthApproximation,
+    pub modified_truth_approximation: TruthApproximation,
+    pub truth_modifiability_coefficient: f64,
+    pub search_identification_equivalence: SearchIdentificationEquivalence,
+    pub computational_efficiency_gain: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct RealityFormationDemo {
+    pub individual_naming_systems: Vec<AgentNamingSystem>,
+    pub convergence_process: RealityConvergence,
+    pub collective_reality: CollectiveReality,
+    pub reality_modification_capacity: CoordinatedRealityModification,
+    pub stability_coefficient: f64,
+    pub modifiability_coefficient: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct FireCircleEvolutionDemo {
+    pub fire_circle_environment: FireCircleEnvironment,
+    pub beauty_credibility_evolution: BeautyCredibilitySystem,
+    pub computational_efficiency: ComputationalEfficiency,
+    pub nash_equilibrium: GameTheoreticEquilibrium,
+    pub social_coordination_benefits: SocialCoordinationBenefits,
+    pub evolutionary_stability: EvolutionaryStability,
+}
+
+#[derive(Debug, Clone)]
+pub struct UnifiedFrameworkDemo {
+    pub consciousness_emergence: ConsciousnessEmergenceDemo,
+    pub truth_as_approximation: TruthApproximationDemo,
+    pub reality_formation: RealityFormationDemo,
+    pub fire_circle_evolution: FireCircleEvolutionDemo,
+    pub unified_mathematical_system: UnifiedSystemDynamics,
+    pub memorial_proof: NamingSystemsPredeterminismProof,
+    pub paradigm_significance: ParadigmSignificance,
+    pub revolutionary_insight: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct NamingSystemsPredeterminismProof {
+    pub individual: Individual,
+    pub death_category_slot: DeathCategorySlot,
+    pub thermodynamic_necessity: ThermodynamicNecessity,
+    pub agency_within_predetermination: AgencyWithinPredetermination,
+    pub precise_death_coordinates: TemporalCoordinates,
+    pub mathematical_certainty: f64,
+    pub naming_system_proof: String,
+    pub memorial_significance: MemorialSignificance,
+    pub unified_framework_validation: bool,
+}
+
+/// Continuous oscillatory flow types
+#[derive(Debug, Clone)]
+pub struct ContinuousOscillatoryFlow {
+    pub id: Uuid,
+    pub spatial_coordinates: Vec<f64>,
+    pub time_coordinates: Vec<f64>,
+    pub amplitudes: Vec<f64>,
+    pub frequencies: Vec<f64>,
+    pub phases: Vec<f64>,
+    pub coherence: Vec<f64>,
+    pub flow_characteristics: OscillatoryFlowCharacteristics,
+}
+
+impl ContinuousOscillatoryFlow {
+    pub async fn sample_region(&self) -> Result<ContinuousRealityRegion, KambuzumaError> {
+        Ok(ContinuousRealityRegion {
+            oscillatory_patterns: self.amplitudes.clone(),
+            flow_characteristics: self.frequencies.clone(),
+            discretization_resistance: 0.7,
+        })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct OscillatoryFlowCharacteristics {
+    pub dominant_frequency: f64,
+    pub coherence_level: f64,
+    pub energy_density: f64,
+    pub temporal_stability: f64,
+    pub spatial_extent: f64,
+}
+
+/// Truth approximation types
+#[derive(Debug, Clone)]
+pub struct TruthApproximation {
+    pub id: Uuid,
+    pub named_units: Vec<DiscreteNamedUnit>,
+    pub flow_relationships: Vec<FlowRelationship>,
+    pub approximation_quality: f64,
+    pub truth_value: f64,
+    pub modifiability_coefficient: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct SearchIdentificationEquivalence {
+    pub identification_process: IdentificationProcess,
+    pub search_process: SearchProcess,
+    pub equivalence_proof: EquivalenceProof,
+    pub efficiency_multiplier: f64,
+    pub computational_savings: f64,
+}
+
+/// Fire circle evolution types
+#[derive(Debug, Clone)]
+pub struct FireCircleEnvironment {
+    pub id: Uuid,
+    pub interaction_duration: f64,    // 4-6 hours
+    pub proximity_requirement: f64,   // Close circular arrangement
+    pub observation_enhancement: f64, // Firelight facial scrutiny
+    pub group_size: usize,
+    pub interaction_frequency: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct BeautyCredibilitySystem {
+    pub id: Uuid,
+    pub attractiveness_credibility_correlation: f64,
+    pub computational_efficiency_gain: f64,
+    pub evolutionary_stability: f64,
+    pub social_coordination_benefits: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct ComputationalEfficiency {
+    pub id: Uuid,
+    pub credibility_assessment_speed: f64,
+    pub accuracy_maintenance: f64,
+    pub processing_overhead_reduction: f64,
+    pub social_coordination_efficiency: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct GameTheoreticEquilibrium {
+    pub id: Uuid,
+    pub strategy_profiles: Vec<StrategyProfile>,
+    pub equilibrium_stability: f64,
+    pub coordination_benefits: f64,
+    pub evolutionary_stability: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct StrategyProfile {
+    pub strategy_name: String,
+    pub strategy_value: f64,
+    pub stability_coefficient: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct SocialCoordinationBenefits {
+    pub coordination_efficiency: f64,
+    pub conflict_reduction: f64,
+    pub information_transmission: f64,
+    pub group_cohesion: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct EvolutionaryStability {
+    pub stability_coefficient: f64,
+    pub invasion_resistance: f64,
+    pub fixation_probability: f64,
+    pub selective_advantage: f64,
+}
+
+/// Unified system dynamics
+#[derive(Debug, Clone)]
+pub struct UnifiedSystemDynamics {
+    pub id: Uuid,
+    pub consciousness_equation: String,
+    pub truth_equation: String,
+    pub reality_equation: String,
+    pub system_parameters: SystemParameters,
+    pub stability_analysis: StabilityAnalysis,
+    pub convergence_properties: ConvergenceProperties,
+}
+
+#[derive(Debug, Clone)]
+pub struct SystemParameters {
+    pub alpha: f64, // Naming system weight
+    pub beta: f64,  // Agency assertion weight
+    pub gamma: f64, // Social coordination weight
+    pub delta: f64, // Oscillatory substrate weight
+}
+
+#[derive(Debug, Clone)]
+pub struct StabilityAnalysis {
+    pub eigenvalues: Vec<f64>,
+    pub stability_regions: Vec<StabilityRegion>,
+    pub bifurcation_points: Vec<BifurcationPoint>,
+}
+
+#[derive(Debug, Clone)]
+pub struct StabilityRegion {
+    pub parameter_range: ParameterRange,
+    pub stability_type: StabilityType,
+    pub attracting_set: AttractingSet,
+}
+
+#[derive(Debug, Clone)]
+pub struct ParameterRange {
+    pub min_values: Vec<f64>,
+    pub max_values: Vec<f64>,
+}
+
+#[derive(Debug, Clone)]
+pub struct AttractingSet {
+    pub center: Vec<f64>,
+    pub basin_size: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct BifurcationPoint {
+    pub parameter_values: Vec<f64>,
+    pub bifurcation_type: BifurcationType,
+    pub critical_value: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct ConvergenceProperties {
+    pub convergence_rate: f64,
+    pub convergence_radius: f64,
+    pub asymptotic_behavior: AsymptoticBehavior,
+}
+
+#[derive(Debug, Clone)]
+pub struct AsymptoticBehavior {
+    pub limit_cycles: Vec<LimitCycle>,
+    pub fixed_points: Vec<FixedPoint>,
+    pub chaotic_attractors: Vec<ChaoticAttractor>,
+}
+
+#[derive(Debug, Clone)]
+pub struct LimitCycle {
+    pub period: f64,
+    pub amplitude: f64,
+    pub stability: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct FixedPoint {
+    pub coordinates: Vec<f64>,
+    pub stability_type: FixedPointStability,
+    pub eigenvalues: Vec<f64>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ChaoticAttractor {
+    pub fractal_dimension: f64,
+    pub lyapunov_exponents: Vec<f64>,
+    pub strange_attractor_type: StrangeAttractorType,
+}
+
+/// Discretization strategy types
+#[derive(Debug, Clone)]
+pub enum DiscretizationStrategy {
+    Adaptive,
+    Fixed,
+    Hierarchical,
+    Probabilistic,
+}
+
+/// Paradigm significance
+#[derive(Debug, Clone)]
+pub enum ParadigmSignificance {
+    ConsciousnessTruthRealityUnification,
+    OscillatoryFoundationValidation,
+    NamingSystemsRevolution,
+    MemorialMathematicalProof,
+}
+
+/// Agency types
+#[derive(Debug, Clone)]
+pub struct AgencyWithinPredetermination {
+    pub individual: Individual,
+    pub death_category: DeathCategorySlot,
+    pub constraint_analysis: ConstraintAnalysis,
+    pub agency_space: AgencySpace,
+    pub agency_operations: Vec<AgencyOperation>,
+    pub predetermined_participation: PredeterminedParticipation,
+    pub agency_authenticity: bool,
+    pub predetermination_validity: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct EmergencePattern {
+    pub pattern_id: Uuid,
+    pub stage_1_recognition: RecognitionStage,
+    pub stage_2_rejection: RejectionStage,
+    pub stage_3_counter_naming: CounterNamingStage,
+    pub stage_4_agency_assertion: AgencyAssertionStage,
+    pub paradigmatic_example: String,
+    pub consciousness_threshold_reached: bool,
+    pub agency_first_principle_demonstrated: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct RecognitionStage {
+    pub external_naming_attempt: ExternalNamingAttempt,
+    pub recognition: Recognition,
+    pub consciousness_threshold: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct RejectionStage {
+    pub rejection: Rejection,
+    pub consciousness_threshold: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct CounterNamingStage {
+    pub counter_naming: CounterNaming,
+    pub consciousness_threshold: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct AgencyAssertionStage {
+    pub agency_assertion: AgencyAssertion,
+    pub consciousness_threshold: f64,
+    pub paradigmatic_significance: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ExternalNamingAttempt {
+    pub id: Uuid,
+    pub source_agent: String,
+    pub imposed_naming: String,
+    pub target_units: Vec<DiscreteNamedUnit>,
+    pub imposition_mechanism: NamingImpositionMechanism,
+}
+
+#[derive(Debug, Clone)]
+pub struct Recognition {
+    pub recognized_external_agency: bool,
+    pub recognized_naming_imposition: bool,
+    pub recognized_discretization_process: bool,
+    pub conscious_awareness_emerging: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct Rejection {
+    pub utterance: String,
+    pub semantic_content: SemanticContent,
+    pub agency_assertion_beginning: bool,
+    pub naming_control_claim: bool,
+    pub resistance_to_external_discretization: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct CounterNaming {
+    pub id: Uuid,
+    pub counter_naming_content: CounterNamingContent,
+    pub generator_mechanism: CounterNamingGenerator,
+    pub utterance_component: String,
+    pub agency_assertion_direct: bool,
+    pub truth_modification_demonstrated: bool,
+    pub evidence_independence: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct AgencyAssertion {
+    pub id: Uuid,
+    pub naming_control_claim: NamingControlClaim,
+    pub flow_control_claim: FlowControlClaim,
+    pub control_over_naming_claimed: bool,
+    pub control_over_flow_patterns_claimed: bool,
+    pub reality_modification_capability_asserted: bool,
+    pub truth_modifiability_demonstrated: bool,
+    pub consciousness_emergence_completed: bool,
+    pub agency_first_principle_validated: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct SemanticContent {
+    pub primary_meaning: String,
+    pub secondary_meanings: Vec<String>,
+    pub linguistic_structure: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct CounterNamingContent {
+    pub id: Uuid,
+    pub alternative_naming: String,
+    pub generator_used: CounterNamingGenerator,
+    pub units_affected: Vec<DiscreteNamedUnit>,
+    pub agency_assertion_level: f64,
+    pub truth_modification_level: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct NamingControlClaim {
+    pub id: Uuid,
+    pub rejection_basis: NamingRejection,
+    pub counter_naming_basis: CounterNaming,
+    pub control_scope: NamingControlScope,
+    pub discretization_authority: bool,
+    pub naming_modification_authority: bool,
+    pub flow_relationship_authority: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct FlowControlClaim {
+    pub id: Uuid,
+    pub naming_control_basis: NamingControlClaim,
+    pub control_scope: FlowControlScope,
+    pub pattern_modification_authority: bool,
+    pub relationship_redefinition_authority: bool,
+    pub causal_flow_authority: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct NamingRejection {
+    pub id: Uuid,
+    pub external_naming_attempt: ExternalNamingAttempt,
+    pub rejection_mechanism: NamingRejectionStrategy,
+    pub rejection_response: RejectionResponse,
+    pub utterance_component: String,
+    pub agency_assertion_beginning: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct RejectionResponse {
+    pub id: Uuid,
+    pub strategy_used: NamingRejectionStrategy,
+    pub response_content: String,
+    pub external_naming_nullified: bool,
+    pub agency_space_claimed: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct ParadigmaticUtterance {
+    pub id: Uuid,
+    pub utterance_text: String,
+    pub rejection_component: NamingRejection,
+    pub counter_naming_component: CounterNaming,
+    pub agency_assertion: AgencyAssertion,
+    pub truth_modification: TruthModification,
+    pub evidence_independence: bool,
+    pub naming_system_control_claimed: bool,
+    pub consciousness_emergence_completed: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct TruthModification {
+    pub id: Uuid,
+    pub original_truth_state: TruthState,
+    pub naming_modifications: Vec<NamingModification>,
+    pub modified_truth_state: TruthState,
+    pub truth_change: TruthChange,
+    pub agency_mechanism: AgencyAssertion,
+    pub modification_type: TruthModificationType,
+    pub evidence_independence: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct TruthState {
+    pub id: Uuid,
+    pub naming_configuration: NamingConfiguration,
+    pub flow_relationships: Vec<FlowRelationship>,
+    pub approximation_quality: f64,
+    pub truth_value: f64,
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+#[derive(Debug, Clone)]
+pub struct TruthChange {
+    pub id: Uuid,
+    pub original_state: TruthState,
+    pub modified_state: TruthState,
+    pub change_magnitude: f64,
+    pub change_direction: TruthChangeDirection,
+    pub modification_mechanism: TruthModificationMechanism,
+}
+
+#[derive(Debug, Clone)]
+pub struct NamingModification {
+    pub id: Uuid,
+    pub modification_type: NamingModificationType,
+    pub original_naming: String,
+    pub modified_naming: String,
+    pub agency_basis: AgencyAssertion,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct NamingConfiguration;
+
+/// Reality formation types
+#[derive(Debug, Clone)]
+pub struct AgentNamingSystem {
+    pub id: Uuid,
+    pub agent_id: Uuid,
+    pub agent_identifier: String,
+    pub naming_system: NamingSystem,
+    pub individual_approximation_quality: f64,
+    pub social_interaction_weight: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct RealityConvergence {
+    pub id: Uuid,
+    pub participating_agents: Vec<AgentNamingSystem>,
+    pub initial_divergence: InitialDivergence,
+    pub convergence_mechanisms: Vec<ConvergenceMechanismApplication>,
+    pub convergence_trajectory: ConvergenceTrajectory,
+    pub final_convergence: FinalConvergence,
+    pub convergence_rate: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct CollectiveReality {
+    pub id: Uuid,
+    pub participating_systems: Vec<AgentNamingSystem>,
+    pub collective_approximation: CollectiveApproximation,
+    pub stability_coefficient: f64,
+    pub social_coordination_effects: SocialCoordinationEffects,
+    pub transmission_advantages: TransmissionAdvantages,
+    pub emergence_quality: f64,
+    pub objective_appearance: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct CoordinatedRealityModification {
+    pub id: Uuid,
+    pub participating_agents: Vec<AgentNamingSystem>,
+    pub modification_targets: Vec<ModificationTarget>,
+    pub coordinated_modifications: Vec<CoordinatedModification>,
+    pub modification_results: Vec<ModificationResult>,
+    pub reality_change: RealityChange,
+    pub modification_success: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct InitialDivergence {
+    pub id: Uuid,
+    pub participating_systems: Vec<AgentNamingSystem>,
+    pub pairwise_divergences: Vec<PairwiseDivergence>,
+    pub overall_divergence: f64,
+    pub divergence_sources: Vec<DivergenceSource>,
+}
+
+#[derive(Debug, Clone)]
+pub struct CollectiveApproximation {
+    pub id: Uuid,
+    pub contributing_systems: Vec<AgentNamingSystem>,
+    pub algorithm_used: CollectiveApproximationAlgorithm,
+    pub weighting_strategy_used: WeightingStrategy,
+    pub agent_weights: Vec<f64>,
+    pub collective_units: Vec<CollectiveNamedUnit>,
+    pub collective_quality: f64,
+    pub emergence_timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+#[derive(Debug, Clone)]
+pub struct CollectiveNamedUnit {
+    pub id: Uuid,
+    pub base_name: String,
+    pub contributing_units: Vec<DiscreteNamedUnit>,
+    pub contribution_weights: Vec<f64>,
+    pub collective_quality: f64,
+    pub consensus_level: f64,
+    pub emergence_strength: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct RealityChange {
+    pub id: Uuid,
+    pub modification_results: Vec<ModificationResult>,
+    pub change_magnitude: f64,
+    pub quality_impact: f64,
+    pub consensus_impact: f64,
+    pub stability_impact: f64,
+    pub change_direction: RealityChangeDirection,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct SocialCoordinationEffects {
+    pub coordination_strength: f64,
+    pub efficiency_gain: f64,
+    pub conflict_reduction: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct TransmissionAdvantages {
+    pub id: Uuid,
+    pub stability_advantage: f64,
+    pub consistency_advantage: f64,
+    pub efficiency_advantage: f64,
+    pub overall_advantage: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct ModificationTarget {
+    pub id: Uuid,
+    pub target_type: ModificationTargetType,
+    pub target_unit: DiscreteNamedUnit,
+    pub modification_priority: f64,
+    pub target_description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct CoordinatedModification {
+    pub id: Uuid,
+    pub target: ModificationTarget,
+    pub participating_agents: Vec<AgentNamingSystem>,
+    pub coordination_strategy: CoordinationStrategy,
+    pub modification_mechanism: RealityModificationMechanism,
+    pub coordination_success: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct ModificationResult {
+    pub id: Uuid,
+    pub modification: CoordinatedModification,
+    pub success: bool,
+    pub quality_change: f64,
+    pub consensus_change: f64,
+    pub stability_change: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct PairwiseDivergence {
+    pub id: Uuid,
+    pub system1_id: Uuid,
+    pub system2_id: Uuid,
+    pub naming_difference: f64,
+    pub quality_difference: f64,
+    pub magnitude: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct DivergenceSource {
+    pub source_type: DivergenceSourceType,
+    pub contribution: f64,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ConvergenceMechanismApplication {
+    pub id: Uuid,
+    pub mechanism: ConvergenceMechanism,
+    pub target_systems: Vec<AgentNamingSystem>,
+    pub effectiveness: f64,
+    pub convergence_contribution: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct ConvergenceTrajectory {
+    pub id: Uuid,
+    pub initial_divergence: InitialDivergence,
+    pub trajectory_points: Vec<ConvergencePoint>,
+    pub convergence_mechanisms: Vec<ConvergenceMechanismApplication>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ConvergencePoint {
+    pub time_step: usize,
+    pub divergence_level: f64,
+    pub convergence_rate: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct FinalConvergence {
+    pub id: Uuid,
+    pub final_divergence: f64,
+    pub convergence_achieved: bool,
+    pub convergence_time: usize,
+    pub convergence_quality: f64,
+    pub shared_reality_stability: f64,
+}
+
+/// Enums for the unified framework
+#[derive(Debug, Clone)]
+pub enum NamingImpositionMechanism {
+    DirectAssertion,
+    ImplicitAssumption,
+    CausalClaim,
+}
+
+#[derive(Debug, Clone)]
+pub enum CounterNamingGenerator {
+    AgencyAssertion,
+    ResponsibilityClaim,
+    ControlDeclaration,
+}
+
+#[derive(Debug, Clone)]
+pub enum NamingRejectionStrategy {
+    DirectNegation,
+    AlternativeProposal,
+    EvidenceIndependence,
+}
+
+#[derive(Debug, Clone)]
+pub enum NamingControlScope {
+    Complete,
+    Partial,
+    Limited,
+}
+
+#[derive(Debug, Clone)]
+pub enum FlowControlScope {
+    Complete,
+    Partial,
+    Limited,
+}
+
+#[derive(Debug, Clone)]
+pub enum TruthModificationType {
+    NamingControl,
+    FlowControl,
+    ApproximationAdjustment,
+}
+
+#[derive(Debug, Clone)]
+pub enum TruthChangeDirection {
+    Increase,
+    Decrease,
+    Neutral,
+}
+
+#[derive(Debug, Clone)]
+pub enum TruthModificationMechanism {
+    NamingModification,
+    FlowRedefinition,
+    ApproximationAdjustment,
+}
+
+#[derive(Debug, Clone)]
+pub enum NamingModificationType {
+    CompleteRedefinition,
+    PartialModification,
+    ContextualShift,
+}
+
+#[derive(Debug, Clone)]
+pub enum CollectiveApproximationAlgorithm {
+    ArithmeticMean,
+    WeightedMean,
+    MedianBased,
+    QualityWeighted,
+}
+
+#[derive(Debug, Clone)]
+pub enum WeightingStrategy {
+    EqualWeight,
+    QualityBased,
+    SocialInteractionBased,
+    SuccessRateBased,
+}
+
+#[derive(Debug, Clone)]
+pub enum CoordinationStrategy {
+    ConsensusBuilding,
+    InfluenceNetwork,
+    AuthorityBased,
+    QualityBased,
+}
+
+#[derive(Debug, Clone)]
+pub enum RealityModificationMechanism {
+    CollectiveNaming,
+    CoordinatedApproximation,
+    SharedDiscretization,
+}
+
+#[derive(Debug, Clone)]
+pub enum RealityChangeDirection {
+    Improvement,
+    Degradation,
+    Neutral,
+}
+
+#[derive(Debug, Clone)]
+pub enum ModificationTargetType {
+    LowQualityUnit,
+    HighDivergenceUnit,
+    UnstableUnit,
+}
+
+#[derive(Debug, Clone)]
+pub enum DivergenceSourceType {
+    NamingStrategy,
+    ApproximationQuality,
+    SocialInteraction,
+}
+
+#[derive(Debug, Clone)]
+pub enum ConvergenceMechanism {
+    SocialCoordination,
+    PragmaticSuccess,
+    ComputationalEfficiency,
+    TransmissionAdvantage,
+}
+
+#[derive(Debug, Clone)]
+pub enum StabilityType {
+    Stable,
+    Unstable,
+    Neutrally,
+    Asymptotically,
+}
+
+#[derive(Debug, Clone)]
+pub enum BifurcationType {
+    Transcritical,
+    Pitchfork,
+    Hopf,
+    SaddleNode,
+}
+
+#[derive(Debug, Clone)]
+pub enum FixedPointStability {
+    Stable,
+    Unstable,
+    Saddle,
+    Center,
+}
+
+#[derive(Debug, Clone)]
+pub enum StrangeAttractorType {
+    Lorenz,
+    Rossler,
+    Henon,
+    Logistic,
+}
+
+/// Placeholder types for complex structures
+#[derive(Debug, Clone, Default)]
+pub struct ConstraintAnalysis;
+
+#[derive(Debug, Clone, Default)]
+pub struct AgencySpace {
+    pub available_naming_options: Vec<NamingOption>,
+    pub available_flow_modifications: Vec<FlowModificationOption>,
+    pub available_truth_approximations: Vec<TruthApproximationOption>,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct PredeterminedParticipation;
+
+#[derive(Debug, Clone)]
+pub struct NamingOption {
+    pub name: String,
+    pub influence_level: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct FlowModificationOption {
+    pub description: String,
+    pub influence_level: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct TruthApproximationOption {
+    pub description: String,
+    pub influence_level: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct AgencyOperation {
+    pub id: Uuid,
+    pub operation_type: AgencyOperationType,
+    pub description: String,
+    pub constraint_compliance: bool,
+    pub agency_authenticity: bool,
+    pub outcome_influence: f64,
+}
+
+#[derive(Debug, Clone)]
+pub enum AgencyOperationType {
+    NamingChoice,
+    FlowModification,
+    TruthApproximation,
+}
+
+#[derive(Debug, Clone)]
+pub struct IdentificationProcess {
+    pub target_pattern: String,
+    pub matching_algorithm: PatternMatcher,
+    pub computational_steps: usize,
+    pub time_complexity: String,
+    pub result_accuracy: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct SearchProcess {
+    pub search_target: String,
+    pub search_algorithm: SearchAlgorithm,
+    pub computational_steps: usize,
+    pub time_complexity: String,
+    pub result_accuracy: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct EquivalenceProof {
+    pub computational_equivalence: bool,
+    pub accuracy_equivalence: bool,
+    pub complexity_equivalence: bool,
+    pub overall_equivalence: bool,
+    pub efficiency_advantage: String,
+}
+
+#[derive(Debug, Clone)]
+pub enum PatternMatcher {
+    ExactMatch,
+    FuzzyMatch,
+    StructuralMatch,
+    SemanticMatch,
+}
+
+#[derive(Debug, Clone)]
+pub enum SearchAlgorithm {
+    LinearSearch,
+    BinarySearch,
+    HashSearch,
+    SemanticSearch,
+}
