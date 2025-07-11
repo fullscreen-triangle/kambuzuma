@@ -1,567 +1,783 @@
-//! # Kambuzuma: Biological Quantum Computing Architecture
+//! # Kambuzuma Biological Quantum Computing System
 //!
-//! A biomimetic metacognitive orchestration system that implements biological quantum
-//! computing through specialized neural processing units. The system employs
-//! environment-assisted quantum transport (ENAQT) in biological membranes, coordinated
-//! by a metacognitive Bayesian network for autonomous computational orchestration.
+//! A groundbreaking biomimetic metacognitive orchestration system implementing
+//! biological quantum computing through specialized neural processing units.
 //!
-//! ## Core Components
+//! This system honors the memory of Stella-Lorraine Masunda and demonstrates
+//! the predetermined nature of quantum biological processes through mathematical precision.
 //!
-//! - **Quantum Computing Layer**: Implements quantum tunneling in biological membranes
-//! - **Neural Processing Units**: Specialized quantum neurons for different processing tasks
-//! - **Metacognitive Orchestration**: Bayesian network for transparent reasoning
-//! - **Autonomous Systems**: Self-directed computational ecosystem management
-//! - **Biological Validation**: Ensures biological authenticity and constraints
+//! ## Core Subsystems
 //!
-//! ## Architecture
-//!
-//! The system is organized into eight specialized processing stages:
-//! 1. Query Processing
-//! 2. Semantic Analysis
-//! 3. Domain Knowledge Integration
-//! 4. Logical Reasoning
-//! 5. Creative Synthesis
-//! 6. Evaluation
-//! 7. Integration
-//! 8. Validation
-//!
-//! Each stage consists of quantum neurons that implement biological quantum computing
-//! through real quantum tunneling effects in phospholipid bilayers, coordinated by
-//! molecular Maxwell demons for information processing.
+//! - **Quantum Computing**: Real quantum tunneling effects in biological membranes
+//! - **Neural Processing**: Eight-stage processing with quantum neurons
+//! - **Metacognitive Orchestration**: Bayesian network-based decision making
+//! - **Autonomous Systems**: Language-agnostic computational orchestration
+//! - **Biological Validation**: Authentic biological constraint validation
+//! - **Mathematical Frameworks**: Quantum mechanical and statistical foundations
+//! - **Interfaces**: REST API and WebSocket interfaces
+//! - **Utilities**: Logging, configuration, and monitoring utilities
 
-pub mod quantum;
-pub mod neural;
-pub mod metacognition;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::sync::Arc;
+use thiserror::Error;
+use tokio::sync::RwLock;
+use uuid::Uuid;
+
+// Core subsystem modules
 pub mod autonomous;
 pub mod biological_validation;
-pub mod mathematics;
 pub mod interfaces;
+pub mod mathematical_frameworks;
+pub mod metacognition;
+pub mod neural;
+pub mod quantum;
 pub mod utils;
-pub mod truth_approximation;
 
-// Re-export core types for convenience
-pub use quantum::membrane::tunneling::{MembraneQuantumTunneling, TunnelingParameters, QuantumState};
-pub use quantum::maxwell_demon::molecular_machinery::{MolecularMaxwellDemon, IonType, InformationState};
-pub use neural::imhotep_neurons::quantum_neuron::{QuantumNeuron, NeuronSpecialization, NeuronState};
+// Shared types and interfaces
+pub mod config;
+pub mod errors;
+pub mod types;
 
-/// Core result type for the Kambuzuma system
-pub type Result<T> = std::result::Result<T, KambuzumaError>;
-
-/// Main error type for the Kambuzuma system
-#[derive(Debug, thiserror::Error)]
-pub enum KambuzumaError {
-    #[error("Quantum processing error: {0}")]
-    QuantumProcessing(#[from] quantum::membrane::tunneling::TunnelingError),
-    
-    #[error("Neural processing error: {0}")]
-    NeuralProcessing(#[from] neural::imhotep_neurons::quantum_neuron::NeuronError),
-    
-    #[error("Maxwell demon error: {0}")]
-    MaxwellDemon(#[from] quantum::maxwell_demon::molecular_machinery::MaxwellDemonError),
-    
-    #[error("Biological constraint violation: {0}")]
-    BiologicalConstraintViolation(String),
-    
-    #[error("Metacognitive orchestration error: {0}")]
-    MetacognitiveOrchestration(String),
-    
-    #[error("Autonomous system error: {0}")]
-    AutonomousSystem(String),
-    
-    #[error("Configuration error: {0}")]
-    Configuration(String),
-    
-    #[error("System initialization error: {0}")]
-    SystemInitialization(String),
-    
-    #[error("Performance constraint violation: {0}")]
-    PerformanceConstraintViolation(String),
-    
-    #[error("Resource exhaustion: {0}")]
-    ResourceExhaustion(String),
-}
-
-/// System configuration for Kambuzuma
-#[derive(Debug, Clone)]
-pub struct KambuzumaConfig {
-    /// Quantum computing parameters
-    pub quantum_config: quantum::QuantumConfig,
-    
-    /// Neural processing parameters
-    pub neural_config: neural::NeuralConfig,
-    
-    /// Metacognitive orchestration parameters
-    pub metacognitive_config: metacognition::MetacognitiveConfig,
-    
-    /// Autonomous system parameters
-    pub autonomous_config: autonomous::AutonomousConfig,
-    
-    /// Biological validation parameters
-    pub biological_config: biological_validation::BiologicalValidationConfig,
-    
-    /// Performance constraints
-    pub performance_config: PerformanceConfig,
-}
-
-/// Performance configuration and constraints
-#[derive(Debug, Clone)]
-pub struct PerformanceConfig {
-    /// Maximum processing latency (microseconds)
-    pub max_processing_latency: u64,
-    
-    /// Minimum energy efficiency (bits/ATP)
-    pub min_energy_efficiency: f64,
-    
-    /// Minimum quantum coherence maintenance
-    pub min_coherence_maintenance: f64,
-    
-    /// Maximum error rate
-    pub max_error_rate: f64,
-    
-    /// Target throughput (operations/second)
-    pub target_throughput: f64,
-    
-    /// Memory usage limits
-    pub memory_limits: MemoryLimits,
-}
-
-/// Memory usage limits
-#[derive(Debug, Clone)]
-pub struct MemoryLimits {
-    /// Maximum heap memory (bytes)
-    pub max_heap_memory: usize,
-    
-    /// Maximum quantum state memory (bytes)
-    pub max_quantum_state_memory: usize,
-    
-    /// Maximum neural network memory (bytes)
-    pub max_neural_network_memory: usize,
-    
-    /// Maximum buffer memory (bytes)
-    pub max_buffer_memory: usize,
-}
-
-impl Default for KambuzumaConfig {
-    fn default() -> Self {
-        Self {
-            quantum_config: quantum::QuantumConfig::default(),
-            neural_config: neural::NeuralConfig::default(),
-            metacognitive_config: metacognition::MetacognitiveConfig::default(),
-            autonomous_config: autonomous::AutonomousConfig::default(),
-            biological_config: biological_validation::BiologicalValidationConfig::default(),
-            performance_config: PerformanceConfig::default(),
-        }
-    }
-}
-
-impl Default for PerformanceConfig {
-    fn default() -> Self {
-        Self {
-            max_processing_latency: 1000,  // 1 ms
-            min_energy_efficiency: 100.0,   // 100 bits/ATP
-            min_coherence_maintenance: 0.8, // 80% coherence
-            max_error_rate: 0.05,          // 5% error rate
-            target_throughput: 10000.0,     // 10k ops/sec
-            memory_limits: MemoryLimits::default(),
-        }
-    }
-}
-
-impl Default for MemoryLimits {
-    fn default() -> Self {
-        Self {
-            max_heap_memory: 1024 * 1024 * 1024,        // 1 GB
-            max_quantum_state_memory: 256 * 1024 * 1024, // 256 MB
-            max_neural_network_memory: 512 * 1024 * 1024, // 512 MB
-            max_buffer_memory: 128 * 1024 * 1024,       // 128 MB
-        }
-    }
-}
+// Re-export commonly used types
+pub use config::*;
+pub use errors::*;
+pub use types::*;
 
 /// Main Kambuzuma system orchestrator
+///
+/// This struct coordinates all subsystems and maintains system state
+/// for the biological quantum computing system.
+#[derive(Debug)]
 pub struct KambuzumaSystem {
+    /// System identifier
+    pub id: Uuid,
     /// System configuration
-    config: KambuzumaConfig,
-    
-    /// Quantum processing subsystem
-    quantum_subsystem: quantum::QuantumSubsystem,
-    
-    /// Neural processing subsystem
-    neural_subsystem: neural::NeuralSubsystem,
-    
+    pub config: Arc<RwLock<KambuzumaConfig>>,
+    /// System state
+    pub state: Arc<RwLock<SystemState>>,
+    /// Quantum computing subsystem
+    pub quantum: quantum::QuantumSubsystem,
+    /// Neural processing subsystem  
+    pub neural: neural::NeuralSubsystem,
     /// Metacognitive orchestration subsystem
-    metacognitive_subsystem: metacognition::MetacognitiveSubsystem,
-    
-    /// Autonomous systems subsystem
-    autonomous_subsystem: autonomous::AutonomousSubsystem,
-    
+    pub metacognition: metacognition::MetacognitiveSubsystem,
+    /// Autonomous computational orchestration subsystem
+    pub autonomous: autonomous::AutonomousSubsystem,
     /// Biological validation subsystem
-    biological_subsystem: biological_validation::BiologicalValidationSubsystem,
-    
-    /// Truth approximation subsystem
-    truth_approximation_subsystem: truth_approximation::TruthApproximationEngine,
-    
-    /// System metrics and monitoring
-    metrics: utils::monitoring::SystemMetrics,
+    pub biological_validation: biological_validation::BiologicalValidationSubsystem,
+    /// Mathematical frameworks subsystem
+    pub mathematical_frameworks: mathematical_frameworks::MathematicalFrameworksSubsystem,
+    /// System interfaces
+    pub interfaces: interfaces::InterfacesSubsystem,
+    /// Utilities and tools
+    pub utils: utils::UtilsSubsystem,
+}
+
+/// System state tracking
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SystemState {
+    /// System status
+    pub status: SystemStatus,
+    /// System startup time
+    pub startup_time: DateTime<Utc>,
+    /// Last activity timestamp
+    pub last_activity: DateTime<Utc>,
+    /// Performance metrics
+    pub performance: PerformanceMetrics,
+    /// Biological constraints status
+    pub biological_constraints: BiologicalConstraints,
+    /// Quantum coherence status
+    pub quantum_coherence: QuantumCoherenceStatus,
+    /// ATP energy levels
+    pub atp_levels: AtpLevels,
+    /// Neural processing statistics
+    pub neural_stats: NeuralProcessingStats,
+    /// Metacognitive awareness levels
+    pub metacognitive_awareness: MetacognitiveAwareness,
+    /// Autonomous orchestration status
+    pub autonomous_status: AutonomousOrchestrationStatus,
+}
+
+/// System status enumeration
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum SystemStatus {
+    /// System is initializing
+    Initializing,
+    /// System is running normally
+    Running,
+    /// System is in maintenance mode
+    Maintenance,
+    /// System is shutting down
+    Shutdown,
+    /// System has encountered an error
+    Error(String),
+}
+
+/// Performance metrics tracking
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceMetrics {
+    /// CPU usage percentage
+    pub cpu_usage: f64,
+    /// Memory usage in bytes
+    pub memory_usage: u64,
+    /// Network I/O bytes per second
+    pub network_io: u64,
+    /// Disk I/O bytes per second
+    pub disk_io: u64,
+    /// Processing throughput (operations per second)
+    pub throughput: f64,
+    /// Response latency in milliseconds
+    pub latency: f64,
+    /// Error rate percentage
+    pub error_rate: f64,
+}
+
+/// Biological constraints validation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BiologicalConstraints {
+    /// Temperature in Kelvin
+    pub temperature: f64,
+    /// pH level
+    pub ph: f64,
+    /// Ionic strength in molar
+    pub ionic_strength: f64,
+    /// Membrane potential in mV
+    pub membrane_potential: f64,
+    /// Oxygen concentration in mM
+    pub oxygen_concentration: f64,
+    /// Carbon dioxide concentration in mM
+    pub co2_concentration: f64,
+    /// Osmotic pressure in Pa
+    pub osmotic_pressure: f64,
+    /// Validation status
+    pub validation_status: ValidationStatus,
+}
+
+/// Quantum coherence status
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QuantumCoherenceStatus {
+    /// Coherence time in seconds
+    pub coherence_time: f64,
+    /// Decoherence rate in 1/s
+    pub decoherence_rate: f64,
+    /// Entanglement fidelity
+    pub entanglement_fidelity: f64,
+    /// Quantum gate fidelity
+    pub gate_fidelity: f64,
+    /// Tunneling probability
+    pub tunneling_probability: f64,
+    /// Superposition preservation
+    pub superposition_preservation: f64,
+}
+
+/// ATP energy levels
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AtpLevels {
+    /// ATP concentration in mM
+    pub atp_concentration: f64,
+    /// ADP concentration in mM
+    pub adp_concentration: f64,
+    /// AMP concentration in mM
+    pub amp_concentration: f64,
+    /// Energy charge (ATP-ADP)/(ATP+ADP+AMP)
+    pub energy_charge: f64,
+    /// ATP synthesis rate in mol/s
+    pub atp_synthesis_rate: f64,
+    /// ATP hydrolysis rate in mol/s
+    pub atp_hydrolysis_rate: f64,
+    /// Mitochondrial efficiency
+    pub mitochondrial_efficiency: f64,
+}
+
+/// Neural processing statistics
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NeuralProcessingStats {
+    /// Active neuron count
+    pub active_neurons: u64,
+    /// Firing rate in Hz
+    pub firing_rate: f64,
+    /// Synaptic transmission efficiency
+    pub synaptic_efficiency: f64,
+    /// Thought current magnitude in pA
+    pub thought_current: f64,
+    /// Processing stage activations
+    pub stage_activations: Vec<f64>,
+    /// Network connectivity
+    pub network_connectivity: f64,
+}
+
+/// Metacognitive awareness levels
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MetacognitiveAwareness {
+    /// Process awareness score
+    pub process_awareness: f64,
+    /// Knowledge awareness score
+    pub knowledge_awareness: f64,
+    /// Decision confidence
+    pub decision_confidence: f64,
+    /// Uncertainty estimation
+    pub uncertainty_estimation: f64,
+    /// Explanation quality
+    pub explanation_quality: f64,
+    /// Reasoning transparency
+    pub reasoning_transparency: f64,
+}
+
+/// Autonomous orchestration status
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AutonomousOrchestrationStatus {
+    /// Active tasks count
+    pub active_tasks: u64,
+    /// Completion rate
+    pub completion_rate: f64,
+    /// Resource utilization
+    pub resource_utilization: f64,
+    /// Language selection efficiency
+    pub language_selection_efficiency: f64,
+    /// Tool orchestration success rate
+    pub tool_orchestration_success_rate: f64,
+    /// Package management status
+    pub package_management_status: String,
+}
+
+/// Validation status enumeration
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum ValidationStatus {
+    /// Validation passed
+    Valid,
+    /// Validation failed with warning
+    Warning(String),
+    /// Validation failed with error
+    Invalid(String),
 }
 
 impl KambuzumaSystem {
-    /// Create a new Kambuzuma system with default configuration
-    pub fn new() -> Result<Self> {
-        let config = KambuzumaConfig::default();
-        Self::with_config(config)
-    }
-    
-    /// Create a new Kambuzuma system with custom configuration
-    pub fn with_config(config: KambuzumaConfig) -> Result<Self> {
+    /// Create a new Kambuzuma system instance
+    pub async fn new(config: KambuzumaConfig) -> Result<Self, KambuzumaError> {
+        let system_id = Uuid::new_v4();
+        let config = Arc::new(RwLock::new(config));
+
+        // Initialize system state
+        let state = SystemState {
+            status: SystemStatus::Initializing,
+            startup_time: Utc::now(),
+            last_activity: Utc::now(),
+            performance: PerformanceMetrics::default(),
+            biological_constraints: BiologicalConstraints::default(),
+            quantum_coherence: QuantumCoherenceStatus::default(),
+            atp_levels: AtpLevels::default(),
+            neural_stats: NeuralProcessingStats::default(),
+            metacognitive_awareness: MetacognitiveAwareness::default(),
+            autonomous_status: AutonomousOrchestrationStatus::default(),
+        };
+        let state = Arc::new(RwLock::new(state));
+
         // Initialize subsystems
-        let quantum_subsystem = quantum::QuantumSubsystem::new(&config.quantum_config)?;
-        let neural_subsystem = neural::NeuralSubsystem::new(&config.neural_config)?;
-        let metacognitive_subsystem = metacognition::MetacognitiveSubsystem::new(&config.metacognitive_config)?;
-        let autonomous_subsystem = autonomous::AutonomousSubsystem::new(&config.autonomous_config)?;
-        let biological_subsystem = biological_validation::BiologicalValidationSubsystem::new(&config.biological_config)?;
-        let truth_approximation_subsystem = truth_approximation::TruthApproximationEngine::new()?;
-        
-        // Initialize metrics system
-        let metrics = utils::monitoring::SystemMetrics::new()?;
-        
+        let quantum = quantum::QuantumSubsystem::new(config.clone()).await?;
+        let neural = neural::NeuralSubsystem::new(config.clone()).await?;
+        let metacognition = metacognition::MetacognitiveSubsystem::new(config.clone()).await?;
+        let autonomous = autonomous::AutonomousSubsystem::new(config.clone()).await?;
+        let biological_validation = biological_validation::BiologicalValidationSubsystem::new(config.clone()).await?;
+        let mathematical_frameworks =
+            mathematical_frameworks::MathematicalFrameworksSubsystem::new(config.clone()).await?;
+        let interfaces = interfaces::InterfacesSubsystem::new(config.clone()).await?;
+        let utils = utils::UtilsSubsystem::new(config.clone()).await?;
+
         Ok(Self {
+            id: system_id,
             config,
-            quantum_subsystem,
-            neural_subsystem,
-            metacognitive_subsystem,
-            autonomous_subsystem,
-            biological_subsystem,
-            truth_approximation_subsystem,
-            metrics,
+            state,
+            quantum,
+            neural,
+            metacognition,
+            autonomous,
+            biological_validation,
+            mathematical_frameworks,
+            interfaces,
+            utils,
         })
     }
-    
+
     /// Start the Kambuzuma system
-    pub async fn start(&mut self) -> Result<()> {
-        tracing::info!("Starting Kambuzuma system...");
-        
+    pub async fn start(&mut self) -> Result<(), KambuzumaError> {
+        // Update status
+        {
+            let mut state = self.state.write().await;
+            state.status = SystemStatus::Running;
+            state.startup_time = Utc::now();
+        }
+
         // Start subsystems in order
-        self.quantum_subsystem.start().await?;
-        self.neural_subsystem.start().await?;
-        self.metacognitive_subsystem.start().await?;
-        self.autonomous_subsystem.start().await?;
-        self.biological_subsystem.start().await?;
-        self.truth_approximation_subsystem.start().await?;
-        
-        // Start metrics collection
-        self.metrics.start().await?;
-        
-        tracing::info!("Kambuzuma system started successfully");
-        Ok(())
-    }
-    
-    /// Stop the Kambuzuma system
-    pub async fn stop(&mut self) -> Result<()> {
-        tracing::info!("Stopping Kambuzuma system...");
-        
-        // Stop subsystems in reverse order
-        self.truth_approximation_subsystem.stop().await?;
-        self.biological_subsystem.stop().await?;
-        self.autonomous_subsystem.stop().await?;
-        self.metacognitive_subsystem.stop().await?;
-        self.neural_subsystem.stop().await?;
-        self.quantum_subsystem.stop().await?;
-        
-        // Stop metrics collection
-        self.metrics.stop().await?;
-        
-        tracing::info!("Kambuzuma system stopped");
-        Ok(())
-    }
-    
-    /// Process a computational task through the system
-    pub async fn process_task(&self, task: ComputationalTask) -> Result<ComputationalResult> {
-        tracing::debug!("Processing computational task: {:?}", task.id);
-        
+        self.utils.start().await?;
+        self.mathematical_frameworks.start().await?;
+        self.biological_validation.start().await?;
+        self.quantum.start().await?;
+        self.neural.start().await?;
+        self.metacognition.start().await?;
+        self.autonomous.start().await?;
+        self.interfaces.start().await?;
+
         // Validate biological constraints
-        self.biological_subsystem.validate_constraints(&task).await?;
-        
-        // Route through neural processing stages
-        let neural_result = self.neural_subsystem.process_task(&task).await?;
-        
-        // Apply metacognitive orchestration
-        let orchestrated_result = self.metacognitive_subsystem.orchestrate(&neural_result).await?;
-        
-        // Execute autonomous actions if needed
-        let autonomous_result = self.autonomous_subsystem.execute(&orchestrated_result).await?;
-        
-        // Validate final result
-        self.biological_subsystem.validate_result(&autonomous_result).await?;
-        
-        // Update metrics
-        self.metrics.record_task_completion(&task, &autonomous_result).await?;
-        
-        tracing::debug!("Task processing completed: {:?}", task.id);
-        Ok(autonomous_result)
-    }
-    
-    /// Get current system state
-    pub async fn get_system_state(&self) -> Result<SystemState> {
-        let quantum_state = self.quantum_subsystem.get_state().await?;
-        let neural_state = self.neural_subsystem.get_state().await?;
-        let metacognitive_state = self.metacognitive_subsystem.get_state().await?;
-        let autonomous_state = self.autonomous_subsystem.get_state().await?;
-        let biological_state = self.biological_subsystem.get_state().await?;
-        let truth_approximation_state = self.truth_approximation_subsystem.get_state().await?;
-        let metrics = self.metrics.get_current_metrics().await?;
-        
-        Ok(SystemState {
-            quantum_state,
-            neural_state,
-            metacognitive_state,
-            autonomous_state,
-            biological_state,
-            truth_approximation_state,
-            metrics,
-        })
-    }
-    
-    /// Validate all biological constraints
-    pub async fn validate_biological_constraints(&self) -> Result<()> {
-        self.quantum_subsystem.validate_biological_constraints().await?;
-        self.neural_subsystem.validate_biological_constraints().await?;
-        self.biological_subsystem.validate_all_constraints().await?;
-        
+        self.validate_biological_constraints().await?;
+
+        // Initialize quantum coherence
+        self.initialize_quantum_coherence().await?;
+
+        // Start neural processing
+        self.start_neural_processing().await?;
+
+        // Begin metacognitive orchestration
+        self.begin_metacognitive_orchestration().await?;
+
+        // Enable autonomous systems
+        self.enable_autonomous_systems().await?;
+
+        log::info!("Kambuzuma biological quantum computing system started successfully");
+
         Ok(())
     }
-    
-    /// Get system performance metrics
-    pub async fn get_performance_metrics(&self) -> Result<utils::monitoring::PerformanceMetrics> {
-        self.metrics.get_performance_metrics().await
+
+    /// Stop the Kambuzuma system
+    pub async fn stop(&mut self) -> Result<(), KambuzumaError> {
+        // Update status
+        {
+            let mut state = self.state.write().await;
+            state.status = SystemStatus::Shutdown;
+        }
+
+        // Stop subsystems in reverse order
+        self.interfaces.stop().await?;
+        self.autonomous.stop().await?;
+        self.metacognition.stop().await?;
+        self.neural.stop().await?;
+        self.quantum.stop().await?;
+        self.biological_validation.stop().await?;
+        self.mathematical_frameworks.stop().await?;
+        self.utils.stop().await?;
+
+        log::info!("Kambuzuma biological quantum computing system stopped successfully");
+
+        Ok(())
+    }
+
+    /// Get current system state
+    pub async fn get_state(&self) -> SystemState {
+        self.state.read().await.clone()
+    }
+
+    /// Update system state
+    pub async fn update_state<F>(&self, updater: F) -> Result<(), KambuzumaError>
+    where
+        F: FnOnce(&mut SystemState),
+    {
+        let mut state = self.state.write().await;
+        updater(&mut *state);
+        state.last_activity = Utc::now();
+        Ok(())
+    }
+
+    /// Validate biological constraints
+    async fn validate_biological_constraints(&self) -> Result<(), KambuzumaError> {
+        let validation_result = self.biological_validation.validate_constraints().await?;
+
+        self.update_state(|state| {
+            state.biological_constraints = validation_result;
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    /// Initialize quantum coherence
+    async fn initialize_quantum_coherence(&self) -> Result<(), KambuzumaError> {
+        let coherence_status = self.quantum.initialize_coherence().await?;
+
+        self.update_state(|state| {
+            state.quantum_coherence = coherence_status;
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    /// Start neural processing
+    async fn start_neural_processing(&self) -> Result<(), KambuzumaError> {
+        let neural_stats = self.neural.start_processing().await?;
+
+        self.update_state(|state| {
+            state.neural_stats = neural_stats;
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    /// Begin metacognitive orchestration
+    async fn begin_metacognitive_orchestration(&self) -> Result<(), KambuzumaError> {
+        let awareness_levels = self.metacognition.begin_orchestration().await?;
+
+        self.update_state(|state| {
+            state.metacognitive_awareness = awareness_levels;
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    /// Enable autonomous systems
+    async fn enable_autonomous_systems(&self) -> Result<(), KambuzumaError> {
+        let autonomous_status = self.autonomous.enable_systems().await?;
+
+        self.update_state(|state| {
+            state.autonomous_status = autonomous_status;
+        })
+        .await?;
+
+        Ok(())
+    }
+
+    /// Process a computational task
+    pub async fn process_task(&self, task: ComputationalTask) -> Result<TaskResult, KambuzumaError> {
+        // Route through metacognitive orchestration
+        let result = self.metacognition.orchestrate_task(task).await?;
+
+        // Update activity timestamp
+        self.update_state(|state| {
+            state.last_activity = Utc::now();
+        })
+        .await?;
+
+        Ok(result)
+    }
+
+    /// Monitor system health
+    pub async fn monitor_health(&self) -> Result<HealthStatus, KambuzumaError> {
+        let state = self.get_state().await;
+
+        let health_status = HealthStatus {
+            overall_status: state.status,
+            subsystem_health: vec![
+                ("quantum".to_string(), self.quantum.health_check().await?),
+                ("neural".to_string(), self.neural.health_check().await?),
+                ("metacognition".to_string(), self.metacognition.health_check().await?),
+                ("autonomous".to_string(), self.autonomous.health_check().await?),
+                (
+                    "biological_validation".to_string(),
+                    self.biological_validation.health_check().await?,
+                ),
+                (
+                    "mathematical_frameworks".to_string(),
+                    self.mathematical_frameworks.health_check().await?,
+                ),
+                ("interfaces".to_string(), self.interfaces.health_check().await?),
+                ("utils".to_string(), self.utils.health_check().await?),
+            ],
+            performance: state.performance,
+            biological_constraints: state.biological_constraints,
+            quantum_coherence: state.quantum_coherence,
+            atp_levels: state.atp_levels,
+        };
+
+        Ok(health_status)
     }
 }
 
-/// Computational task to be processed by the system
-#[derive(Debug, Clone)]
+/// Health status information
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HealthStatus {
+    /// Overall system status
+    pub overall_status: SystemStatus,
+    /// Individual subsystem health
+    pub subsystem_health: Vec<(String, SubsystemHealth)>,
+    /// Performance metrics
+    pub performance: PerformanceMetrics,
+    /// Biological constraints
+    pub biological_constraints: BiologicalConstraints,
+    /// Quantum coherence status
+    pub quantum_coherence: QuantumCoherenceStatus,
+    /// ATP energy levels
+    pub atp_levels: AtpLevels,
+}
+
+/// Subsystem health enumeration
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum SubsystemHealth {
+    /// Subsystem is healthy
+    Healthy,
+    /// Subsystem has warnings
+    Warning(String),
+    /// Subsystem is unhealthy
+    Unhealthy(String),
+    /// Subsystem is offline
+    Offline,
+}
+
+/// Computational task representation
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ComputationalTask {
     /// Task identifier
-    pub id: uuid::Uuid,
-    
-    /// Task description
-    pub description: String,
-    
-    /// Input data
-    pub input_data: Vec<u8>,
-    
+    pub id: Uuid,
     /// Task type
     pub task_type: TaskType,
-    
-    /// Priority level
-    pub priority: Priority,
-    
-    /// Deadline for completion
-    pub deadline: Option<std::time::Instant>,
-    
-    /// Resource requirements
-    pub resource_requirements: ResourceRequirements,
+    /// Task parameters
+    pub parameters: HashMap<String, serde_json::Value>,
+    /// Task priority
+    pub priority: TaskPriority,
+    /// Biological constraints
+    pub biological_constraints: Option<BiologicalConstraints>,
+    /// Quantum requirements
+    pub quantum_requirements: Option<QuantumRequirements>,
+    /// Expected execution time
+    pub expected_execution_time: Option<std::time::Duration>,
 }
 
-/// Types of computational tasks
-#[derive(Debug, Clone, Copy, PartialEq)]
+/// Task type enumeration
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum TaskType {
-    /// Text processing and analysis
-    TextProcessing,
-    
-    /// Mathematical computation
+    /// Quantum computation task
+    QuantumComputation,
+    /// Neural processing task
+    NeuralProcessing,
+    /// Metacognitive reasoning task
+    MetacognitiveReasoning,
+    /// Autonomous orchestration task
+    AutonomousOrchestration,
+    /// Biological validation task
+    BiologicalValidation,
+    /// Mathematical computation task
     MathematicalComputation,
-    
-    /// Logical reasoning
-    LogicalReasoning,
-    
-    /// Creative synthesis
-    CreativeSynthesis,
-    
-    /// Data analysis
-    DataAnalysis,
-    
-    /// System orchestration
-    SystemOrchestration,
-    
-    /// Validation and verification
-    ValidationVerification,
+    /// Hybrid task combining multiple types
+    Hybrid(Vec<TaskType>),
 }
 
-/// Task priority levels
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Priority {
+/// Task priority enumeration
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+pub enum TaskPriority {
+    /// Low priority
     Low,
-    Medium,
+    /// Normal priority
+    Normal,
+    /// High priority
     High,
+    /// Critical priority
     Critical,
 }
 
-/// Resource requirements for tasks
-#[derive(Debug, Clone)]
-pub struct ResourceRequirements {
-    /// Required processing power (relative scale)
-    pub processing_power: f64,
-    
-    /// Required memory (bytes)
-    pub memory: usize,
-    
-    /// Required energy (in ATP molecules)
-    pub energy: f64,
-    
-    /// Required quantum coherence level
-    pub coherence_level: f64,
-    
-    /// Maximum acceptable latency (microseconds)
-    pub max_latency: u64,
+/// Quantum requirements specification
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QuantumRequirements {
+    /// Required coherence time in seconds
+    pub min_coherence_time: f64,
+    /// Required gate fidelity
+    pub min_gate_fidelity: f64,
+    /// Required number of qubits
+    pub min_qubits: u32,
+    /// Required entanglement fidelity
+    pub min_entanglement_fidelity: f64,
+    /// Maximum decoherence rate
+    pub max_decoherence_rate: f64,
 }
 
-/// Result of computational processing
-#[derive(Debug, Clone)]
-pub struct ComputationalResult {
+/// Task execution result
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TaskResult {
     /// Task identifier
-    pub task_id: uuid::Uuid,
-    
+    pub task_id: Uuid,
+    /// Execution status
+    pub status: TaskStatus,
     /// Result data
-    pub result_data: Vec<u8>,
-    
-    /// Processing success status
-    pub success: bool,
-    
-    /// Confidence in result
-    pub confidence: f64,
-    
-    /// Processing metrics
-    pub processing_metrics: ProcessingMetrics,
-    
-    /// Explanation of processing
-    pub explanation: String,
+    pub result: Option<serde_json::Value>,
+    /// Error information
+    pub error: Option<String>,
+    /// Execution time
+    pub execution_time: std::time::Duration,
+    /// Resource usage
+    pub resource_usage: ResourceUsage,
+    /// Biological metrics
+    pub biological_metrics: BiologicalMetrics,
+    /// Quantum metrics
+    pub quantum_metrics: QuantumMetrics,
 }
 
-/// Metrics from processing a task
-#[derive(Debug, Clone)]
-pub struct ProcessingMetrics {
-    /// Total processing time
-    pub processing_time: std::time::Duration,
-    
-    /// Energy consumed (ATP molecules)
-    pub energy_consumed: f64,
-    
-    /// Quantum coherence maintained
-    pub coherence_maintained: f64,
-    
-    /// Error rate
-    pub error_rate: f64,
-    
-    /// Throughput achieved
-    pub throughput: f64,
+/// Task execution status
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum TaskStatus {
+    /// Task is pending
+    Pending,
+    /// Task is running
+    Running,
+    /// Task completed successfully
+    Completed,
+    /// Task failed
+    Failed,
+    /// Task was cancelled
+    Cancelled,
 }
 
-/// Overall system state
-#[derive(Debug, Clone)]
-pub struct SystemState {
-    /// Quantum subsystem state
-    pub quantum_state: quantum::QuantumState,
-    
-    /// Neural subsystem state
-    pub neural_state: neural::NeuralState,
-    
-    /// Metacognitive subsystem state
-    pub metacognitive_state: metacognition::MetacognitiveState,
-    
-    /// Autonomous subsystem state
-    pub autonomous_state: autonomous::AutonomousState,
-    
-    /// Biological subsystem state
-    pub biological_state: biological_validation::BiologicalValidationState,
-    
-    /// Truth approximation subsystem state
-    pub truth_approximation_state: truth_approximation::TruthApproximationState,
-    
-    /// System metrics
-    pub metrics: utils::monitoring::SystemMetrics,
+/// Resource usage tracking
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ResourceUsage {
+    /// CPU time in seconds
+    pub cpu_time: f64,
+    /// Memory usage in bytes
+    pub memory_usage: u64,
+    /// Energy consumption in joules
+    pub energy_consumption: f64,
+    /// Network bandwidth in bytes
+    pub network_bandwidth: u64,
 }
 
-// Default implementations
-impl Default for ResourceRequirements {
+/// Biological metrics
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BiologicalMetrics {
+    /// ATP consumption in mol
+    pub atp_consumption: f64,
+    /// Oxygen consumption in mol
+    pub oxygen_consumption: f64,
+    /// Heat generation in J
+    pub heat_generation: f64,
+    /// Metabolic rate in J/s
+    pub metabolic_rate: f64,
+}
+
+/// Quantum metrics
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QuantumMetrics {
+    /// Quantum gates executed
+    pub gates_executed: u64,
+    /// Coherence time achieved
+    pub coherence_time_achieved: f64,
+    /// Gate fidelity achieved
+    pub gate_fidelity_achieved: f64,
+    /// Entanglement operations
+    pub entanglement_operations: u64,
+}
+
+// Default implementations for convenience
+impl Default for PerformanceMetrics {
     fn default() -> Self {
         Self {
-            processing_power: 1.0,
-            memory: 1024 * 1024, // 1 MB
-            energy: 1000.0,      // 1000 ATP molecules
-            coherence_level: 0.8, // 80% coherence
-            max_latency: 1000,    // 1 ms
-        }
-    }
-}
-
-impl Default for ProcessingMetrics {
-    fn default() -> Self {
-        Self {
-            processing_time: std::time::Duration::from_millis(1),
-            energy_consumed: 0.0,
-            coherence_maintained: 1.0,
-            error_rate: 0.0,
+            cpu_usage: 0.0,
+            memory_usage: 0,
+            network_io: 0,
+            disk_io: 0,
             throughput: 0.0,
+            latency: 0.0,
+            error_rate: 0.0,
         }
     }
 }
 
-/// Initialize tracing for the system
-pub fn init_tracing() -> Result<()> {
-    use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-    
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::new(
-            std::env::var("RUST_LOG").unwrap_or_else(|_| "kambuzuma=debug".into()),
-        ))
-        .with(tracing_subscriber::fmt::layer())
-        .init();
-    
-    Ok(())
+impl Default for BiologicalConstraints {
+    fn default() -> Self {
+        Self {
+            temperature: 310.15, // 37°C in Kelvin
+            ph: 7.4,
+            ionic_strength: 0.15,       // physiological
+            membrane_potential: -70.0,  // mV
+            oxygen_concentration: 0.2,  // mM
+            co2_concentration: 0.04,    // mM
+            osmotic_pressure: 101325.0, // Pa
+            validation_status: ValidationStatus::Valid,
+        }
+    }
+}
+
+impl Default for QuantumCoherenceStatus {
+    fn default() -> Self {
+        Self {
+            coherence_time: 0.001,    // 1 ms
+            decoherence_rate: 1000.0, // 1/s
+            entanglement_fidelity: 0.95,
+            gate_fidelity: 0.99,
+            tunneling_probability: 0.5,
+            superposition_preservation: 0.9,
+        }
+    }
+}
+
+impl Default for AtpLevels {
+    fn default() -> Self {
+        Self {
+            atp_concentration: 5.0, // mM
+            adp_concentration: 1.0, // mM
+            amp_concentration: 0.1, // mM
+            energy_charge: 0.9,
+            atp_synthesis_rate: 1e-6,  // mol/s
+            atp_hydrolysis_rate: 1e-6, // mol/s
+            mitochondrial_efficiency: 0.38,
+        }
+    }
+}
+
+impl Default for NeuralProcessingStats {
+    fn default() -> Self {
+        Self {
+            active_neurons: 0,
+            firing_rate: 0.0,
+            synaptic_efficiency: 0.8,
+            thought_current: 0.0,
+            stage_activations: vec![0.0; 8],
+            network_connectivity: 0.5,
+        }
+    }
+}
+
+impl Default for MetacognitiveAwareness {
+    fn default() -> Self {
+        Self {
+            process_awareness: 0.5,
+            knowledge_awareness: 0.5,
+            decision_confidence: 0.5,
+            uncertainty_estimation: 0.5,
+            explanation_quality: 0.5,
+            reasoning_transparency: 0.5,
+        }
+    }
+}
+
+impl Default for AutonomousOrchestrationStatus {
+    fn default() -> Self {
+        Self {
+            active_tasks: 0,
+            completion_rate: 0.0,
+            resource_utilization: 0.0,
+            language_selection_efficiency: 0.0,
+            tool_orchestration_success_rate: 0.0,
+            package_management_status: "idle".to_string(),
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio;
-    
+
     #[tokio::test]
-    async fn test_system_initialization() {
-        let system = KambuzumaSystem::new().unwrap();
-        
-        // Test that system can be created with default config
-        assert!(system.config.quantum_config.is_valid());
-        assert!(system.config.neural_config.is_valid());
+    async fn test_system_creation() {
+        let config = KambuzumaConfig::default();
+        let system = KambuzumaSystem::new(config).await;
+        assert!(system.is_ok());
     }
-    
+
     #[tokio::test]
-    async fn test_task_processing() {
-        let mut system = KambuzumaSystem::new().unwrap();
-        system.start().await.unwrap();
-        
-        let task = ComputationalTask {
-            id: uuid::Uuid::new_v4(),
-            description: "Test task".to_string(),
-            input_data: vec![1, 2, 3, 4, 5],
-            task_type: TaskType::TextProcessing,
-            priority: Priority::Medium,
-            deadline: None,
-            resource_requirements: ResourceRequirements::default(),
-        };
-        
-        let result = system.process_task(task).await.unwrap();
-        assert!(result.success);
-        assert!(result.confidence > 0.0);
-        
-        system.stop().await.unwrap();
+    async fn test_system_state_updates() {
+        let config = KambuzumaConfig::default();
+        let system = KambuzumaSystem::new(config).await.unwrap();
+
+        let initial_state = system.get_state().await;
+        assert_eq!(initial_state.status, SystemStatus::Initializing);
+
+        system
+            .update_state(|state| {
+                state.status = SystemStatus::Running;
+            })
+            .await
+            .unwrap();
+
+        let updated_state = system.get_state().await;
+        assert_eq!(updated_state.status, SystemStatus::Running);
     }
-    
-    #[tokio::test]
-    async fn test_biological_constraints() {
-        let system = KambuzumaSystem::new().unwrap();
-        
-        // Test that biological constraints are validated
-        let result = system.validate_biological_constraints().await;
-        assert!(result.is_ok());
-    }
-} 
+}
