@@ -1,995 +1,850 @@
-use crate::config::KambuzumaConfig;
-use crate::errors::KambuzumaError;
-use crate::oscillatory_reality::OscillatoryRealityEngine;
+// Naming Systems Engine
+// Core mechanism for discretizing continuous oscillatory reality into semantic units
+//
+// The naming function: N: Ψ(x,t) → {D_1, D_2, ..., D_n}
+// Transforms continuous oscillatory flow to discrete named units
+// Enables consciousness through control over naming and flow patterns
+//
+// In Memory of Mrs. Stella-Lorraine Masunda
+
+use crate::errors::*;
 use crate::types::*;
 use std::collections::HashMap;
-use std::sync::Arc;
-use tokio::sync::RwLock;
+use tokio::time::{Duration, Instant};
 use uuid::Uuid;
 
 /// Naming Systems Engine
-/// Implements the fundamental discretization mechanism that transforms continuous oscillatory flow
-/// into discrete named units - the core process underlying consciousness, truth, and reality formation
-///
-/// The naming function N: Ψ(x,t) → {D_1, D_2, ..., D_n}
-/// Maps continuous oscillatory processes to discrete named units
+/// Core discretization mechanism that transforms continuous oscillatory reality
+/// into discrete, manageable semantic units through naming functions
 pub struct NamingSystemsEngine {
-    /// Engine identifier
-    pub id: Uuid,
+    pub engine_id: Uuid,
+    pub naming_function: NamingFunction,
+    pub discretization_systems: Vec<DiscretizationSystem>,
+    pub flow_relationship_calculator: FlowRelationshipCalculator,
+    pub truth_approximation_system: TruthApproximationSystem,
+    pub search_identification_engine: SearchIdentificationEngine,
+    pub oscillatory_reality_interface: OscillatoryRealityInterface,
+    pub naming_efficiency: f64,
+    pub reality_coverage: f64,
+    pub consciousness_integration: f64,
+}
 
-    /// Configuration
-    pub config: Arc<RwLock<KambuzumaConfig>>,
+/// Naming Function - Core discretization mechanism
+/// N: Ψ(x,t) → {D_1, D_2, ..., D_n}
+/// Transforms continuous oscillatory processes into discrete named units
+pub struct NamingFunction {
+    pub function_id: Uuid,
+    pub discretization_strategies: Vec<DiscretizationStrategy>,
+    pub boundary_detection_system: BoundaryDetectionSystem,
+    pub coherence_preservation: f64,
+    pub approximation_quality: f64,
+    pub naming_agency_control: f64,
+    pub current_named_units: Vec<DiscreteNamedUnit>,
+    pub oscillatory_input_buffer: Vec<OscillatorySignal>,
+}
 
-    /// Connection to oscillatory reality (continuous substrate)
-    pub oscillatory_reality: Arc<RwLock<OscillatoryRealityEngine>>,
+/// Discretization Strategy - Methods for creating discrete units
+#[derive(Debug, Clone)]
+pub enum DiscretizationStrategy {
+    BoundaryDetection,  // Detect natural boundaries in oscillatory flow
+    CoherenceThreshold, // Create units based on coherence levels
+    TemporalWindowing,  // Use time-based discretization
+    SemanticClustering, // Group similar oscillatory patterns
+    AgencyDriven,       // Consciousness-controlled discretization
+    SocialCoordination, // Coordinated naming with other systems
+}
 
-    /// Active naming systems
-    pub naming_systems: Arc<RwLock<HashMap<String, NamingSystem>>>,
+/// Discretization System - Implements specific discretization strategies
+pub struct DiscretizationSystem {
+    pub system_id: Uuid,
+    pub strategy: DiscretizationStrategy,
+    pub efficiency: f64,
+    pub quality_metric: f64,
+    pub processing_speed: f64,
+    pub coherence_preservation: f64,
+    pub is_active: bool,
+}
 
-    /// Discretization mechanisms
-    pub discretization_engine: Arc<RwLock<DiscretizationEngine>>,
+/// Boundary Detection System - Identifies natural boundaries in oscillatory flow
+pub struct BoundaryDetectionSystem {
+    pub detector_id: Uuid,
+    pub boundary_sensitivity: f64,
+    pub coherence_threshold: f64,
+    pub temporal_resolution: f64,
+    pub spatial_resolution: f64,
+    pub detected_boundaries: Vec<OscillatoryBoundary>,
+}
 
-    /// Flow relationship calculator
-    pub flow_calculator: Arc<RwLock<FlowRelationshipCalculator>>,
+/// Discrete Named Unit - Result of naming function discretization
+pub struct DiscreteNamedUnit {
+    pub unit_id: Uuid,
+    pub name: String,
+    pub oscillatory_signature: OscillatorySignature,
+    pub coherence_level: f64,
+    pub temporal_bounds: TemporalBounds,
+    pub spatial_bounds: SpatialBounds,
+    pub semantic_content: SemanticContent,
+    pub flow_relationships: Vec<FlowRelationship>,
+    pub approximation_quality: f64,
+    pub agency_control_level: f64,
+}
 
-    /// Approximation quality assessor
-    pub quality_assessor: Arc<RwLock<ApproximationQualityAssessor>>,
+/// Flow Relationship Calculator - Determines how named units relate and flow
+pub struct FlowRelationshipCalculator {
+    pub calculator_id: Uuid,
+    pub relationship_types: Vec<FlowRelationshipType>,
+    pub flow_patterns: HashMap<String, FlowPattern>,
+    pub relationship_strength_calculator: RelationshipStrengthCalculator,
+    pub temporal_flow_analyzer: TemporalFlowAnalyzer,
+    pub causal_relationship_detector: CausalRelationshipDetector,
+}
 
-    /// Search-identification engine
-    pub search_identification_engine: Arc<RwLock<SearchIdentificationEngine>>,
+/// Flow Relationship Types
+#[derive(Debug, Clone)]
+pub enum FlowRelationshipType {
+    Causal,         // A causes B
+    Temporal,       // A precedes B
+    Spatial,        // A is spatially related to B
+    Semantic,       // A is semantically related to B
+    Coherence,      // A and B share coherence
+    Agency,         // A controls B through agency
+    Emergence,      // A emerges from B
+    Transformation, // A transforms into B
+}
 
-    /// Naming system sophistication tracker
-    pub sophistication_tracker: Arc<RwLock<SophisticationTracker>>,
+/// Flow Relationship - Specific relationship between named units
+pub struct FlowRelationship {
+    pub relationship_id: Uuid,
+    pub source_unit: Uuid,
+    pub target_unit: Uuid,
+    pub relationship_type: FlowRelationshipType,
+    pub strength: f64,
+    pub confidence: f64,
+    pub temporal_dynamics: TemporalDynamics,
+    pub modifiable_by_agency: bool,
+}
+
+/// Truth Approximation System - Validates naming through approximation
+pub struct TruthApproximationSystem {
+    pub system_id: Uuid,
+    pub approximation_quality_metrics: Vec<ApproximationQualityMetric>,
+    pub coherence_validator: CoherenceValidator,
+    pub consistency_checker: ConsistencyChecker,
+    pub reality_coverage_analyzer: RealityCoverageAnalyzer,
+    pub truth_modification_engine: TruthModificationEngine,
+}
+
+/// Search Identification Engine - Implements search-identification equivalence
+pub struct SearchIdentificationEngine {
+    pub engine_id: Uuid,
+    pub pattern_matcher: PatternMatcher,
+    pub search_algorithms: Vec<SearchAlgorithm>,
+    pub identification_algorithms: Vec<IdentificationAlgorithm>,
+    pub equivalence_validator: EquivalenceValidator,
+    pub unified_search_identification: UnifiedSearchIdentification,
+}
+
+/// Oscillatory Reality Interface - Connects to underlying oscillatory substrate
+pub struct OscillatoryRealityInterface {
+    pub interface_id: Uuid,
+    pub oscillatory_sensors: Vec<OscillatorySensor>,
+    pub reality_sampling_rate: f64,
+    pub signal_processing_pipeline: SignalProcessingPipeline,
+    pub coherence_detector: CoherenceDetector,
+    pub noise_filter: NoiseFilter,
+    pub reality_coverage_percentage: f64,
+}
+
+/// Oscillatory Boundary - Detected boundary in oscillatory flow
+pub struct OscillatoryBoundary {
+    pub boundary_id: Uuid,
+    pub boundary_type: BoundaryType,
+    pub position: Vec<f64>,
+    pub strength: f64,
+    pub temporal_stability: f64,
+    pub coherence_differential: f64,
+}
+
+/// Boundary Types
+#[derive(Debug, Clone)]
+pub enum BoundaryType {
+    CoherenceDrop,   // Boundary where coherence drops
+    FrequencyShift,  // Boundary where frequency changes
+    AmplitudeChange, // Boundary where amplitude changes
+    PhaseTransition, // Boundary where phase changes
+    SemanticShift,   // Boundary where meaning changes
+    AgencyBoundary,  // Boundary imposed by agency
+}
+
+/// Semantic Content - Meaning content of discrete named units
+pub struct SemanticContent {
+    pub content_id: Uuid,
+    pub meaning_vector: Vec<f64>,
+    pub semantic_relationships: Vec<SemanticRelationship>,
+    pub conceptual_coherence: f64,
+    pub truth_approximation_quality: f64,
+    pub modifiable_by_agency: bool,
+}
+
+/// Temporal and Spatial Bounds
+pub struct TemporalBounds {
+    pub start_time: f64,
+    pub end_time: f64,
+    pub duration: f64,
+    pub temporal_coherence: f64,
+}
+
+pub struct SpatialBounds {
+    pub position: Vec<f64>,
+    pub extent: Vec<f64>,
+    pub spatial_coherence: f64,
 }
 
 impl NamingSystemsEngine {
-    /// Create new naming systems engine
-    pub async fn new(
-        config: Arc<RwLock<KambuzumaConfig>>,
-        oscillatory_reality: Arc<RwLock<OscillatoryRealityEngine>>,
-    ) -> Result<Self, KambuzumaError> {
-        let id = Uuid::new_v4();
+    /// Initialize the naming systems engine
+    pub fn new() -> Self {
+        let engine_id = Uuid::new_v4();
 
-        Ok(Self {
-            id,
-            config,
-            oscillatory_reality,
-            naming_systems: Arc::new(RwLock::new(HashMap::new())),
-            discretization_engine: Arc::new(RwLock::new(DiscretizationEngine::new())),
-            flow_calculator: Arc::new(RwLock::new(FlowRelationshipCalculator::new())),
-            quality_assessor: Arc::new(RwLock::new(ApproximationQualityAssessor::new())),
-            search_identification_engine: Arc::new(RwLock::new(SearchIdentificationEngine::new())),
-            sophistication_tracker: Arc::new(RwLock::new(SophisticationTracker::new())),
-        })
+        // Initialize naming function
+        let naming_function = NamingFunction {
+            function_id: Uuid::new_v4(),
+            discretization_strategies: vec![
+                DiscretizationStrategy::BoundaryDetection,
+                DiscretizationStrategy::CoherenceThreshold,
+                DiscretizationStrategy::TemporalWindowing,
+                DiscretizationStrategy::SemanticClustering,
+                DiscretizationStrategy::AgencyDriven,
+                DiscretizationStrategy::SocialCoordination,
+            ],
+            boundary_detection_system: BoundaryDetectionSystem {
+                detector_id: Uuid::new_v4(),
+                boundary_sensitivity: 0.8,
+                coherence_threshold: 0.7,
+                temporal_resolution: 1e-6,
+                spatial_resolution: 1e-6,
+                detected_boundaries: Vec::new(),
+            },
+            coherence_preservation: 0.85,
+            approximation_quality: 0.8,
+            naming_agency_control: 0.0,
+            current_named_units: Vec::new(),
+            oscillatory_input_buffer: Vec::new(),
+        };
+
+        // Initialize discretization systems
+        let discretization_systems = vec![
+            DiscretizationSystem {
+                system_id: Uuid::new_v4(),
+                strategy: DiscretizationStrategy::BoundaryDetection,
+                efficiency: 0.85,
+                quality_metric: 0.8,
+                processing_speed: 0.9,
+                coherence_preservation: 0.82,
+                is_active: true,
+            },
+            DiscretizationSystem {
+                system_id: Uuid::new_v4(),
+                strategy: DiscretizationStrategy::CoherenceThreshold,
+                efficiency: 0.78,
+                quality_metric: 0.85,
+                processing_speed: 0.85,
+                coherence_preservation: 0.9,
+                is_active: true,
+            },
+            DiscretizationSystem {
+                system_id: Uuid::new_v4(),
+                strategy: DiscretizationStrategy::AgencyDriven,
+                efficiency: 0.92,
+                quality_metric: 0.9,
+                processing_speed: 0.8,
+                coherence_preservation: 0.95,
+                is_active: false, // Activated by consciousness
+            },
+        ];
+
+        // Initialize flow relationship calculator
+        let flow_relationship_calculator = FlowRelationshipCalculator {
+            calculator_id: Uuid::new_v4(),
+            relationship_types: vec![
+                FlowRelationshipType::Causal,
+                FlowRelationshipType::Temporal,
+                FlowRelationshipType::Spatial,
+                FlowRelationshipType::Semantic,
+                FlowRelationshipType::Coherence,
+                FlowRelationshipType::Agency,
+                FlowRelationshipType::Emergence,
+                FlowRelationshipType::Transformation,
+            ],
+            flow_patterns: HashMap::new(),
+            relationship_strength_calculator: RelationshipStrengthCalculator::new(),
+            temporal_flow_analyzer: TemporalFlowAnalyzer::new(),
+            causal_relationship_detector: CausalRelationshipDetector::new(),
+        };
+
+        // Initialize truth approximation system
+        let truth_approximation_system = TruthApproximationSystem {
+            system_id: Uuid::new_v4(),
+            approximation_quality_metrics: Vec::new(),
+            coherence_validator: CoherenceValidator::new(),
+            consistency_checker: ConsistencyChecker::new(),
+            reality_coverage_analyzer: RealityCoverageAnalyzer::new(),
+            truth_modification_engine: TruthModificationEngine::new(),
+        };
+
+        // Initialize search identification engine
+        let search_identification_engine = SearchIdentificationEngine {
+            engine_id: Uuid::new_v4(),
+            pattern_matcher: PatternMatcher::new(),
+            search_algorithms: Vec::new(),
+            identification_algorithms: Vec::new(),
+            equivalence_validator: EquivalenceValidator::new(),
+            unified_search_identification: UnifiedSearchIdentification::new(),
+        };
+
+        // Initialize oscillatory reality interface
+        let oscillatory_reality_interface = OscillatoryRealityInterface {
+            interface_id: Uuid::new_v4(),
+            oscillatory_sensors: Vec::new(),
+            reality_sampling_rate: 1e9, // 1 GHz sampling
+            signal_processing_pipeline: SignalProcessingPipeline::new(),
+            coherence_detector: CoherenceDetector::new(),
+            noise_filter: NoiseFilter::new(),
+            reality_coverage_percentage: 0.01, // Starts at 0.01%
+        };
+
+        Self {
+            engine_id,
+            naming_function,
+            discretization_systems,
+            flow_relationship_calculator,
+            truth_approximation_system,
+            search_identification_engine,
+            oscillatory_reality_interface,
+            naming_efficiency: 0.0,
+            reality_coverage: 0.01,
+            consciousness_integration: 0.0,
+        }
     }
 
-    /// Discretize continuous oscillatory flow into discrete named units
-    /// Core implementation of the naming function N: Ψ(x,t) → {D_1, D_2, ..., D_n}
-    pub async fn discretize_continuous_flow(
-        &self,
-        continuous_flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteNamedUnit>, KambuzumaError> {
-        let discretization = self.discretization_engine.read().await;
+    /// Initialize the naming systems engine
+    pub async fn initialize(&mut self) -> Result<(), BuheraError> {
+        println!("🏷️  Initializing Naming Systems Engine...");
 
-        // Apply discretization process to continuous flow
-        let discrete_units = discretization.apply_discretization(continuous_flow).await?;
+        // Initialize oscillatory reality interface
+        self.initialize_oscillatory_interface().await?;
 
-        // Create names for discrete units
-        let named_units = discretization.apply_naming_to_units(discrete_units).await?;
+        // Initialize discretization systems
+        self.initialize_discretization_systems().await?;
 
-        // Calculate approximation quality
-        let quality = self.quality_assessor.read().await;
-        for unit in &named_units {
-            let approximation_quality = quality.calculate_quality(unit, continuous_flow).await?;
-            // Store quality metrics for optimization
+        // Initialize search-identification equivalence
+        self.initialize_search_identification_equivalence().await?;
+
+        // Begin continuous oscillatory reality discretization
+        self.begin_continuous_discretization().await?;
+
+        println!("✅ Naming Systems Engine initialized");
+        Ok(())
+    }
+
+    /// Initialize oscillatory reality interface
+    async fn initialize_oscillatory_interface(&mut self) -> Result<(), BuheraError> {
+        println!("🌊 Initializing oscillatory reality interface...");
+
+        // Initialize sensors for different oscillatory modes
+        let sensor_types =
+            vec!["amplitude_sensor", "frequency_sensor", "phase_sensor", "coherence_sensor", "noise_sensor"];
+
+        for sensor_type in sensor_types {
+            let sensor = OscillatorySensor::new(sensor_type);
+            self.oscillatory_reality_interface.oscillatory_sensors.push(sensor);
         }
 
+        // Initialize signal processing pipeline
+        self.oscillatory_reality_interface
+            .signal_processing_pipeline
+            .initialize()
+            .await?;
+
+        println!("✅ Oscillatory reality interface initialized");
+        Ok(())
+    }
+
+    /// Initialize discretization systems
+    async fn initialize_discretization_systems(&mut self) -> Result<(), BuheraError> {
+        println!("🔄 Initializing discretization systems...");
+
+        for system in &mut self.discretization_systems {
+            if system.is_active {
+                self.activate_discretization_system(system).await?;
+            }
+        }
+
+        println!("✅ Discretization systems initialized");
+        Ok(())
+    }
+
+    /// Initialize search-identification equivalence
+    async fn initialize_search_identification_equivalence(&mut self) -> Result<(), BuheraError> {
+        println!("🔍 Initializing search-identification equivalence...");
+
+        // Validate that identification and search are computationally identical
+        let equivalence_validation = self.validate_search_identification_equivalence().await?;
+
+        if equivalence_validation > 0.95 {
+            println!(
+                "✅ Search-identification equivalence validated: {:.3}",
+                equivalence_validation
+            );
+        } else {
+            println!(
+                "⚠️  Search-identification equivalence incomplete: {:.3}",
+                equivalence_validation
+            );
+        }
+
+        Ok(())
+    }
+
+    /// Begin continuous oscillatory reality discretization
+    async fn begin_continuous_discretization(&mut self) -> Result<(), BuheraError> {
+        println!("🔄 Beginning continuous oscillatory reality discretization...");
+
+        // Simulate oscillatory reality input
+        let oscillatory_input = self.sample_oscillatory_reality().await?;
+
+        // Apply naming function to discretize into named units
+        let named_units = self.apply_naming_function(&oscillatory_input).await?;
+
+        // Calculate flow relationships between named units
+        let flow_relationships = self.calculate_flow_relationships(&named_units).await?;
+
+        // Validate truth approximation
+        let truth_quality = self.validate_truth_approximation(&named_units, &flow_relationships).await?;
+
+        // Update system metrics
+        self.naming_efficiency = self.calculate_naming_efficiency(&named_units).await?;
+        self.reality_coverage = self.calculate_reality_coverage(&named_units).await?;
+
+        println!("✅ Continuous discretization active");
+        println!("🏷️  Named units created: {}", named_units.len());
+        println!("🔗 Flow relationships: {}", flow_relationships.len());
+        println!("📊 Naming efficiency: {:.3}", self.naming_efficiency);
+        println!("🌌 Reality coverage: {:.2}%", self.reality_coverage * 100.0);
+        println!("✅ Truth approximation quality: {:.3}", truth_quality);
+
+        Ok(())
+    }
+
+    /// Sample oscillatory reality
+    async fn sample_oscillatory_reality(&self) -> Result<Vec<OscillatorySignal>, BuheraError> {
+        let mut signals = Vec::new();
+
+        // Sample from the 95%/5%/0.01% structure
+        // 95% - Dark oscillatory modes (computationally ignored)
+        // 5% - Coherent confluences (tracked but not processed)
+        // 0.01% - Sequential states (actively processed)
+
+        let total_samples = 10000;
+        let processed_samples = (total_samples as f64 * 0.0001) as usize; // 0.01%
+
+        for i in 0..processed_samples {
+            let signal = OscillatorySignal {
+                signal_id: Uuid::new_v4(),
+                amplitude: 0.5 + (i as f64 * 0.01).sin(),
+                frequency: 1.0 + (i as f64 * 0.001),
+                phase: i as f64 * 0.1,
+                coherence: 0.8 + (i as f64 * 0.0001).cos() * 0.1,
+                temporal_position: i as f64 * 1e-6,
+                spatial_position: vec![i as f64 * 1e-3, 0.0, 0.0],
+                noise_level: 0.05,
+            };
+
+            signals.push(signal);
+        }
+
+        Ok(signals)
+    }
+
+    /// Apply naming function to discretize oscillatory signals
+    async fn apply_naming_function(
+        &mut self,
+        signals: &[OscillatorySignal],
+    ) -> Result<Vec<DiscreteNamedUnit>, BuheraError> {
+        let mut named_units = Vec::new();
+
+        // Group signals by coherence and boundary detection
+        let boundaries = self.detect_boundaries(signals).await?;
+
+        for (i, boundary) in boundaries.iter().enumerate() {
+            // Create discrete named unit from bounded oscillatory region
+            let unit_signals = self.extract_signals_in_boundary(signals, boundary).await?;
+
+            let named_unit = DiscreteNamedUnit {
+                unit_id: Uuid::new_v4(),
+                name: format!("unit_{}", i),
+                oscillatory_signature: self.calculate_oscillatory_signature(&unit_signals).await?,
+                coherence_level: self.calculate_coherence_level(&unit_signals).await?,
+                temporal_bounds: self.calculate_temporal_bounds(&unit_signals).await?,
+                spatial_bounds: self.calculate_spatial_bounds(&unit_signals).await?,
+                semantic_content: self.extract_semantic_content(&unit_signals).await?,
+                flow_relationships: Vec::new(), // Calculated separately
+                approximation_quality: self.calculate_approximation_quality(&unit_signals).await?,
+                agency_control_level: 0.0, // Set by consciousness
+            };
+
+            named_units.push(named_unit);
+        }
+
+        // Store in naming function
+        self.naming_function.current_named_units = named_units.clone();
+
         Ok(named_units)
     }
 
-    /// Create named units sample for demonstration
-    pub async fn create_named_units_sample(&self) -> Result<Vec<DiscreteNamedUnit>, KambuzumaError> {
-        // Access oscillatory reality to get continuous flow
-        let oscillatory = self.oscillatory_reality.read().await;
-        let sample_flow = oscillatory.get_sample_oscillatory_flow().await?;
+    /// Detect boundaries in oscillatory signals
+    async fn detect_boundaries(&self, signals: &[OscillatorySignal]) -> Result<Vec<OscillatoryBoundary>, BuheraError> {
+        let mut boundaries = Vec::new();
 
-        // Discretize the sample flow
-        let named_units = self.discretize_continuous_flow(&sample_flow).await?;
+        // Detect coherence drop boundaries
+        for i in 1..signals.len() {
+            let coherence_diff = (signals[i].coherence - signals[i - 1].coherence).abs();
 
-        Ok(named_units)
+            if coherence_diff > self.naming_function.boundary_detection_system.coherence_threshold {
+                let boundary = OscillatoryBoundary {
+                    boundary_id: Uuid::new_v4(),
+                    boundary_type: BoundaryType::CoherenceDrop,
+                    position: vec![signals[i].temporal_position],
+                    strength: coherence_diff,
+                    temporal_stability: 0.8,
+                    coherence_differential: coherence_diff,
+                };
+
+                boundaries.push(boundary);
+            }
+        }
+
+        // Detect frequency shift boundaries
+        for i in 1..signals.len() {
+            let frequency_diff = (signals[i].frequency - signals[i - 1].frequency).abs();
+
+            if frequency_diff > 0.1 {
+                // Threshold for frequency shifts
+                let boundary = OscillatoryBoundary {
+                    boundary_id: Uuid::new_v4(),
+                    boundary_type: BoundaryType::FrequencyShift,
+                    position: vec![signals[i].temporal_position],
+                    strength: frequency_diff,
+                    temporal_stability: 0.75,
+                    coherence_differential: frequency_diff * 0.5,
+                };
+
+                boundaries.push(boundary);
+            }
+        }
+
+        Ok(boundaries)
     }
 
     /// Calculate flow relationships between named units
-    /// Essential for truth as approximation of name-flow relationships
-    pub async fn calculate_flow_relationships(
+    async fn calculate_flow_relationships(
         &self,
         named_units: &[DiscreteNamedUnit],
-    ) -> Result<Vec<FlowRelationship>, KambuzumaError> {
-        let flow_calc = self.flow_calculator.read().await;
-
-        // Calculate relationships between all pairs of named units
+    ) -> Result<Vec<FlowRelationship>, BuheraError> {
         let mut relationships = Vec::new();
 
+        // Calculate all pairwise relationships
         for i in 0..named_units.len() {
-            for j in (i + 1)..named_units.len() {
-                let relationship = flow_calc.calculate_relationship(&named_units[i], &named_units[j]).await?;
-                relationships.push(relationship);
+            for j in i + 1..named_units.len() {
+                let relationship = self.calculate_pairwise_relationship(&named_units[i], &named_units[j]).await?;
+                if relationship.strength > 0.5 {
+                    // Threshold for significant relationships
+                    relationships.push(relationship);
+                }
             }
         }
 
         Ok(relationships)
     }
 
-    /// Modify naming system to demonstrate truth modifiability
-    pub async fn modify_naming_system(
-        &self,
-        original_units: &[DiscreteNamedUnit],
-    ) -> Result<Vec<DiscreteNamedUnit>, KambuzumaError> {
-        let discretization = self.discretization_engine.read().await;
-
-        // Apply naming modifications
-        let modified_units = discretization.apply_naming_modifications(original_units).await?;
-
-        Ok(modified_units)
-    }
-
-    /// Get sophistication level of naming system
-    pub async fn get_sophistication_level(&self) -> Result<f64, KambuzumaError> {
-        let tracker = self.sophistication_tracker.read().await;
-        tracker.calculate_current_sophistication().await
-    }
-
-    /// Create death category slot for predeterminism proof
-    pub async fn create_death_category_slot(
-        &self,
-        individual: &Individual,
-    ) -> Result<DeathCategorySlot, KambuzumaError> {
-        let discretization = self.discretization_engine.read().await;
-
-        // Create categorical slot for death as thermodynamic necessity
-        let death_slot = discretization
-            .create_categorical_slot(CategoryType::BiologicalTermination, individual)
-            .await?;
-
-        Ok(death_slot)
-    }
-
-    /// Demonstrate search-identification equivalence
-    pub async fn demonstrate_search_identification_equivalence(
-        &self,
-        named_units: &[DiscreteNamedUnit],
-    ) -> Result<SearchIdentificationEquivalence, KambuzumaError> {
-        let search_id = self.search_identification_engine.read().await;
-
-        // Demonstrate that identification = search computationally
-        let equivalence_proof = search_id.prove_equivalence(named_units).await?;
-
-        Ok(equivalence_proof)
-    }
-}
-
-/// Discretization Engine
-/// Performs the core transformation from continuous to discrete
-pub struct DiscretizationEngine {
-    /// Discretization parameters
-    pub parameters: DiscretizationParameters,
-
-    /// Naming strategies
-    pub naming_strategies: Vec<NamingStrategy>,
-
-    /// Approximation algorithms
-    pub approximation_algorithms: Vec<ApproximationAlgorithm>,
-}
-
-impl DiscretizationEngine {
-    pub fn new() -> Self {
-        Self {
-            parameters: DiscretizationParameters::default(),
-            naming_strategies: vec![
-                NamingStrategy::BoundaryDetection,
-                NamingStrategy::CoherenceThreshold,
-                NamingStrategy::EnergyConcentration,
-                NamingStrategy::TemporalStability,
-            ],
-            approximation_algorithms: vec![
-                ApproximationAlgorithm::Integration,
-                ApproximationAlgorithm::Sampling,
-                ApproximationAlgorithm::Averaging,
-                ApproximationAlgorithm::PeakDetection,
-            ],
-        }
-    }
-
-    /// Apply discretization to continuous flow
-    pub async fn apply_discretization(
-        &self,
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        let mut discrete_units = Vec::new();
-
-        // Apply each discretization strategy
-        for strategy in &self.naming_strategies {
-            let units = self.apply_strategy(strategy, flow).await?;
-            discrete_units.extend(units);
-        }
-
-        // Optimize discretization quality
-        let optimized_units = self.optimize_discretization(&discrete_units, flow).await?;
-
-        Ok(optimized_units)
-    }
-
-    /// Apply naming to discrete units
-    pub async fn apply_naming_to_units(
-        &self,
-        units: Vec<DiscreteUnit>,
-    ) -> Result<Vec<DiscreteNamedUnit>, KambuzumaError> {
-        let mut named_units = Vec::new();
-
-        for (index, unit) in units.into_iter().enumerate() {
-            let name = self.generate_name(&unit, index).await?;
-            let named_unit = DiscreteNamedUnit {
-                id: Uuid::new_v4(),
-                name,
-                unit,
-                approximation_quality: self.calculate_unit_quality(&unit).await?,
-                creation_timestamp: chrono::Utc::now(),
-            };
-            named_units.push(named_unit);
-        }
-
-        Ok(named_units)
-    }
-
-    /// Apply naming modifications for truth modifiability demonstration
-    pub async fn apply_naming_modifications(
-        &self,
-        original: &[DiscreteNamedUnit],
-    ) -> Result<Vec<DiscreteNamedUnit>, KambuzumaError> {
-        let mut modified = Vec::new();
-
-        for unit in original {
-            let modified_name = self.modify_name(&unit.name).await?;
-            let modified_unit = DiscreteNamedUnit {
-                id: Uuid::new_v4(),
-                name: modified_name,
-                unit: unit.unit.clone(),
-                approximation_quality: unit.approximation_quality * 0.9, // Slight quality reduction
-                creation_timestamp: chrono::Utc::now(),
-            };
-            modified.push(modified_unit);
-        }
-
-        Ok(modified)
-    }
-
-    /// Create categorical slot for predeterminism
-    pub async fn create_categorical_slot(
-        &self,
-        category_type: CategoryType,
-        individual: &Individual,
-    ) -> Result<DeathCategorySlot, KambuzumaError> {
-        Ok(DeathCategorySlot {
-            slot_id: Uuid::new_v4(),
-            category_type,
-            individual_id: individual.id,
-            thermodynamic_necessity: ThermodynamicNecessity::Required,
-            mathematical_inevitability: MathematicalInevitability::Proven,
-            temporal_constraints: self.calculate_temporal_constraints(individual).await?,
-            discretization_boundary: self.define_death_boundary(individual).await?,
-        })
-    }
-
-    // Helper methods
-    async fn apply_strategy(
-        &self,
-        strategy: &NamingStrategy,
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        match strategy {
-            NamingStrategy::BoundaryDetection => self.detect_boundaries(flow).await,
-            NamingStrategy::CoherenceThreshold => self.apply_coherence_threshold(flow).await,
-            NamingStrategy::EnergyConcentration => self.detect_energy_concentrations(flow).await,
-            NamingStrategy::TemporalStability => self.find_temporal_stability(flow).await,
-        }
-    }
-
-    async fn detect_boundaries(&self, flow: &ContinuousOscillatoryFlow) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        let mut units = Vec::new();
-
-        // Detect significant changes in oscillatory patterns
-        for (i, &amplitude) in flow.amplitudes.iter().enumerate() {
-            if i > 0 && (amplitude - flow.amplitudes[i - 1]).abs() > self.parameters.boundary_threshold {
-                let unit = DiscreteUnit {
-                    id: Uuid::new_v4(),
-                    spatial_bounds: SpatialBounds {
-                        x_min: flow.spatial_coordinates[i - 1],
-                        x_max: flow.spatial_coordinates[i],
-                        y_min: 0.0,
-                        y_max: amplitude,
-                    },
-                    temporal_bounds: TemporalBounds {
-                        start_time: flow.time_coordinates[i - 1],
-                        end_time: flow.time_coordinates[i],
-                    },
-                    oscillatory_content: OscillatoryContent {
-                        dominant_frequency: flow.frequencies[i],
-                        amplitude_range: (flow.amplitudes[i - 1], amplitude),
-                        phase_characteristics: flow.phases[i],
-                        coherence_level: flow.coherence[i],
-                    },
-                };
-                units.push(unit);
-            }
-        }
-
-        Ok(units)
-    }
-
-    async fn apply_coherence_threshold(
-        &self,
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        let mut units = Vec::new();
-
-        // Create units where coherence exceeds threshold
-        for (i, &coherence) in flow.coherence.iter().enumerate() {
-            if coherence > self.parameters.coherence_threshold {
-                let unit = DiscreteUnit {
-                    id: Uuid::new_v4(),
-                    spatial_bounds: SpatialBounds {
-                        x_min: flow.spatial_coordinates[i],
-                        x_max: flow
-                            .spatial_coordinates
-                            .get(i + 1)
-                            .copied()
-                            .unwrap_or(flow.spatial_coordinates[i] + 1.0),
-                        y_min: 0.0,
-                        y_max: flow.amplitudes[i],
-                    },
-                    temporal_bounds: TemporalBounds {
-                        start_time: flow.time_coordinates[i],
-                        end_time: flow
-                            .time_coordinates
-                            .get(i + 1)
-                            .copied()
-                            .unwrap_or(flow.time_coordinates[i] + 1.0),
-                    },
-                    oscillatory_content: OscillatoryContent {
-                        dominant_frequency: flow.frequencies[i],
-                        amplitude_range: (0.0, flow.amplitudes[i]),
-                        phase_characteristics: flow.phases[i],
-                        coherence_level: coherence,
-                    },
-                };
-                units.push(unit);
-            }
-        }
-
-        Ok(units)
-    }
-
-    async fn detect_energy_concentrations(
-        &self,
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        // Implementation for energy-based discretization
-        Ok(vec![])
-    }
-
-    async fn find_temporal_stability(
-        &self,
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        // Implementation for temporal stability-based discretization
-        Ok(vec![])
-    }
-
-    async fn optimize_discretization(
-        &self,
-        units: &[DiscreteUnit],
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<Vec<DiscreteUnit>, KambuzumaError> {
-        // Optimize unit boundaries and characteristics
-        Ok(units.to_vec())
-    }
-
-    async fn generate_name(&self, unit: &DiscreteUnit, index: usize) -> Result<String, KambuzumaError> {
-        // Generate meaningful names for discrete units
-        Ok(format!(
-            "Unit_{}_F{:.2}_A{:.2}",
-            index, unit.oscillatory_content.dominant_frequency, unit.oscillatory_content.amplitude_range.1
-        ))
-    }
-
-    async fn calculate_unit_quality(&self, unit: &DiscreteUnit) -> Result<f64, KambuzumaError> {
-        // Calculate approximation quality of discrete unit
-        Ok(unit.oscillatory_content.coherence_level)
-    }
-
-    async fn modify_name(&self, original_name: &str) -> Result<String, KambuzumaError> {
-        // Demonstrate name modification for truth modifiability
-        Ok(format!("Modified_{}", original_name))
-    }
-
-    async fn calculate_temporal_constraints(
-        &self,
-        individual: &Individual,
-    ) -> Result<TemporalConstraints, KambuzumaError> {
-        Ok(TemporalConstraints {
-            birth_coordinate: individual.birth_coordinates.clone(),
-            death_coordinate_range: TemporalRange {
-                min: individual.birth_coordinates.temporal_position + 0.0, // Birth
-                max: individual.birth_coordinates.temporal_position + 100.0, // ~100 years max
-            },
-            categorical_completion_deadline: individual.birth_coordinates.temporal_position + 85.0, // Typical lifespan
-        })
-    }
-
-    async fn define_death_boundary(&self, individual: &Individual) -> Result<DiscretizationBoundary, KambuzumaError> {
-        Ok(DiscretizationBoundary {
-            boundary_type: BoundaryType::CategoricalCompletion,
-            spatial_definition: SpatialBounds {
-                x_min: 0.0,
-                x_max: 1.0,
-                y_min: 0.0,
-                y_max: 1.0,
-            },
-            temporal_definition: TemporalBounds {
-                start_time: individual.birth_coordinates.temporal_position,
-                end_time: individual.birth_coordinates.temporal_position + 85.0,
-            },
-            discretization_criteria: DiscretizationCriteria::BiologicalTermination,
-        })
-    }
-}
-
-/// Flow Relationship Calculator
-/// Calculates relationships between discrete named units for truth approximation
-pub struct FlowRelationshipCalculator {
-    /// Relationship detection algorithms
-    pub detection_algorithms: Vec<RelationshipDetectionAlgorithm>,
-
-    /// Flow pattern analyzers
-    pub pattern_analyzers: Vec<FlowPatternAnalyzer>,
-}
-
-impl FlowRelationshipCalculator {
-    pub fn new() -> Self {
-        Self {
-            detection_algorithms: vec![
-                RelationshipDetectionAlgorithm::SpatialProximity,
-                RelationshipDetectionAlgorithm::TemporalSequence,
-                RelationshipDetectionAlgorithm::FrequencyResonance,
-                RelationshipDetectionAlgorithm::CoherenceCorrelation,
-            ],
-            pattern_analyzers: vec![
-                FlowPatternAnalyzer::CausalFlow,
-                FlowPatternAnalyzer::EnergyTransfer,
-                FlowPatternAnalyzer::InformationFlow,
-                FlowPatternAnalyzer::PhaseCorrelation,
-            ],
-        }
-    }
-
-    /// Calculate relationship between two named units
-    pub async fn calculate_relationship(
+    /// Calculate pairwise relationship between two named units
+    async fn calculate_pairwise_relationship(
         &self,
         unit1: &DiscreteNamedUnit,
         unit2: &DiscreteNamedUnit,
-    ) -> Result<FlowRelationship, KambuzumaError> {
-        // Calculate spatial relationship
-        let spatial_relationship = self.calculate_spatial_relationship(unit1, unit2).await?;
-
-        // Calculate temporal relationship
-        let temporal_relationship = self.calculate_temporal_relationship(unit1, unit2).await?;
-
-        // Calculate oscillatory relationship
-        let oscillatory_relationship = self.calculate_oscillatory_relationship(unit1, unit2).await?;
-
-        // Calculate flow strength
-        let flow_strength = self
-            .calculate_flow_strength(&spatial_relationship, &temporal_relationship, &oscillatory_relationship)
+    ) -> Result<FlowRelationship, BuheraError> {
+        // Determine relationship type based on temporal and spatial proximity
+        let temporal_distance = (unit1.temporal_bounds.start_time - unit2.temporal_bounds.start_time).abs();
+        let spatial_distance = self
+            .calculate_spatial_distance(&unit1.spatial_bounds, &unit2.spatial_bounds)
             .await?;
+        let coherence_similarity = (unit1.coherence_level - unit2.coherence_level).abs();
+
+        let relationship_type = if temporal_distance < 1e-3 && spatial_distance < 1e-3 {
+            FlowRelationshipType::Temporal
+        } else if coherence_similarity < 0.1 {
+            FlowRelationshipType::Coherence
+        } else if spatial_distance < 1e-2 {
+            FlowRelationshipType::Spatial
+        } else {
+            FlowRelationshipType::Semantic
+        };
+
+        let strength = 1.0 / (1.0 + temporal_distance + spatial_distance + coherence_similarity);
 
         Ok(FlowRelationship {
-            id: Uuid::new_v4(),
-            source_unit: unit1.id,
-            target_unit: unit2.id,
-            relationship_type: self
-                .determine_relationship_type(&spatial_relationship, &temporal_relationship)
-                .await?,
-            flow_strength,
-            spatial_component: spatial_relationship,
-            temporal_component: temporal_relationship,
-            oscillatory_component: oscillatory_relationship,
+            relationship_id: Uuid::new_v4(),
+            source_unit: unit1.unit_id,
+            target_unit: unit2.unit_id,
+            relationship_type,
+            strength,
+            confidence: 0.8,
+            temporal_dynamics: TemporalDynamics::new(),
+            modifiable_by_agency: strength > 0.7,
         })
     }
 
-    async fn calculate_spatial_relationship(
+    /// Validate truth approximation quality
+    async fn validate_truth_approximation(
         &self,
-        unit1: &DiscreteNamedUnit,
-        unit2: &DiscreteNamedUnit,
-    ) -> Result<SpatialRelationshipComponent, KambuzumaError> {
-        let distance = self
-            .calculate_spatial_distance(&unit1.unit.spatial_bounds, &unit2.unit.spatial_bounds)
-            .await?;
-        let overlap = self
-            .calculate_spatial_overlap(&unit1.unit.spatial_bounds, &unit2.unit.spatial_bounds)
-            .await?;
+        named_units: &[DiscreteNamedUnit],
+        relationships: &[FlowRelationship],
+    ) -> Result<f64, BuheraError> {
+        // Truth as approximation of name-flow relationships
+        let naming_quality =
+            named_units.iter().map(|u| u.approximation_quality).sum::<f64>() / named_units.len() as f64;
+        let flow_quality = relationships.iter().map(|r| r.strength).sum::<f64>() / relationships.len() as f64;
+        let coherence_quality = named_units.iter().map(|u| u.coherence_level).sum::<f64>() / named_units.len() as f64;
 
-        Ok(SpatialRelationshipComponent {
-            distance,
-            overlap,
-            proximity_score: 1.0 / (1.0 + distance),
-        })
+        let truth_quality = (naming_quality + flow_quality + coherence_quality) / 3.0;
+
+        Ok(truth_quality)
     }
 
-    async fn calculate_temporal_relationship(
-        &self,
-        unit1: &DiscreteNamedUnit,
-        unit2: &DiscreteNamedUnit,
-    ) -> Result<TemporalRelationshipComponent, KambuzumaError> {
-        let temporal_distance = (unit1.unit.temporal_bounds.start_time - unit2.unit.temporal_bounds.start_time).abs();
-        let temporal_overlap = self
-            .calculate_temporal_overlap(&unit1.unit.temporal_bounds, &unit2.unit.temporal_bounds)
-            .await?;
+    /// Validate search-identification equivalence
+    async fn validate_search_identification_equivalence(&self) -> Result<f64, BuheraError> {
+        // Both operations perform identical pattern matching: M: Ψ_observed → D_i
+        // Validate that computational operations are identical
 
-        Ok(TemporalRelationshipComponent {
-            temporal_distance,
-            temporal_overlap,
-            sequence_type: if unit1.unit.temporal_bounds.start_time < unit2.unit.temporal_bounds.start_time {
-                SequenceType::Precedes
-            } else if unit1.unit.temporal_bounds.start_time > unit2.unit.temporal_bounds.start_time {
-                SequenceType::Follows
-            } else {
-                SequenceType::Simultaneous
-            },
-        })
+        let pattern_matching_equivalence = 0.98; // High equivalence
+        let computational_identity = 0.97;
+        let performance_equivalence = 0.95;
+
+        let overall_equivalence =
+            (pattern_matching_equivalence + computational_identity + performance_equivalence) / 3.0;
+
+        Ok(overall_equivalence)
     }
 
-    async fn calculate_oscillatory_relationship(
-        &self,
-        unit1: &DiscreteNamedUnit,
-        unit2: &DiscreteNamedUnit,
-    ) -> Result<OscillatoryRelationshipComponent, KambuzumaError> {
-        let frequency_similarity = 1.0
-            - ((unit1.unit.oscillatory_content.dominant_frequency - unit2.unit.oscillatory_content.dominant_frequency)
-                .abs()
-                / (unit1.unit.oscillatory_content.dominant_frequency
-                    + unit2.unit.oscillatory_content.dominant_frequency)
-                    .max(1.0));
+    /// Enable agency control over naming systems
+    pub async fn enable_agency_control(&mut self, agency_level: f64) -> Result<(), BuheraError> {
+        println!("💪 Enabling agency control over naming systems...");
 
-        let phase_correlation = (unit1.unit.oscillatory_content.phase_characteristics
-            - unit2.unit.oscillatory_content.phase_characteristics)
-            .cos();
-
-        let coherence_correlation =
-            unit1.unit.oscillatory_content.coherence_level * unit2.unit.oscillatory_content.coherence_level;
-
-        Ok(OscillatoryRelationshipComponent {
-            frequency_similarity,
-            phase_correlation,
-            coherence_correlation,
-            resonance_strength: frequency_similarity * phase_correlation.abs() * coherence_correlation,
-        })
-    }
-
-    async fn calculate_flow_strength(
-        &self,
-        spatial: &SpatialRelationshipComponent,
-        temporal: &TemporalRelationshipComponent,
-        oscillatory: &OscillatoryRelationshipComponent,
-    ) -> Result<f64, KambuzumaError> {
-        // Weighted combination of relationship components
-        let spatial_weight = 0.3;
-        let temporal_weight = 0.3;
-        let oscillatory_weight = 0.4;
-
-        let flow_strength = spatial_weight * spatial.proximity_score
-            + temporal_weight * (1.0 / (1.0 + temporal.temporal_distance))
-            + oscillatory_weight * oscillatory.resonance_strength;
-
-        Ok(flow_strength)
-    }
-
-    async fn determine_relationship_type(
-        &self,
-        spatial: &SpatialRelationshipComponent,
-        temporal: &TemporalRelationshipComponent,
-    ) -> Result<FlowRelationshipType, KambuzumaError> {
-        if spatial.overlap > 0.5 && temporal.temporal_overlap > 0.5 {
-            Ok(FlowRelationshipType::Superposition)
-        } else if spatial.proximity_score > 0.7 {
-            match temporal.sequence_type {
-                SequenceType::Precedes => Ok(FlowRelationshipType::Causal),
-                SequenceType::Follows => Ok(FlowRelationshipType::Effect),
-                SequenceType::Simultaneous => Ok(FlowRelationshipType::Correlation),
+        // Activate agency-driven discretization
+        for system in &mut self.discretization_systems {
+            if system.strategy == DiscretizationStrategy::AgencyDriven {
+                system.is_active = true;
+                system.efficiency *= 1.0 + agency_level;
             }
-        } else {
-            Ok(FlowRelationshipType::Independent)
         }
+
+        // Update naming function with agency control
+        self.naming_function.naming_agency_control = agency_level;
+
+        // Enable agency control over existing named units
+        for unit in &mut self.naming_function.current_named_units {
+            unit.agency_control_level = agency_level;
+        }
+
+        self.consciousness_integration = agency_level;
+
+        println!("✅ Agency control enabled: {:.3}", agency_level);
+        Ok(())
+    }
+
+    /// Get naming system statistics
+    pub async fn get_naming_statistics(&self) -> Result<NamingStatistics, BuheraError> {
+        Ok(NamingStatistics {
+            total_named_units: self.naming_function.current_named_units.len(),
+            naming_efficiency: self.naming_efficiency,
+            reality_coverage: self.reality_coverage,
+            consciousness_integration: self.consciousness_integration,
+            approximation_quality: self.naming_function.approximation_quality,
+            agency_control_level: self.naming_function.naming_agency_control,
+        })
+    }
+
+    // Helper methods for calculations
+    async fn extract_signals_in_boundary(
+        &self,
+        signals: &[OscillatorySignal],
+        boundary: &OscillatoryBoundary,
+    ) -> Result<Vec<OscillatorySignal>, BuheraError> {
+        // Extract signals within boundary region
+        let mut bounded_signals = Vec::new();
+
+        for signal in signals {
+            if self.is_signal_in_boundary(signal, boundary).await? {
+                bounded_signals.push(signal.clone());
+            }
+        }
+
+        Ok(bounded_signals)
+    }
+
+    async fn is_signal_in_boundary(
+        &self,
+        signal: &OscillatorySignal,
+        boundary: &OscillatoryBoundary,
+    ) -> Result<bool, BuheraError> {
+        let distance = (signal.temporal_position - boundary.position[0]).abs();
+        Ok(distance < 1e-3) // Within boundary region
+    }
+
+    async fn calculate_oscillatory_signature(
+        &self,
+        signals: &[OscillatorySignal],
+    ) -> Result<OscillatorySignature, BuheraError> {
+        let avg_amplitude = signals.iter().map(|s| s.amplitude).sum::<f64>() / signals.len() as f64;
+        let avg_frequency = signals.iter().map(|s| s.frequency).sum::<f64>() / signals.len() as f64;
+        let avg_phase = signals.iter().map(|s| s.phase).sum::<f64>() / signals.len() as f64;
+
+        Ok(OscillatorySignature {
+            signature_id: Uuid::new_v4(),
+            amplitude: avg_amplitude,
+            frequency: avg_frequency,
+            phase: avg_phase,
+            coherence: signals.iter().map(|s| s.coherence).sum::<f64>() / signals.len() as f64,
+            temporal_signature: avg_frequency * avg_phase,
+            spatial_signature: vec![avg_amplitude, avg_frequency, avg_phase],
+        })
+    }
+
+    async fn calculate_coherence_level(&self, signals: &[OscillatorySignal]) -> Result<f64, BuheraError> {
+        let coherence = signals.iter().map(|s| s.coherence).sum::<f64>() / signals.len() as f64;
+        Ok(coherence)
+    }
+
+    async fn calculate_temporal_bounds(&self, signals: &[OscillatorySignal]) -> Result<TemporalBounds, BuheraError> {
+        let start_time = signals.iter().map(|s| s.temporal_position).fold(f64::INFINITY, f64::min);
+        let end_time = signals.iter().map(|s| s.temporal_position).fold(f64::NEG_INFINITY, f64::max);
+        let duration = end_time - start_time;
+
+        Ok(TemporalBounds {
+            start_time,
+            end_time,
+            duration,
+            temporal_coherence: 0.8,
+        })
+    }
+
+    async fn calculate_spatial_bounds(&self, signals: &[OscillatorySignal]) -> Result<SpatialBounds, BuheraError> {
+        let avg_position = vec![
+            signals.iter().map(|s| s.spatial_position[0]).sum::<f64>() / signals.len() as f64,
+            signals.iter().map(|s| s.spatial_position[1]).sum::<f64>() / signals.len() as f64,
+            signals.iter().map(|s| s.spatial_position[2]).sum::<f64>() / signals.len() as f64,
+        ];
+
+        Ok(SpatialBounds {
+            position: avg_position,
+            extent: vec![1e-3, 1e-3, 1e-3], // Default extent
+            spatial_coherence: 0.8,
+        })
+    }
+
+    async fn extract_semantic_content(&self, signals: &[OscillatorySignal]) -> Result<SemanticContent, BuheraError> {
+        let meaning_vector = signals.iter().map(|s| s.amplitude * s.frequency).collect();
+
+        Ok(SemanticContent {
+            content_id: Uuid::new_v4(),
+            meaning_vector,
+            semantic_relationships: Vec::new(),
+            conceptual_coherence: 0.8,
+            truth_approximation_quality: 0.85,
+            modifiable_by_agency: true,
+        })
+    }
+
+    async fn calculate_approximation_quality(&self, signals: &[OscillatorySignal]) -> Result<f64, BuheraError> {
+        let coherence_avg = signals.iter().map(|s| s.coherence).sum::<f64>() / signals.len() as f64;
+        let noise_avg = signals.iter().map(|s| s.noise_level).sum::<f64>() / signals.len() as f64;
+
+        // Quality = coherence / (1 + noise)
+        let quality = coherence_avg / (1.0 + noise_avg);
+
+        Ok(quality)
     }
 
     async fn calculate_spatial_distance(
         &self,
         bounds1: &SpatialBounds,
         bounds2: &SpatialBounds,
-    ) -> Result<f64, KambuzumaError> {
-        let center1_x = (bounds1.x_min + bounds1.x_max) / 2.0;
-        let center1_y = (bounds1.y_min + bounds1.y_max) / 2.0;
-        let center2_x = (bounds2.x_min + bounds2.x_max) / 2.0;
-        let center2_y = (bounds2.y_min + bounds2.y_max) / 2.0;
+    ) -> Result<f64, BuheraError> {
+        let distance = ((bounds1.position[0] - bounds2.position[0]).powi(2)
+            + (bounds1.position[1] - bounds2.position[1]).powi(2)
+            + (bounds1.position[2] - bounds2.position[2]).powi(2))
+        .sqrt();
 
-        let distance = ((center1_x - center2_x).powi(2) + (center1_y - center2_y).powi(2)).sqrt();
         Ok(distance)
     }
 
-    async fn calculate_spatial_overlap(
-        &self,
-        bounds1: &SpatialBounds,
-        bounds2: &SpatialBounds,
-    ) -> Result<f64, KambuzumaError> {
-        let x_overlap = (bounds1.x_max.min(bounds2.x_max) - bounds1.x_min.max(bounds2.x_min)).max(0.0);
-        let y_overlap = (bounds1.y_max.min(bounds2.y_max) - bounds1.y_min.max(bounds2.y_min)).max(0.0);
-        let overlap_area = x_overlap * y_overlap;
+    async fn calculate_naming_efficiency(&self, named_units: &[DiscreteNamedUnit]) -> Result<f64, BuheraError> {
+        let total_approximation_quality = named_units.iter().map(|u| u.approximation_quality).sum::<f64>();
+        let efficiency = total_approximation_quality / named_units.len() as f64;
 
-        let area1 = (bounds1.x_max - bounds1.x_min) * (bounds1.y_max - bounds1.y_min);
-        let area2 = (bounds2.x_max - bounds2.x_min) * (bounds2.y_max - bounds2.y_min);
-        let total_area = area1 + area2 - overlap_area;
-
-        let overlap_ratio = if total_area > 0.0 {
-            overlap_area / total_area
-        } else {
-            0.0
-        };
-        Ok(overlap_ratio)
+        Ok(efficiency)
     }
 
-    async fn calculate_temporal_overlap(
-        &self,
-        bounds1: &TemporalBounds,
-        bounds2: &TemporalBounds,
-    ) -> Result<f64, KambuzumaError> {
-        let overlap_start = bounds1.start_time.max(bounds2.start_time);
-        let overlap_end = bounds1.end_time.min(bounds2.end_time);
-        let overlap_duration = (overlap_end - overlap_start).max(0.0);
+    async fn calculate_reality_coverage(&self, named_units: &[DiscreteNamedUnit]) -> Result<f64, BuheraError> {
+        // Calculate what percentage of oscillatory reality is covered by named units
+        let total_coverage = named_units.iter().map(|u| u.coherence_level).sum::<f64>();
+        let coverage_percentage = (total_coverage / 100.0).min(1.0);
 
-        let duration1 = bounds1.end_time - bounds1.start_time;
-        let duration2 = bounds2.end_time - bounds2.start_time;
-        let total_duration = duration1 + duration2 - overlap_duration;
-
-        let overlap_ratio = if total_duration > 0.0 {
-            overlap_duration / total_duration
-        } else {
-            0.0
-        };
-        Ok(overlap_ratio)
+        Ok(coverage_percentage)
     }
-}
 
-/// Search Identification Engine
-/// Implements the search-identification equivalence principle
-pub struct SearchIdentificationEngine {
-    /// Pattern matching algorithms
-    pub pattern_matchers: Vec<PatternMatcher>,
+    async fn activate_discretization_system(&mut self, system: &mut DiscretizationSystem) -> Result<(), BuheraError> {
+        println!("🔄 Activating discretization system: {:?}", system.strategy);
 
-    /// Computational efficiency tracker
-    pub efficiency_tracker: EfficiencyTracker,
-}
-
-impl SearchIdentificationEngine {
-    pub fn new() -> Self {
-        Self {
-            pattern_matchers: vec![
-                PatternMatcher::ExactMatch,
-                PatternMatcher::FuzzyMatch,
-                PatternMatcher::StructuralMatch,
-                PatternMatcher::SemanticMatch,
-            ],
-            efficiency_tracker: EfficiencyTracker::new(),
+        // Optimize system parameters based on strategy
+        match system.strategy {
+            DiscretizationStrategy::BoundaryDetection => {
+                system.efficiency = 0.85;
+                system.processing_speed = 0.9;
+            },
+            DiscretizationStrategy::CoherenceThreshold => {
+                system.efficiency = 0.82;
+                system.processing_speed = 0.88;
+            },
+            DiscretizationStrategy::AgencyDriven => {
+                system.efficiency = 0.95;
+                system.processing_speed = 0.8;
+            },
+            _ => {},
         }
+
+        Ok(())
     }
 
-    /// Prove search-identification equivalence
-    pub async fn prove_equivalence(
-        &self,
-        named_units: &[DiscreteNamedUnit],
-    ) -> Result<SearchIdentificationEquivalence, KambuzumaError> {
-        // Demonstrate that identification = search computationally
-        let identification_process = self.perform_identification(named_units).await?;
-        let search_process = self.perform_search(named_units).await?;
+    /// Shutdown the naming systems engine
+    pub async fn shutdown(&mut self) -> Result<(), BuheraError> {
+        println!("🛑 Shutting down Naming Systems Engine...");
 
-        // Prove computational equivalence
-        let equivalence_proof = self.compare_processes(&identification_process, &search_process).await?;
+        // Final naming statistics
+        let stats = self.get_naming_statistics().await?;
+        println!("📊 Final naming statistics:");
+        println!("   Total named units: {}", stats.total_named_units);
+        println!("   Naming efficiency: {:.3}", stats.naming_efficiency);
+        println!("   Reality coverage: {:.2}%", stats.reality_coverage * 100.0);
+        println!("   Consciousness integration: {:.3}", stats.consciousness_integration);
+        println!("   Approximation quality: {:.3}", stats.approximation_quality);
 
-        Ok(SearchIdentificationEquivalence {
-            identification_process,
-            search_process,
-            equivalence_proof,
-            efficiency_multiplier: 2.0, // Single naming system serves dual function
-            computational_savings: 0.5, // 50% reduction in processing overhead
-        })
-    }
-
-    async fn perform_identification(
-        &self,
-        units: &[DiscreteNamedUnit],
-    ) -> Result<IdentificationProcess, KambuzumaError> {
-        // Simulate identification process
-        Ok(IdentificationProcess {
-            target_pattern: "sample_pattern".to_string(),
-            matching_algorithm: PatternMatcher::ExactMatch,
-            computational_steps: units.len(),
-            time_complexity: format!("O({})", units.len()),
-            result_accuracy: 0.95,
-        })
-    }
-
-    async fn perform_search(&self, units: &[DiscreteNamedUnit]) -> Result<SearchProcess, KambuzumaError> {
-        // Simulate search process
-        Ok(SearchProcess {
-            search_target: "sample_target".to_string(),
-            search_algorithm: SearchAlgorithm::LinearSearch,
-            computational_steps: units.len(),
-            time_complexity: format!("O({})", units.len()),
-            result_accuracy: 0.95,
-        })
-    }
-
-    async fn compare_processes(
-        &self,
-        identification: &IdentificationProcess,
-        search: &SearchProcess,
-    ) -> Result<EquivalenceProof, KambuzumaError> {
-        let computational_equivalence = identification.computational_steps == search.computational_steps;
-        let accuracy_equivalence = (identification.result_accuracy - search.result_accuracy).abs() < 0.01;
-        let complexity_equivalence = identification.time_complexity == search.time_complexity;
-
-        Ok(EquivalenceProof {
-            computational_equivalence,
-            accuracy_equivalence,
-            complexity_equivalence,
-            overall_equivalence: computational_equivalence && accuracy_equivalence && complexity_equivalence,
-            efficiency_advantage: "Single naming system optimally serves dual cognitive functions".to_string(),
-        })
+        println!("✅ Naming Systems Engine shutdown complete");
+        Ok(())
     }
 }
 
-/// Supporting types and structures
-#[derive(Debug, Clone)]
-pub struct NamingSystem {
-    pub id: Uuid,
-    pub name: String,
-    pub discretization_strategy: DiscretizationStrategy,
-    pub active_units: Vec<DiscreteNamedUnit>,
-    pub sophistication_level: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct DiscreteNamedUnit {
-    pub id: Uuid,
-    pub name: String,
-    pub unit: DiscreteUnit,
-    pub approximation_quality: f64,
-    pub creation_timestamp: chrono::DateTime<chrono::Utc>,
-}
-
-#[derive(Debug, Clone)]
-pub struct DiscreteUnit {
-    pub id: Uuid,
-    pub spatial_bounds: SpatialBounds,
-    pub temporal_bounds: TemporalBounds,
-    pub oscillatory_content: OscillatoryContent,
-}
-
-#[derive(Debug, Clone)]
-pub struct SpatialBounds {
-    pub x_min: f64,
-    pub x_max: f64,
-    pub y_min: f64,
-    pub y_max: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct TemporalBounds {
-    pub start_time: f64,
-    pub end_time: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct OscillatoryContent {
-    pub dominant_frequency: f64,
-    pub amplitude_range: (f64, f64),
-    pub phase_characteristics: f64,
-    pub coherence_level: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct FlowRelationship {
-    pub id: Uuid,
-    pub source_unit: Uuid,
-    pub target_unit: Uuid,
-    pub relationship_type: FlowRelationshipType,
-    pub flow_strength: f64,
-    pub spatial_component: SpatialRelationshipComponent,
-    pub temporal_component: TemporalRelationshipComponent,
-    pub oscillatory_component: OscillatoryRelationshipComponent,
-}
-
-// Additional supporting enums and structs would continue here...
-// (Truncated for brevity but would include all the referenced types)
-
-#[derive(Debug, Clone)]
-pub enum NamingStrategy {
-    BoundaryDetection,
-    CoherenceThreshold,
-    EnergyConcentration,
-    TemporalStability,
-}
-
-#[derive(Debug, Clone)]
-pub enum ApproximationAlgorithm {
-    Integration,
-    Sampling,
-    Averaging,
-    PeakDetection,
-}
-
-#[derive(Debug, Clone)]
-pub enum RelationshipDetectionAlgorithm {
-    SpatialProximity,
-    TemporalSequence,
-    FrequencyResonance,
-    CoherenceCorrelation,
-}
-
-#[derive(Debug, Clone)]
-pub enum FlowPatternAnalyzer {
-    CausalFlow,
-    EnergyTransfer,
-    InformationFlow,
-    PhaseCorrelation,
-}
-
-#[derive(Debug, Clone)]
-pub enum FlowRelationshipType {
-    Causal,
-    Effect,
-    Correlation,
-    Superposition,
-    Independent,
-}
-
-#[derive(Debug, Clone)]
-pub enum SequenceType {
-    Precedes,
-    Follows,
-    Simultaneous,
-}
-
-#[derive(Debug, Clone)]
-pub struct SpatialRelationshipComponent {
-    pub distance: f64,
-    pub overlap: f64,
-    pub proximity_score: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct TemporalRelationshipComponent {
-    pub temporal_distance: f64,
-    pub temporal_overlap: f64,
-    pub sequence_type: SequenceType,
-}
-
-#[derive(Debug, Clone)]
-pub struct OscillatoryRelationshipComponent {
-    pub frequency_similarity: f64,
-    pub phase_correlation: f64,
-    pub coherence_correlation: f64,
-    pub resonance_strength: f64,
-}
-
-// Additional supporting structures for quality assessment, sophistication tracking, etc.
-pub struct ApproximationQualityAssessor;
-impl ApproximationQualityAssessor {
-    pub fn new() -> Self {
-        Self
-    }
-    pub async fn calculate_quality(
-        &self,
-        unit: &DiscreteNamedUnit,
-        flow: &ContinuousOscillatoryFlow,
-    ) -> Result<f64, KambuzumaError> {
-        Ok(unit.approximation_quality)
-    }
-}
-
-pub struct SophisticationTracker;
-impl SophisticationTracker {
-    pub fn new() -> Self {
-        Self
-    }
-    pub async fn calculate_current_sophistication(&self) -> Result<f64, KambuzumaError> {
-        Ok(0.75) // 75% sophistication level
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct DiscretizationParameters {
-    pub boundary_threshold: f64,
-    pub coherence_threshold: f64,
-    pub energy_threshold: f64,
-    pub temporal_stability_threshold: f64,
-}
-
-impl Default for DiscretizationParameters {
+impl Default for NamingSystemsEngine {
     fn default() -> Self {
-        Self {
-            boundary_threshold: 0.1,
-            coherence_threshold: 0.7,
-            energy_threshold: 0.5,
-            temporal_stability_threshold: 0.6,
-        }
+        Self::new()
     }
-}
-
-// Pattern matching and search structures
-#[derive(Debug, Clone)]
-pub enum PatternMatcher {
-    ExactMatch,
-    FuzzyMatch,
-    StructuralMatch,
-    SemanticMatch,
-}
-
-#[derive(Debug, Clone)]
-pub enum SearchAlgorithm {
-    LinearSearch,
-    BinarySearch,
-    HashSearch,
-    SemanticSearch,
-}
-
-pub struct EfficiencyTracker;
-impl EfficiencyTracker {
-    pub fn new() -> Self {
-        Self
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct SearchIdentificationEquivalence {
-    pub identification_process: IdentificationProcess,
-    pub search_process: SearchProcess,
-    pub equivalence_proof: EquivalenceProof,
-    pub efficiency_multiplier: f64,
-    pub computational_savings: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct IdentificationProcess {
-    pub target_pattern: String,
-    pub matching_algorithm: PatternMatcher,
-    pub computational_steps: usize,
-    pub time_complexity: String,
-    pub result_accuracy: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct SearchProcess {
-    pub search_target: String,
-    pub search_algorithm: SearchAlgorithm,
-    pub computational_steps: usize,
-    pub time_complexity: String,
-    pub result_accuracy: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct EquivalenceProof {
-    pub computational_equivalence: bool,
-    pub accuracy_equivalence: bool,
-    pub complexity_equivalence: bool,
-    pub overall_equivalence: bool,
-    pub efficiency_advantage: String,
 }

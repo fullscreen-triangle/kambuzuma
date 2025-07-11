@@ -1,1324 +1,1078 @@
-use crate::agency_assertion::AgencyAssertionEngine;
-use crate::config::KambuzumaConfig;
-use crate::errors::KambuzumaError;
-use crate::naming_systems::NamingSystemsEngine;
+// Reality Formation Engine
+// Enables collective reality formation through coordinated naming systems
+//
+// Implements the collective approximation formula: R = lim(n→∞) (1/n) Σ(i=1 to n) N_i(Ψ)
+// Convergence through social coordination and pragmatic success
+// Multiple agent naming systems simulation with stability and modifiability
+//
+// In Memory of Mrs. Stella-Lorraine Masunda
+
+use crate::errors::*;
 use crate::types::*;
 use std::collections::HashMap;
-use std::sync::Arc;
-use tokio::sync::RwLock;
+use tokio::time::{Duration, Instant};
 use uuid::Uuid;
 
 /// Reality Formation Engine
-/// Implements the collective approximation systems that create reality from multiple naming systems
-///
-/// Core insight: Reality emerges from the convergence of multiple conscious agents' naming systems
-/// Reality = lim(n→∞) (1/n) Σ(i=1 to n) N_i(Ψ)
-/// Where N_i represents the naming system of agent i operating on oscillatory substrate Ψ
-///
-/// Reality formation involves:
-/// - Convergence of multiple naming systems toward shared approximations
-/// - Collective reality modification through coordinated agency
-/// - Stability and modifiability coefficients
-/// - Social coordination pressures
-/// - Transmission advantages of stable approximation systems
+/// Enables collective reality formation through coordinated naming systems
+/// Implements convergence mechanisms for multi-agent reality coordination
 pub struct RealityFormationEngine {
-    /// Engine identifier
-    pub id: Uuid,
+    pub engine_id: Uuid,
+    pub collective_approximation_system: CollectiveApproximationSystem,
+    pub convergence_mechanisms: Vec<ConvergenceMechanism>,
+    pub multi_agent_naming_systems: Vec<MultiAgentNamingSystem>,
+    pub reality_stability_analyzer: RealityStabilityAnalyzer,
+    pub reality_modifiability_controller: RealityModifiabilityController,
+    pub social_coordination_system: SocialCoordinationSystem,
+    pub pragmatic_success_evaluator: PragmaticSuccessEvaluator,
+    pub collective_reality_state: CollectiveRealityState,
+    pub reality_formation_history: Vec<RealityFormationEvent>,
+    pub consensus_threshold: f64,
+    pub stability_coefficient: f64,
+    pub modifiability_coefficient: f64,
+}
 
-    /// Configuration
-    pub config: Arc<RwLock<KambuzumaConfig>>,
+/// Collective Approximation System
+/// Implements R = lim(n→∞) (1/n) Σ(i=1 to n) N_i(Ψ)
+pub struct CollectiveApproximationSystem {
+    pub system_id: Uuid,
+    pub agent_naming_functions: Vec<AgentNamingFunction>,
+    pub approximation_aggregator: ApproximationAggregator,
+    pub convergence_calculator: ConvergenceCalculator,
+    pub reality_approximation_quality: f64,
+    pub agent_count: usize,
+    pub convergence_rate: f64,
+}
 
-    /// Connection to naming systems (source of reality approximations)
-    pub naming_systems: Arc<RwLock<NamingSystemsEngine>>,
+/// Agent Naming Function - Individual agent's naming function N_i(Ψ)
+pub struct AgentNamingFunction {
+    pub agent_id: Uuid,
+    pub agent_name: String,
+    pub naming_function: NamingFunction,
+    pub naming_consistency: f64,
+    pub social_influence: f64,
+    pub pragmatic_success_rate: f64,
+    pub coordination_willingness: f64,
+    pub reality_modification_capability: f64,
+}
 
-    /// Connection to agency assertion (reality modification mechanism)
-    pub agency_assertion: Arc<RwLock<AgencyAssertionEngine>>,
+/// Convergence Mechanisms - Methods for achieving collective reality
+#[derive(Debug, Clone)]
+pub enum ConvergenceMechanism {
+    SocialCoordination,    // Coordination through social interaction
+    PragmaticSuccess,      // Convergence through practical success
+    AuthorityAssertion,    // Convergence through authority
+    ConsensusBuilding,     // Convergence through consensus
+    CompetitiveSelection,  // Convergence through competition
+    EvolutionaryStability, // Convergence through evolutionary stability
+    CulturalTransmission,  // Convergence through cultural transmission
+    NetworkEffects,        // Convergence through network effects
+}
 
-    /// Active reality formations
-    pub reality_formations: Arc<RwLock<HashMap<String, RealityFormation>>>,
+/// Convergence Mechanism System
+pub struct ConvergenceMechanismSystem {
+    pub mechanism_id: Uuid,
+    pub mechanism_type: ConvergenceMechanism,
+    pub effectiveness: f64,
+    pub coordination_requirements: f64,
+    pub stability_contribution: f64,
+    pub modifiability_impact: f64,
+    pub is_active: bool,
+}
 
-    /// Convergence mechanisms
-    pub convergence_engine: Arc<RwLock<ConvergenceEngine>>,
+/// Multi-Agent Naming System - Coordinated naming across multiple agents
+pub struct MultiAgentNamingSystem {
+    pub system_id: Uuid,
+    pub participating_agents: Vec<Uuid>,
+    pub shared_naming_conventions: HashMap<String, SharedNamingConvention>,
+    pub coordination_protocols: Vec<CoordinationProtocol>,
+    pub consensus_mechanisms: Vec<ConsensusMechanism>,
+    pub reality_modification_rules: Vec<RealityModificationRule>,
+    pub coordination_efficiency: f64,
+}
 
-    /// Collective approximation calculator
-    pub collective_approximation_calculator: Arc<RwLock<CollectiveApproximationCalculator>>,
+/// Shared Naming Convention - Agreed-upon naming across agents
+pub struct SharedNamingConvention {
+    pub convention_id: Uuid,
+    pub naming_target: String,
+    pub agreed_name: String,
+    pub consensus_level: f64,
+    pub stability_score: f64,
+    pub modification_threshold: f64,
+    pub participating_agents: Vec<Uuid>,
+    pub creation_timestamp: Instant,
+}
 
-    /// Reality modification coordinator
-    pub reality_modification_coordinator: Arc<RwLock<RealityModificationCoordinator>>,
+/// Reality Stability Analyzer - Analyzes stability of collective reality
+pub struct RealityStabilityAnalyzer {
+    pub analyzer_id: Uuid,
+    pub stability_metrics: Vec<StabilityMetric>,
+    pub stability_predictors: Vec<StabilityPredictor>,
+    pub stability_threats: Vec<StabilityThreat>,
+    pub stability_enhancement_strategies: Vec<StabilityEnhancementStrategy>,
+    pub current_stability_level: f64,
+}
 
-    /// Stability coefficient calculator
-    pub stability_calculator: Arc<RwLock<StabilityCalculator>>,
+/// Reality Modifiability Controller - Controls how reality can be modified
+pub struct RealityModifiabilityController {
+    pub controller_id: Uuid,
+    pub modification_rules: Vec<RealityModificationRule>,
+    pub modification_permissions: HashMap<Uuid, ModificationPermission>,
+    pub modification_constraints: Vec<ModificationConstraint>,
+    pub modification_history: Vec<RealityModificationEvent>,
+    pub current_modifiability_level: f64,
+}
 
-    /// Social coordination analyzer
-    pub social_coordination_analyzer: Arc<RwLock<SocialCoordinationAnalyzer>>,
+/// Social Coordination System - Manages social coordination for reality formation
+pub struct SocialCoordinationSystem {
+    pub system_id: Uuid,
+    pub coordination_protocols: Vec<CoordinationProtocol>,
+    pub fire_circle_protocols: Vec<FireCircleProtocol>,
+    pub communication_channels: Vec<CommunicationChannel>,
+    pub coordination_efficiency_metrics: Vec<CoordinationEfficiencyMetric>,
+    pub social_influence_calculator: SocialInfluenceCalculator,
+    pub coordination_success_rate: f64,
+}
 
-    /// Reality convergence tracker
-    pub convergence_tracker: Arc<RwLock<ConvergenceTracker>>,
+/// Pragmatic Success Evaluator - Evaluates practical success of reality formulations
+pub struct PragmaticSuccessEvaluator {
+    pub evaluator_id: Uuid,
+    pub success_metrics: Vec<PragmaticSuccessMetric>,
+    pub success_predictors: Vec<SuccessPredictor>,
+    pub success_optimization_strategies: Vec<SuccessOptimizationStrategy>,
+    pub reality_effectiveness_calculator: RealityEffectivenessCalculator,
+    pub current_success_rate: f64,
+}
+
+/// Collective Reality State - Current state of collective reality
+pub struct CollectiveRealityState {
+    pub state_id: Uuid,
+    pub consensus_level: f64,
+    pub stability_level: f64,
+    pub modifiability_level: f64,
+    pub coordination_efficiency: f64,
+    pub pragmatic_success_rate: f64,
+    pub agent_participation_rate: f64,
+    pub reality_coherence: f64,
+    pub modification_activity: f64,
+    pub timestamp: Instant,
+}
+
+/// Reality Formation Event - Events in reality formation process
+pub struct RealityFormationEvent {
+    pub event_id: Uuid,
+    pub event_type: RealityFormationEventType,
+    pub participating_agents: Vec<Uuid>,
+    pub reality_modification_attempt: Option<RealityModificationAttempt>,
+    pub consensus_change: f64,
+    pub stability_impact: f64,
+    pub coordination_level: f64,
+    pub success_level: f64,
+    pub timestamp: Instant,
+}
+
+/// Reality Formation Event Types
+#[derive(Debug, Clone)]
+pub enum RealityFormationEventType {
+    ConsensusBuilding,       // Building consensus on reality
+    RealityModification,     // Modifying existing reality
+    ConflictResolution,      // Resolving reality conflicts
+    CoordinationImprovement, // Improving coordination
+    StabilityEnhancement,    // Enhancing stability
+    ModifiabilityChange,     // Changing modifiability
+    AgentJoining,            // Agent joining reality formation
+    AgentLeaving,            // Agent leaving reality formation
+}
+
+/// Coordination Protocol - Protocols for coordinating reality formation
+pub struct CoordinationProtocol {
+    pub protocol_id: Uuid,
+    pub protocol_name: String,
+    pub coordination_mechanism: ConvergenceMechanism,
+    pub required_participants: usize,
+    pub coordination_efficiency: f64,
+    pub stability_contribution: f64,
+    pub modification_rules: Vec<RealityModificationRule>,
+    pub success_rate: f64,
+}
+
+/// Fire Circle Protocol - Fire circle enhanced coordination
+pub struct FireCircleProtocol {
+    pub protocol_id: Uuid,
+    pub enhancement_factor: f64,       // 79× enhancement
+    pub optimal_participants: usize,   // 4-6 participants
+    pub session_duration: Duration,    // 4-6 hours
+    pub communication_complexity: f64, // 79× complexity increase
+    pub coordination_efficiency: f64,
+    pub reality_modification_power: f64,
+}
+
+/// Reality Modification Rule - Rules for modifying collective reality
+pub struct RealityModificationRule {
+    pub rule_id: Uuid,
+    pub rule_description: String,
+    pub required_consensus: f64,
+    pub required_coordination: f64,
+    pub stability_impact_threshold: f64,
+    pub agent_requirements: Vec<AgentRequirement>,
+    pub modification_constraints: Vec<ModificationConstraint>,
+}
+
+/// Stability Metric - Measures stability of collective reality
+pub struct StabilityMetric {
+    pub metric_id: Uuid,
+    pub metric_name: String,
+    pub current_value: f64,
+    pub optimal_range: (f64, f64),
+    pub stability_contribution: f64,
+    pub trend_direction: TrendDirection,
+}
+
+/// Modification Constraint - Constraints on reality modification
+pub struct ModificationConstraint {
+    pub constraint_id: Uuid,
+    pub constraint_type: ModificationConstraintType,
+    pub constraint_strength: f64,
+    pub affected_aspects: Vec<String>,
+    pub bypass_requirements: Vec<BypassRequirement>,
+}
+
+/// Modification Constraint Types
+#[derive(Debug, Clone)]
+pub enum ModificationConstraintType {
+    ConsensusThreshold,       // Requires minimum consensus
+    StabilityMaintenance,     // Must maintain stability
+    CoordinationRequirement,  // Requires coordination
+    AuthorityPermission,      // Requires authority permission
+    PragmaticSuccess,         // Must demonstrate pragmatic success
+    GradualChange,            // Changes must be gradual
+    ReversibilityRequirement, // Changes must be reversible
+    ConflictResolution,       // Must resolve conflicts
 }
 
 impl RealityFormationEngine {
-    /// Create new reality formation engine
-    pub async fn new(
-        config: Arc<RwLock<KambuzumaConfig>>,
-        naming_systems: Arc<RwLock<NamingSystemsEngine>>,
-        agency_assertion: Arc<RwLock<AgencyAssertionEngine>>,
-    ) -> Result<Self, KambuzumaError> {
-        let id = Uuid::new_v4();
-
-        Ok(Self {
-            id,
-            config,
-            naming_systems,
-            agency_assertion,
-            reality_formations: Arc::new(RwLock::new(HashMap::new())),
-            convergence_engine: Arc::new(RwLock::new(ConvergenceEngine::new())),
-            collective_approximation_calculator: Arc::new(RwLock::new(CollectiveApproximationCalculator::new())),
-            reality_modification_coordinator: Arc::new(RwLock::new(RealityModificationCoordinator::new())),
-            stability_calculator: Arc::new(RwLock::new(StabilityCalculator::new())),
-            social_coordination_analyzer: Arc::new(RwLock::new(SocialCoordinationAnalyzer::new())),
-            convergence_tracker: Arc::new(RwLock::new(ConvergenceTracker::new())),
-        })
-    }
-
-    /// Create multiple agent naming systems for reality formation simulation
-    pub async fn create_multiple_agent_naming_systems(
-        &self,
-        num_agents: usize,
-    ) -> Result<Vec<AgentNamingSystem>, KambuzumaError> {
-        let mut agent_systems = Vec::new();
-
-        for i in 0..num_agents {
-            let agent_id = Uuid::new_v4();
-            let agent_system = self.create_agent_naming_system(agent_id, i).await?;
-            agent_systems.push(agent_system);
-        }
-
-        Ok(agent_systems)
-    }
-
-    /// Demonstrate convergence toward shared reality
-    pub async fn demonstrate_convergence(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<RealityConvergence, KambuzumaError> {
-        let convergence_engine = self.convergence_engine.read().await;
-
-        // Calculate initial divergence
-        let initial_divergence = convergence_engine.calculate_initial_divergence(agent_systems).await?;
-
-        // Apply convergence mechanisms
-        let convergence_mechanisms = convergence_engine.apply_convergence_mechanisms(agent_systems).await?;
-
-        // Calculate convergence trajectory
-        let convergence_trajectory = convergence_engine
-            .calculate_convergence_trajectory(&initial_divergence, &convergence_mechanisms)
-            .await?;
-
-        // Calculate final convergence state
-        let final_convergence = convergence_engine.calculate_final_convergence(&convergence_trajectory).await?;
-
-        Ok(RealityConvergence {
-            id: Uuid::new_v4(),
-            participating_agents: agent_systems.to_vec(),
-            initial_divergence,
-            convergence_mechanisms,
-            convergence_trajectory,
-            final_convergence,
-            convergence_rate: convergence_engine.calculate_convergence_rate(&convergence_trajectory).await?,
-        })
-    }
-
-    /// Calculate collective reality from multiple naming systems
-    pub async fn calculate_collective_reality(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<CollectiveReality, KambuzumaError> {
-        let calculator = self.collective_approximation_calculator.read().await;
-
-        // Apply collective approximation formula
-        // R = lim(n→∞) (1/n) Σ(i=1 to n) N_i(Ψ)
-        let collective_approximation = calculator.calculate_collective_approximation(agent_systems).await?;
-
-        // Calculate reality stability
-        let stability = self.stability_calculator.read().await;
-        let stability_coefficient = stability.calculate_stability_coefficient(&collective_approximation).await?;
-
-        // Calculate social coordination effects
-        let social_analyzer = self.social_coordination_analyzer.read().await;
-        let social_effects = social_analyzer.analyze_social_coordination_effects(agent_systems).await?;
-
-        // Calculate transmission advantages
-        let transmission_advantages = calculator.calculate_transmission_advantages(&collective_approximation).await?;
-
-        Ok(CollectiveReality {
-            id: Uuid::new_v4(),
-            participating_systems: agent_systems.to_vec(),
-            collective_approximation,
-            stability_coefficient,
-            social_coordination_effects: social_effects,
-            transmission_advantages,
-            emergence_quality: calculator.calculate_emergence_quality(&collective_approximation).await?,
-            objective_appearance: true, // Reality appears stable and objective despite being constructed
-        })
-    }
-
-    /// Demonstrate coordinated reality modification
-    pub async fn demonstrate_coordinated_reality_modification(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<CoordinatedRealityModification, KambuzumaError> {
-        let coordinator = self.reality_modification_coordinator.read().await;
-
-        // Identify modification targets
-        let modification_targets = coordinator.identify_modification_targets(agent_systems).await?;
-
-        // Coordinate agent modifications
-        let coordinated_modifications = coordinator
-            .coordinate_agent_modifications(agent_systems, &modification_targets)
-            .await?;
-
-        // Apply coordinated modifications
-        let modification_results = coordinator.apply_coordinated_modifications(&coordinated_modifications).await?;
-
-        // Calculate reality change
-        let reality_change = coordinator.calculate_reality_change(&modification_results).await?;
-
-        Ok(CoordinatedRealityModification {
-            id: Uuid::new_v4(),
-            participating_agents: agent_systems.to_vec(),
-            modification_targets,
-            coordinated_modifications,
-            modification_results,
-            reality_change,
-            modification_success: reality_change.change_magnitude > 0.1,
-        })
-    }
-
-    /// Calculate stability coefficient of collective reality
-    pub async fn calculate_stability_coefficient(
-        &self,
-        collective_reality: &CollectiveReality,
-    ) -> Result<f64, KambuzumaError> {
-        let stability_calc = self.stability_calculator.read().await;
-        stability_calc
-            .calculate_stability_coefficient(&collective_reality.collective_approximation)
-            .await
-    }
-
-    /// Calculate modifiability coefficient of reality modification
-    pub async fn calculate_modifiability_coefficient(
-        &self,
-        modification: &CoordinatedRealityModification,
-    ) -> Result<f64, KambuzumaError> {
-        let coordinator = self.reality_modification_coordinator.read().await;
-        coordinator
-            .calculate_modifiability_coefficient(&modification.reality_change)
-            .await
-    }
-
-    /// Create agent naming system for simulation
-    async fn create_agent_naming_system(
-        &self,
-        agent_id: Uuid,
-        index: usize,
-    ) -> Result<AgentNamingSystem, KambuzumaError> {
-        let naming_systems = self.naming_systems.read().await;
-
-        // Create sample discrete units for this agent
-        let agent_units = naming_systems.create_named_units_sample().await?;
-
-        // Create agent-specific naming variations
-        let agent_naming_variations = self.create_agent_naming_variations(&agent_units, index).await?;
-
-        Ok(AgentNamingSystem {
-            id: Uuid::new_v4(),
-            agent_id,
-            agent_identifier: format!("Agent_{}", index),
-            naming_system: NamingSystem {
-                id: Uuid::new_v4(),
-                name: format!("NamingSystem_{}", index),
-                discretization_strategy: DiscretizationStrategy::Adaptive,
-                active_units: agent_naming_variations,
-                sophistication_level: 0.7 + (index as f64 * 0.05), // Slightly different sophistication levels
-            },
-            individual_approximation_quality: 0.8 + (index as f64 * 0.02),
-            social_interaction_weight: 1.0 / (agent_units.len() as f64),
-        })
-    }
-
-    /// Create agent-specific naming variations
-    async fn create_agent_naming_variations(
-        &self,
-        base_units: &[DiscreteNamedUnit],
-        agent_index: usize,
-    ) -> Result<Vec<DiscreteNamedUnit>, KambuzumaError> {
-        let mut variations = Vec::new();
-
-        for (i, unit) in base_units.iter().enumerate() {
-            let variation = DiscreteNamedUnit {
-                id: Uuid::new_v4(),
-                name: format!("{}_{}", unit.name, agent_index),
-                unit: unit.unit.clone(),
-                approximation_quality: unit.approximation_quality * (0.95 + (agent_index as f64 * 0.01)),
-                creation_timestamp: chrono::Utc::now(),
-            };
-            variations.push(variation);
-        }
-
-        Ok(variations)
-    }
-}
-
-/// Convergence Engine
-/// Manages the convergence of multiple naming systems toward shared reality
-pub struct ConvergenceEngine {
-    /// Convergence mechanisms
-    pub convergence_mechanisms: Vec<ConvergenceMechanism>,
-
-    /// Convergence rate calculators
-    pub rate_calculators: Vec<ConvergenceRateCalculator>,
-
-    /// Divergence analyzers
-    pub divergence_analyzers: Vec<DivergenceAnalyzer>,
-}
-
-impl ConvergenceEngine {
+    /// Initialize the reality formation engine
     pub fn new() -> Self {
+        let engine_id = Uuid::new_v4();
+
+        // Initialize collective approximation system
+        let collective_approximation_system = CollectiveApproximationSystem {
+            system_id: Uuid::new_v4(),
+            agent_naming_functions: Vec::new(),
+            approximation_aggregator: ApproximationAggregator::new(),
+            convergence_calculator: ConvergenceCalculator::new(),
+            reality_approximation_quality: 0.0,
+            agent_count: 0,
+            convergence_rate: 0.0,
+        };
+
+        // Initialize convergence mechanisms
+        let convergence_mechanisms = vec![
+            ConvergenceMechanism::SocialCoordination,
+            ConvergenceMechanism::PragmaticSuccess,
+            ConvergenceMechanism::AuthorityAssertion,
+            ConvergenceMechanism::ConsensusBuilding,
+            ConvergenceMechanism::CompetitiveSelection,
+            ConvergenceMechanism::EvolutionaryStability,
+            ConvergenceMechanism::CulturalTransmission,
+            ConvergenceMechanism::NetworkEffects,
+        ];
+
+        // Initialize social coordination system
+        let social_coordination_system = SocialCoordinationSystem {
+            system_id: Uuid::new_v4(),
+            coordination_protocols: Vec::new(),
+            fire_circle_protocols: Vec::new(),
+            communication_channels: Vec::new(),
+            coordination_efficiency_metrics: Vec::new(),
+            social_influence_calculator: SocialInfluenceCalculator::new(),
+            coordination_success_rate: 0.0,
+        };
+
+        // Initialize pragmatic success evaluator
+        let pragmatic_success_evaluator = PragmaticSuccessEvaluator {
+            evaluator_id: Uuid::new_v4(),
+            success_metrics: Vec::new(),
+            success_predictors: Vec::new(),
+            success_optimization_strategies: Vec::new(),
+            reality_effectiveness_calculator: RealityEffectivenessCalculator::new(),
+            current_success_rate: 0.0,
+        };
+
+        // Initialize reality stability analyzer
+        let reality_stability_analyzer = RealityStabilityAnalyzer {
+            analyzer_id: Uuid::new_v4(),
+            stability_metrics: Vec::new(),
+            stability_predictors: Vec::new(),
+            stability_threats: Vec::new(),
+            stability_enhancement_strategies: Vec::new(),
+            current_stability_level: 0.0,
+        };
+
+        // Initialize reality modifiability controller
+        let reality_modifiability_controller = RealityModifiabilityController {
+            controller_id: Uuid::new_v4(),
+            modification_rules: Vec::new(),
+            modification_permissions: HashMap::new(),
+            modification_constraints: Vec::new(),
+            modification_history: Vec::new(),
+            current_modifiability_level: 0.0,
+        };
+
+        // Initialize collective reality state
+        let collective_reality_state = CollectiveRealityState {
+            state_id: Uuid::new_v4(),
+            consensus_level: 0.0,
+            stability_level: 0.0,
+            modifiability_level: 0.0,
+            coordination_efficiency: 0.0,
+            pragmatic_success_rate: 0.0,
+            agent_participation_rate: 0.0,
+            reality_coherence: 0.0,
+            modification_activity: 0.0,
+            timestamp: Instant::now(),
+        };
+
         Self {
-            convergence_mechanisms: vec![
-                ConvergenceMechanism::SocialCoordination,
-                ConvergenceMechanism::PragmaticSuccess,
-                ConvergenceMechanism::ComputationalEfficiency,
-                ConvergenceMechanism::TransmissionAdvantage,
-            ],
-            rate_calculators: vec![
-                ConvergenceRateCalculator::InteractionBased,
-                ConvergenceRateCalculator::SimilarityBased,
-                ConvergenceRateCalculator::SuccessRateBased,
-            ],
-            divergence_analyzers: vec![
-                DivergenceAnalyzer::NamingDifference,
-                DivergenceAnalyzer::ApproximationQuality,
-                DivergenceAnalyzer::FlowRelationships,
-            ],
+            engine_id,
+            collective_approximation_system,
+            convergence_mechanisms,
+            multi_agent_naming_systems: Vec::new(),
+            reality_stability_analyzer,
+            reality_modifiability_controller,
+            social_coordination_system,
+            pragmatic_success_evaluator,
+            collective_reality_state,
+            reality_formation_history: Vec::new(),
+            consensus_threshold: 0.7,
+            stability_coefficient: 0.8,
+            modifiability_coefficient: 0.6,
         }
     }
 
-    /// Calculate initial divergence between agent naming systems
-    pub async fn calculate_initial_divergence(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<InitialDivergence, KambuzumaError> {
-        let mut divergence_measures = Vec::new();
+    /// Initialize the reality formation engine
+    pub async fn initialize(&mut self) -> Result<(), BuheraError> {
+        println!("🌍 Initializing Reality Formation Engine...");
 
-        // Calculate pairwise divergences
-        for i in 0..agent_systems.len() {
-            for j in (i + 1)..agent_systems.len() {
-                let divergence = self.calculate_pairwise_divergence(&agent_systems[i], &agent_systems[j]).await?;
-                divergence_measures.push(divergence);
-            }
-        }
+        // Initialize collective approximation system
+        self.initialize_collective_approximation_system().await?;
 
-        // Calculate overall divergence
-        let overall_divergence =
-            divergence_measures.iter().map(|d| d.magnitude).sum::<f64>() / divergence_measures.len() as f64;
+        // Initialize convergence mechanisms
+        self.initialize_convergence_mechanisms().await?;
 
-        Ok(InitialDivergence {
-            id: Uuid::new_v4(),
-            participating_systems: agent_systems.to_vec(),
-            pairwise_divergences: divergence_measures,
-            overall_divergence,
-            divergence_sources: self.analyze_divergence_sources(agent_systems).await?,
-        })
+        // Initialize social coordination system
+        self.initialize_social_coordination_system().await?;
+
+        // Initialize fire circle protocols
+        self.initialize_fire_circle_protocols().await?;
+
+        // Initialize pragmatic success evaluation
+        self.initialize_pragmatic_success_evaluation().await?;
+
+        // Initialize reality stability analysis
+        self.initialize_reality_stability_analysis().await?;
+
+        // Initialize reality modifiability control
+        self.initialize_reality_modifiability_control().await?;
+
+        // Begin collective reality formation
+        self.begin_collective_reality_formation().await?;
+
+        println!("✅ Reality Formation Engine initialized");
+        Ok(())
     }
 
-    /// Apply convergence mechanisms
-    pub async fn apply_convergence_mechanisms(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<Vec<ConvergenceMechanismApplication>, KambuzumaError> {
-        let mut applications = Vec::new();
+    /// Initialize collective approximation system
+    async fn initialize_collective_approximation_system(&mut self) -> Result<(), BuheraError> {
+        println!("🔢 Initializing collective approximation system...");
+
+        // Create initial agent naming functions
+        let agent_names = vec!["Alpha", "Beta", "Gamma", "Delta", "Epsilon"];
+
+        for (i, name) in agent_names.iter().enumerate() {
+            let agent_naming_function = AgentNamingFunction {
+                agent_id: Uuid::new_v4(),
+                agent_name: name.to_string(),
+                naming_function: NamingFunction::new(),
+                naming_consistency: 0.8 + (i as f64 * 0.02),
+                social_influence: 0.6 + (i as f64 * 0.05),
+                pragmatic_success_rate: 0.7 + (i as f64 * 0.03),
+                coordination_willingness: 0.75 + (i as f64 * 0.02),
+                reality_modification_capability: 0.65 + (i as f64 * 0.04),
+            };
+
+            self.collective_approximation_system
+                .agent_naming_functions
+                .push(agent_naming_function);
+        }
+
+        self.collective_approximation_system.agent_count = agent_names.len();
+
+        println!(
+            "✅ Collective approximation system initialized with {} agents",
+            self.collective_approximation_system.agent_count
+        );
+        Ok(())
+    }
+
+    /// Initialize convergence mechanisms
+    async fn initialize_convergence_mechanisms(&mut self) -> Result<(), BuheraError> {
+        println!("🔄 Initializing convergence mechanisms...");
 
         for mechanism in &self.convergence_mechanisms {
-            let application = self.apply_single_mechanism(mechanism, agent_systems).await?;
-            applications.push(application);
+            let mechanism_system = ConvergenceMechanismSystem {
+                mechanism_id: Uuid::new_v4(),
+                mechanism_type: mechanism.clone(),
+                effectiveness: self.calculate_mechanism_effectiveness(mechanism).await?,
+                coordination_requirements: self.calculate_coordination_requirements(mechanism).await?,
+                stability_contribution: self.calculate_stability_contribution(mechanism).await?,
+                modifiability_impact: self.calculate_modifiability_impact(mechanism).await?,
+                is_active: true,
+            };
+
+            println!(
+                "   Mechanism: {:?} - Effectiveness: {:.3}",
+                mechanism, mechanism_system.effectiveness
+            );
         }
 
-        Ok(applications)
+        println!("✅ Convergence mechanisms initialized");
+        Ok(())
     }
 
-    /// Calculate convergence trajectory
-    pub async fn calculate_convergence_trajectory(
-        &self,
-        initial_divergence: &InitialDivergence,
-        mechanisms: &[ConvergenceMechanismApplication],
-    ) -> Result<ConvergenceTrajectory, KambuzumaError> {
-        let mut trajectory_points = Vec::new();
-        let mut current_divergence = initial_divergence.overall_divergence;
+    /// Initialize social coordination system
+    async fn initialize_social_coordination_system(&mut self) -> Result<(), BuheraError> {
+        println!("🤝 Initializing social coordination system...");
 
-        // Simulate convergence over time
-        for time_step in 0..100 {
-            // Apply convergence mechanisms
-            let convergence_rate = self.calculate_convergence_rate_at_step(mechanisms, time_step).await?;
-            current_divergence *= (1.0 - convergence_rate);
+        // Create coordination protocols
+        let coordination_protocol = CoordinationProtocol {
+            protocol_id: Uuid::new_v4(),
+            protocol_name: "Consensus Building Protocol".to_string(),
+            coordination_mechanism: ConvergenceMechanism::ConsensusBuilding,
+            required_participants: 3,
+            coordination_efficiency: 0.82,
+            stability_contribution: 0.85,
+            modification_rules: Vec::new(),
+            success_rate: 0.78,
+        };
 
-            let point = ConvergencePoint {
-                time_step,
-                divergence_level: current_divergence,
-                convergence_rate,
+        self.social_coordination_system
+            .coordination_protocols
+            .push(coordination_protocol);
+
+        // Set coordination success rate
+        self.social_coordination_system.coordination_success_rate = 0.8;
+
+        println!("✅ Social coordination system initialized");
+        Ok(())
+    }
+
+    /// Initialize fire circle protocols
+    async fn initialize_fire_circle_protocols(&mut self) -> Result<(), BuheraError> {
+        println!("🔥 Initializing fire circle protocols...");
+
+        // Create fire circle protocol with 79× enhancement
+        let fire_circle_protocol = FireCircleProtocol {
+            protocol_id: Uuid::new_v4(),
+            enhancement_factor: 79.0,                        // 79× enhancement
+            optimal_participants: 5,                         // 4-6 participants
+            session_duration: Duration::from_secs(4 * 3600), // 4 hours
+            communication_complexity: 79.0,                  // 79× complexity increase
+            coordination_efficiency: 0.95,
+            reality_modification_power: 0.92,
+        };
+
+        self.social_coordination_system.fire_circle_protocols.push(fire_circle_protocol);
+
+        println!("✅ Fire circle protocols initialized with 79× enhancement");
+        Ok(())
+    }
+
+    /// Initialize pragmatic success evaluation
+    async fn initialize_pragmatic_success_evaluation(&mut self) -> Result<(), BuheraError> {
+        println!("🎯 Initializing pragmatic success evaluation...");
+
+        // Create success metrics
+        let success_metrics = vec![
+            "coordination_efficiency",
+            "stability_maintenance",
+            "modification_success",
+            "consensus_building",
+            "conflict_resolution",
+        ];
+
+        for metric in success_metrics {
+            let success_metric = PragmaticSuccessMetric::new(metric);
+            self.pragmatic_success_evaluator.success_metrics.push(success_metric);
+        }
+
+        // Set initial success rate
+        self.pragmatic_success_evaluator.current_success_rate = 0.75;
+
+        println!("✅ Pragmatic success evaluation initialized");
+        Ok(())
+    }
+
+    /// Initialize reality stability analysis
+    async fn initialize_reality_stability_analysis(&mut self) -> Result<(), BuheraError> {
+        println!("⚖️  Initializing reality stability analysis...");
+
+        // Create stability metrics
+        let stability_metrics = vec![
+            ("consensus_stability", 0.8, (0.7, 0.9)),
+            ("coordination_stability", 0.75, (0.6, 0.9)),
+            ("modification_stability", 0.7, (0.5, 0.85)),
+            ("agent_participation_stability", 0.85, (0.7, 0.95)),
+            ("reality_coherence_stability", 0.8, (0.6, 0.9)),
+        ];
+
+        for (name, value, range) in stability_metrics {
+            let stability_metric = StabilityMetric {
+                metric_id: Uuid::new_v4(),
+                metric_name: name.to_string(),
+                current_value: value,
+                optimal_range: range,
+                stability_contribution: 0.2,
+                trend_direction: TrendDirection::Stable,
             };
-            trajectory_points.push(point);
 
-            // Stop if convergence is achieved
-            if current_divergence < 0.01 {
-                break;
+            self.reality_stability_analyzer.stability_metrics.push(stability_metric);
+        }
+
+        // Calculate overall stability
+        self.reality_stability_analyzer.current_stability_level = 0.78;
+
+        println!("✅ Reality stability analysis initialized");
+        Ok(())
+    }
+
+    /// Initialize reality modifiability control
+    async fn initialize_reality_modifiability_control(&mut self) -> Result<(), BuheraError> {
+        println!("🔧 Initializing reality modifiability control...");
+
+        // Create modification rules
+        let modification_rules = vec![
+            RealityModificationRule {
+                rule_id: Uuid::new_v4(),
+                rule_description: "Consensus threshold requirement".to_string(),
+                required_consensus: 0.7,
+                required_coordination: 0.6,
+                stability_impact_threshold: 0.8,
+                agent_requirements: Vec::new(),
+                modification_constraints: Vec::new(),
+            },
+            RealityModificationRule {
+                rule_id: Uuid::new_v4(),
+                rule_description: "Stability maintenance requirement".to_string(),
+                required_consensus: 0.5,
+                required_coordination: 0.8,
+                stability_impact_threshold: 0.9,
+                agent_requirements: Vec::new(),
+                modification_constraints: Vec::new(),
+            },
+        ];
+
+        self.reality_modifiability_controller.modification_rules = modification_rules;
+
+        // Set initial modifiability level
+        self.reality_modifiability_controller.current_modifiability_level = 0.65;
+
+        println!("✅ Reality modifiability control initialized");
+        Ok(())
+    }
+
+    /// Begin collective reality formation
+    async fn begin_collective_reality_formation(&mut self) -> Result<(), BuheraError> {
+        println!("🌍 Beginning collective reality formation...");
+
+        // Simulate collective approximation process
+        let collective_approximation = self.calculate_collective_approximation().await?;
+
+        // Evaluate convergence
+        let convergence_level = self.evaluate_convergence().await?;
+
+        // Update collective reality state
+        self.update_collective_reality_state().await?;
+
+        // Record reality formation event
+        self.record_reality_formation_event(
+            RealityFormationEventType::ConsensusBuilding,
+            self.collective_approximation_system
+                .agent_naming_functions
+                .iter()
+                .map(|a| a.agent_id)
+                .collect(),
+            None,
+            0.1,
+            0.05,
+            0.8,
+            0.75,
+        )
+        .await?;
+
+        println!("✅ Collective reality formation active");
+        println!("🔢 Collective approximation quality: {:.3}", collective_approximation);
+        println!("🔄 Convergence level: {:.3}", convergence_level);
+        println!(
+            "🌍 Reality consensus: {:.3}",
+            self.collective_reality_state.consensus_level
+        );
+        println!(
+            "⚖️  Reality stability: {:.3}",
+            self.collective_reality_state.stability_level
+        );
+
+        Ok(())
+    }
+
+    /// Calculate collective approximation R = lim(n→∞) (1/n) Σ(i=1 to n) N_i(Ψ)
+    async fn calculate_collective_approximation(&mut self) -> Result<f64, BuheraError> {
+        let mut total_approximation = 0.0;
+        let n = self.collective_approximation_system.agent_count as f64;
+
+        // Sum all agent naming function approximations
+        for agent in &self.collective_approximation_system.agent_naming_functions {
+            let agent_approximation = agent.naming_consistency * agent.pragmatic_success_rate;
+            total_approximation += agent_approximation;
+        }
+
+        // Calculate average approximation
+        let collective_approximation = total_approximation / n;
+
+        // Update system state
+        self.collective_approximation_system.reality_approximation_quality = collective_approximation;
+
+        Ok(collective_approximation)
+    }
+
+    /// Evaluate convergence of collective reality
+    async fn evaluate_convergence(&mut self) -> Result<f64, BuheraError> {
+        let mut convergence_factors = Vec::new();
+
+        // Social coordination convergence
+        let social_coordination = self.social_coordination_system.coordination_success_rate;
+        convergence_factors.push(social_coordination);
+
+        // Pragmatic success convergence
+        let pragmatic_success = self.pragmatic_success_evaluator.current_success_rate;
+        convergence_factors.push(pragmatic_success);
+
+        // Stability convergence
+        let stability = self.reality_stability_analyzer.current_stability_level;
+        convergence_factors.push(stability);
+
+        // Agent participation convergence
+        let participation = self.calculate_agent_participation_rate().await?;
+        convergence_factors.push(participation);
+
+        // Calculate overall convergence
+        let convergence_level = convergence_factors.iter().sum::<f64>() / convergence_factors.len() as f64;
+
+        // Update convergence rate
+        self.collective_approximation_system.convergence_rate = convergence_level;
+
+        Ok(convergence_level)
+    }
+
+    /// Update collective reality state
+    async fn update_collective_reality_state(&mut self) -> Result<(), BuheraError> {
+        let mut new_state = CollectiveRealityState {
+            state_id: Uuid::new_v4(),
+            consensus_level: self.calculate_consensus_level().await?,
+            stability_level: self.reality_stability_analyzer.current_stability_level,
+            modifiability_level: self.reality_modifiability_controller.current_modifiability_level,
+            coordination_efficiency: self.social_coordination_system.coordination_success_rate,
+            pragmatic_success_rate: self.pragmatic_success_evaluator.current_success_rate,
+            agent_participation_rate: self.calculate_agent_participation_rate().await?,
+            reality_coherence: self.collective_approximation_system.reality_approximation_quality,
+            modification_activity: self.calculate_modification_activity().await?,
+            timestamp: Instant::now(),
+        };
+
+        // Apply fire circle enhancement
+        if let Some(fire_protocol) = self.social_coordination_system.fire_circle_protocols.first() {
+            new_state.coordination_efficiency *= 1.0 + (fire_protocol.enhancement_factor / 100.0);
+            new_state.consensus_level *= 1.0 + (fire_protocol.enhancement_factor / 200.0);
+        }
+
+        self.collective_reality_state = new_state;
+
+        Ok(())
+    }
+
+    /// Attempt coordinated reality modification
+    pub async fn attempt_coordinated_reality_modification(
+        &mut self,
+        modification_target: &str,
+        participating_agents: Vec<Uuid>,
+        modification_strategy: TruthModificationStrategy,
+    ) -> Result<RealityModificationAttempt, BuheraError> {
+        println!("🌍 Attempting coordinated reality modification...");
+        println!("🎯 Target: {}", modification_target);
+        println!("👥 Participating agents: {}", participating_agents.len());
+
+        // Check consensus requirements
+        let consensus_level = self.calculate_consensus_level().await?;
+        let required_consensus = self.consensus_threshold;
+
+        if consensus_level < required_consensus {
+            println!(
+                "⚠️  Insufficient consensus: {:.3} < {:.3}",
+                consensus_level, required_consensus
+            );
+            return Err(BuheraError::InsufficientConsensus);
+        }
+
+        // Check coordination requirements
+        let coordination_level = self.social_coordination_system.coordination_success_rate;
+        let required_coordination = 0.6;
+
+        if coordination_level < required_coordination {
+            println!(
+                "⚠️  Insufficient coordination: {:.3} < {:.3}",
+                coordination_level, required_coordination
+            );
+            return Err(BuheraError::InsufficientCoordination);
+        }
+
+        // Calculate modification success probability
+        let success_probability = self
+            .calculate_coordinated_modification_success_probability(&modification_strategy, participating_agents.len())
+            .await?;
+
+        // Create reality modification attempt
+        let modification_attempt = RealityModificationAttempt {
+            attempt_id: Uuid::new_v4(),
+            modification_type: RealityModificationType::CoordinatedReality,
+            target_aspect: modification_target.to_string(),
+            modification_strategy,
+            success_probability,
+            evidence_independence: false,
+            coordinated_with_others: true,
+            paradigmatic_utterance_used: false,
+            timestamp: Instant::now(),
+        };
+
+        // Record reality formation event
+        self.record_reality_formation_event(
+            RealityFormationEventType::RealityModification,
+            participating_agents.clone(),
+            Some(modification_attempt.clone()),
+            0.1,
+            -0.05,
+            coordination_level,
+            success_probability,
+        )
+        .await?;
+
+        // Update reality state
+        self.update_collective_reality_state().await?;
+
+        println!("✅ Coordinated reality modification attempted");
+        println!("🎯 Success probability: {:.3}", success_probability);
+
+        Ok(modification_attempt)
+    }
+
+    /// Build consensus on reality formulation
+    pub async fn build_consensus_on_reality(&mut self, reality_formulation: &str) -> Result<f64, BuheraError> {
+        println!("🤝 Building consensus on reality formulation...");
+        println!("📝 Formulation: {}", reality_formulation);
+
+        // Simulate consensus building process
+        let mut consensus_votes = Vec::new();
+
+        for agent in &self.collective_approximation_system.agent_naming_functions {
+            let agent_support = self.calculate_agent_support(agent, reality_formulation).await?;
+            consensus_votes.push(agent_support);
+        }
+
+        // Calculate consensus level
+        let consensus_level = consensus_votes.iter().sum::<f64>() / consensus_votes.len() as f64;
+
+        // Update shared naming convention if consensus is high
+        if consensus_level > self.consensus_threshold {
+            let shared_convention = SharedNamingConvention {
+                convention_id: Uuid::new_v4(),
+                naming_target: "reality_formulation".to_string(),
+                agreed_name: reality_formulation.to_string(),
+                consensus_level,
+                stability_score: 0.8,
+                modification_threshold: 0.7,
+                participating_agents: self
+                    .collective_approximation_system
+                    .agent_naming_functions
+                    .iter()
+                    .map(|a| a.agent_id)
+                    .collect(),
+                creation_timestamp: Instant::now(),
+            };
+
+            // Add to multi-agent naming system
+            if let Some(naming_system) = self.multi_agent_naming_systems.first_mut() {
+                naming_system
+                    .shared_naming_conventions
+                    .insert("reality_formulation".to_string(), shared_convention);
             }
         }
 
-        Ok(ConvergenceTrajectory {
-            id: Uuid::new_v4(),
-            initial_divergence: initial_divergence.clone(),
-            trajectory_points,
-            convergence_mechanisms: mechanisms.to_vec(),
-        })
+        // Record consensus building event
+        self.record_reality_formation_event(
+            RealityFormationEventType::ConsensusBuilding,
+            self.collective_approximation_system
+                .agent_naming_functions
+                .iter()
+                .map(|a| a.agent_id)
+                .collect(),
+            None,
+            consensus_level - self.collective_reality_state.consensus_level,
+            0.0,
+            0.9,
+            consensus_level,
+        )
+        .await?;
+
+        println!("✅ Consensus building completed");
+        println!("🤝 Consensus level: {:.3}", consensus_level);
+
+        Ok(consensus_level)
     }
 
-    /// Calculate final convergence state
-    pub async fn calculate_final_convergence(
-        &self,
-        trajectory: &ConvergenceTrajectory,
-    ) -> Result<FinalConvergence, KambuzumaError> {
-        let final_point = trajectory.trajectory_points.last().unwrap();
-
-        Ok(FinalConvergence {
-            id: Uuid::new_v4(),
-            final_divergence: final_point.divergence_level,
-            convergence_achieved: final_point.divergence_level < 0.05,
-            convergence_time: final_point.time_step,
-            convergence_quality: 1.0 - final_point.divergence_level,
-            shared_reality_stability: self.calculate_shared_reality_stability(trajectory).await?,
+    /// Get collective reality statistics
+    pub async fn get_collective_reality_statistics(&self) -> Result<CollectiveRealityStatistics, BuheraError> {
+        Ok(CollectiveRealityStatistics {
+            consensus_level: self.collective_reality_state.consensus_level,
+            stability_level: self.collective_reality_state.stability_level,
+            modifiability_level: self.collective_reality_state.modifiability_level,
+            coordination_efficiency: self.collective_reality_state.coordination_efficiency,
+            pragmatic_success_rate: self.collective_reality_state.pragmatic_success_rate,
+            agent_participation_rate: self.collective_reality_state.agent_participation_rate,
+            reality_coherence: self.collective_reality_state.reality_coherence,
+            modification_activity: self.collective_reality_state.modification_activity,
+            agent_count: self.collective_approximation_system.agent_count,
+            reality_approximation_quality: self.collective_approximation_system.reality_approximation_quality,
+            convergence_rate: self.collective_approximation_system.convergence_rate,
+            fire_circle_enhancement: self
+                .social_coordination_system
+                .fire_circle_protocols
+                .first()
+                .map(|p| p.enhancement_factor)
+                .unwrap_or(1.0),
+            reality_formation_events: self.reality_formation_history.len(),
         })
-    }
-
-    /// Calculate convergence rate
-    pub async fn calculate_convergence_rate(&self, trajectory: &ConvergenceTrajectory) -> Result<f64, KambuzumaError> {
-        let initial_divergence = trajectory.initial_divergence.overall_divergence;
-        let final_divergence = trajectory.trajectory_points.last().unwrap().divergence_level;
-        let time_steps = trajectory.trajectory_points.len() as f64;
-
-        let rate = (initial_divergence - final_divergence) / (initial_divergence * time_steps);
-        Ok(rate)
     }
 
     // Helper methods
-    async fn calculate_pairwise_divergence(
-        &self,
-        system1: &AgentNamingSystem,
-        system2: &AgentNamingSystem,
-    ) -> Result<PairwiseDivergence, KambuzumaError> {
-        // Calculate naming differences
-        let naming_difference = self.calculate_naming_difference(system1, system2).await?;
-
-        // Calculate approximation quality difference
-        let quality_difference =
-            (system1.individual_approximation_quality - system2.individual_approximation_quality).abs();
-
-        // Calculate overall divergence magnitude
-        let magnitude = (naming_difference + quality_difference) / 2.0;
-
-        Ok(PairwiseDivergence {
-            id: Uuid::new_v4(),
-            system1_id: system1.id,
-            system2_id: system2.id,
-            naming_difference,
-            quality_difference,
-            magnitude,
-        })
-    }
-
-    async fn calculate_naming_difference(
-        &self,
-        system1: &AgentNamingSystem,
-        system2: &AgentNamingSystem,
-    ) -> Result<f64, KambuzumaError> {
-        // Compare naming systems
-        let units1 = &system1.naming_system.active_units;
-        let units2 = &system2.naming_system.active_units;
-
-        if units1.is_empty() || units2.is_empty() {
-            return Ok(1.0); // Maximum difference if either system is empty
-        }
-
-        let mut differences = Vec::new();
-        for unit1 in units1 {
-            let mut min_difference = 1.0;
-            for unit2 in units2 {
-                let difference = self.calculate_unit_difference(unit1, unit2).await?;
-                min_difference = min_difference.min(difference);
-            }
-            differences.push(min_difference);
-        }
-
-        let average_difference = differences.iter().sum::<f64>() / differences.len() as f64;
-        Ok(average_difference)
-    }
-
-    async fn calculate_unit_difference(
-        &self,
-        unit1: &DiscreteNamedUnit,
-        unit2: &DiscreteNamedUnit,
-    ) -> Result<f64, KambuzumaError> {
-        // Simple name-based difference for now
-        let name_similarity = if unit1.name == unit2.name { 1.0 } else { 0.0 };
-        let quality_difference = (unit1.approximation_quality - unit2.approximation_quality).abs();
-
-        let difference = (1.0 - name_similarity) * 0.7 + quality_difference * 0.3;
-        Ok(difference)
-    }
-
-    async fn analyze_divergence_sources(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<Vec<DivergenceSource>, KambuzumaError> {
-        let mut sources = Vec::new();
-
-        // Analyze naming strategy differences
-        sources.push(DivergenceSource {
-            source_type: DivergenceSourceType::NamingStrategy,
-            contribution: 0.4,
-            description: "Different discretization strategies".to_string(),
-        });
-
-        // Analyze approximation quality differences
-        sources.push(DivergenceSource {
-            source_type: DivergenceSourceType::ApproximationQuality,
-            contribution: 0.3,
-            description: "Varying approximation quality levels".to_string(),
-        });
-
-        // Analyze social interaction differences
-        sources.push(DivergenceSource {
-            source_type: DivergenceSourceType::SocialInteraction,
-            contribution: 0.3,
-            description: "Different social interaction patterns".to_string(),
-        });
-
-        Ok(sources)
-    }
-
-    async fn apply_single_mechanism(
-        &self,
-        mechanism: &ConvergenceMechanism,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<ConvergenceMechanismApplication, KambuzumaError> {
+    async fn calculate_mechanism_effectiveness(&self, mechanism: &ConvergenceMechanism) -> Result<f64, BuheraError> {
         let effectiveness = match mechanism {
+            ConvergenceMechanism::SocialCoordination => 0.85,
+            ConvergenceMechanism::PragmaticSuccess => 0.8,
+            ConvergenceMechanism::AuthorityAssertion => 0.75,
+            ConvergenceMechanism::ConsensusBuilding => 0.9,
+            ConvergenceMechanism::CompetitiveSelection => 0.7,
+            ConvergenceMechanism::EvolutionaryStability => 0.95,
+            ConvergenceMechanism::CulturalTransmission => 0.8,
+            ConvergenceMechanism::NetworkEffects => 0.85,
+        };
+
+        Ok(effectiveness)
+    }
+
+    async fn calculate_coordination_requirements(&self, mechanism: &ConvergenceMechanism) -> Result<f64, BuheraError> {
+        let requirements = match mechanism {
+            ConvergenceMechanism::SocialCoordination => 0.9,
+            ConvergenceMechanism::PragmaticSuccess => 0.6,
+            ConvergenceMechanism::AuthorityAssertion => 0.3,
+            ConvergenceMechanism::ConsensusBuilding => 0.95,
+            ConvergenceMechanism::CompetitiveSelection => 0.4,
+            ConvergenceMechanism::EvolutionaryStability => 0.7,
+            ConvergenceMechanism::CulturalTransmission => 0.8,
+            ConvergenceMechanism::NetworkEffects => 0.85,
+        };
+
+        Ok(requirements)
+    }
+
+    async fn calculate_stability_contribution(&self, mechanism: &ConvergenceMechanism) -> Result<f64, BuheraError> {
+        let contribution = match mechanism {
+            ConvergenceMechanism::SocialCoordination => 0.8,
+            ConvergenceMechanism::PragmaticSuccess => 0.9,
+            ConvergenceMechanism::AuthorityAssertion => 0.6,
+            ConvergenceMechanism::ConsensusBuilding => 0.95,
+            ConvergenceMechanism::CompetitiveSelection => 0.5,
+            ConvergenceMechanism::EvolutionaryStability => 0.98,
+            ConvergenceMechanism::CulturalTransmission => 0.85,
+            ConvergenceMechanism::NetworkEffects => 0.75,
+        };
+
+        Ok(contribution)
+    }
+
+    async fn calculate_modifiability_impact(&self, mechanism: &ConvergenceMechanism) -> Result<f64, BuheraError> {
+        let impact = match mechanism {
             ConvergenceMechanism::SocialCoordination => 0.8,
             ConvergenceMechanism::PragmaticSuccess => 0.7,
-            ConvergenceMechanism::ComputationalEfficiency => 0.6,
-            ConvergenceMechanism::TransmissionAdvantage => 0.5,
+            ConvergenceMechanism::AuthorityAssertion => 0.9,
+            ConvergenceMechanism::ConsensusBuilding => 0.6,
+            ConvergenceMechanism::CompetitiveSelection => 0.85,
+            ConvergenceMechanism::EvolutionaryStability => 0.3,
+            ConvergenceMechanism::CulturalTransmission => 0.7,
+            ConvergenceMechanism::NetworkEffects => 0.75,
         };
 
-        Ok(ConvergenceMechanismApplication {
-            id: Uuid::new_v4(),
-            mechanism: mechanism.clone(),
-            target_systems: agent_systems.to_vec(),
-            effectiveness,
-            convergence_contribution: effectiveness * 0.1, // 10% convergence per mechanism
-        })
+        Ok(impact)
     }
 
-    async fn calculate_convergence_rate_at_step(
-        &self,
-        mechanisms: &[ConvergenceMechanismApplication],
-        time_step: usize,
-    ) -> Result<f64, KambuzumaError> {
-        let base_rate = 0.05; // 5% base convergence rate
-        let mechanism_contribution: f64 = mechanisms.iter().map(|m| m.convergence_contribution).sum();
+    async fn calculate_consensus_level(&self) -> Result<f64, BuheraError> {
+        let mut consensus_factors = Vec::new();
 
-        // Apply decay over time
-        let decay_factor = 1.0 / (1.0 + time_step as f64 * 0.01);
-
-        let rate = (base_rate + mechanism_contribution) * decay_factor;
-        Ok(rate)
-    }
-
-    async fn calculate_shared_reality_stability(
-        &self,
-        trajectory: &ConvergenceTrajectory,
-    ) -> Result<f64, KambuzumaError> {
-        let final_points = &trajectory.trajectory_points[trajectory.trajectory_points.len().saturating_sub(10)..];
-
-        if final_points.is_empty() {
-            return Ok(0.0);
-        }
-
-        let variance =
-            final_points.iter().map(|p| p.divergence_level).fold(0.0, |acc, x| acc + x * x) / final_points.len() as f64;
-
-        let stability = 1.0 / (1.0 + variance);
-        Ok(stability)
-    }
-}
-
-/// Collective Approximation Calculator
-/// Implements the mathematical formula for collective reality formation
-pub struct CollectiveApproximationCalculator {
-    /// Approximation algorithms
-    pub approximation_algorithms: Vec<CollectiveApproximationAlgorithm>,
-
-    /// Weighting strategies
-    pub weighting_strategies: Vec<WeightingStrategy>,
-
-    /// Quality assessors
-    pub quality_assessors: Vec<QualityAssessor>,
-}
-
-impl CollectiveApproximationCalculator {
-    pub fn new() -> Self {
-        Self {
-            approximation_algorithms: vec![
-                CollectiveApproximationAlgorithm::ArithmeticMean,
-                CollectiveApproximationAlgorithm::WeightedMean,
-                CollectiveApproximationAlgorithm::MedianBased,
-                CollectiveApproximationAlgorithm::QualityWeighted,
-            ],
-            weighting_strategies: vec![
-                WeightingStrategy::EqualWeight,
-                WeightingStrategy::QualityBased,
-                WeightingStrategy::SocialInteractionBased,
-                WeightingStrategy::SuccessRateBased,
-            ],
-            quality_assessors: vec![
-                QualityAssessor::ApproximationAccuracy,
-                QualityAssessor::ConsistencyMeasure,
-                QualityAssessor::StabilityMeasure,
-            ],
-        }
-    }
-
-    /// Calculate collective approximation using the formula R = lim(n→∞) (1/n) Σ(i=1 to n) N_i(Ψ)
-    pub async fn calculate_collective_approximation(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<CollectiveApproximation, KambuzumaError> {
-        // Apply collective approximation algorithm
-        let algorithm = &self.approximation_algorithms[1]; // Use WeightedMean
-        let weighting_strategy = &self.weighting_strategies[1]; // Use QualityBased
-
-        // Calculate weights for each agent system
-        let weights = self.calculate_agent_weights(agent_systems, weighting_strategy).await?;
-
-        // Calculate collective naming units
-        let collective_units = self.calculate_collective_units(agent_systems, &weights).await?;
-
-        // Calculate approximation quality
-        let quality_assessor = &self.quality_assessors[0]; // Use ApproximationAccuracy
-        let collective_quality = self.calculate_collective_quality(&collective_units, quality_assessor).await?;
-
-        Ok(CollectiveApproximation {
-            id: Uuid::new_v4(),
-            contributing_systems: agent_systems.to_vec(),
-            algorithm_used: algorithm.clone(),
-            weighting_strategy_used: weighting_strategy.clone(),
-            agent_weights: weights,
-            collective_units,
-            collective_quality,
-            emergence_timestamp: chrono::Utc::now(),
-        })
-    }
-
-    /// Calculate emergence quality
-    pub async fn calculate_emergence_quality(
-        &self,
-        collective_approximation: &CollectiveApproximation,
-    ) -> Result<f64, KambuzumaError> {
-        let consistency = self.calculate_consistency(&collective_approximation.collective_units).await?;
-        let stability = self.calculate_stability(&collective_approximation.collective_units).await?;
-        let accuracy = collective_approximation.collective_quality;
-
-        let emergence_quality = (consistency + stability + accuracy) / 3.0;
-        Ok(emergence_quality)
-    }
-
-    /// Calculate transmission advantages
-    pub async fn calculate_transmission_advantages(
-        &self,
-        collective_approximation: &CollectiveApproximation,
-    ) -> Result<TransmissionAdvantages, KambuzumaError> {
-        let stability_advantage = self
-            .calculate_stability_advantage(&collective_approximation.collective_units)
-            .await?;
-        let consistency_advantage = self
-            .calculate_consistency_advantage(&collective_approximation.collective_units)
-            .await?;
-        let efficiency_advantage = self
-            .calculate_efficiency_advantage(&collective_approximation.collective_units)
-            .await?;
-
-        Ok(TransmissionAdvantages {
-            id: Uuid::new_v4(),
-            stability_advantage,
-            consistency_advantage,
-            efficiency_advantage,
-            overall_advantage: (stability_advantage + consistency_advantage + efficiency_advantage) / 3.0,
-        })
-    }
-
-    // Helper methods
-    async fn calculate_agent_weights(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-        strategy: &WeightingStrategy,
-    ) -> Result<Vec<f64>, KambuzumaError> {
-        let mut weights = Vec::new();
-
-        match strategy {
-            WeightingStrategy::EqualWeight => {
-                let equal_weight = 1.0 / agent_systems.len() as f64;
-                weights.resize(agent_systems.len(), equal_weight);
-            },
-            WeightingStrategy::QualityBased => {
-                let total_quality: f64 = agent_systems.iter().map(|s| s.individual_approximation_quality).sum();
-                for system in agent_systems {
-                    let weight = system.individual_approximation_quality / total_quality;
-                    weights.push(weight);
-                }
-            },
-            WeightingStrategy::SocialInteractionBased => {
-                let total_interaction: f64 = agent_systems.iter().map(|s| s.social_interaction_weight).sum();
-                for system in agent_systems {
-                    let weight = system.social_interaction_weight / total_interaction;
-                    weights.push(weight);
-                }
-            },
-            WeightingStrategy::SuccessRateBased => {
-                // For now, use approximation quality as proxy for success rate
-                let total_success: f64 = agent_systems.iter().map(|s| s.individual_approximation_quality).sum();
-                for system in agent_systems {
-                    let weight = system.individual_approximation_quality / total_success;
-                    weights.push(weight);
-                }
-            },
-        }
-
-        Ok(weights)
-    }
-
-    async fn calculate_collective_units(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-        weights: &[f64],
-    ) -> Result<Vec<CollectiveNamedUnit>, KambuzumaError> {
-        let mut collective_units = Vec::new();
-
-        // Find common units across systems
-        let mut unit_contributions: HashMap<String, Vec<(DiscreteNamedUnit, f64)>> = HashMap::new();
-
-        for (system_index, system) in agent_systems.iter().enumerate() {
-            let weight = weights[system_index];
-            for unit in &system.naming_system.active_units {
-                let base_name = unit.name.split('_').next().unwrap_or(&unit.name);
-                unit_contributions
-                    .entry(base_name.to_string())
-                    .or_insert_with(Vec::new)
-                    .push((unit.clone(), weight));
-            }
-        }
-
-        // Create collective units
-        for (base_name, contributions) in unit_contributions {
-            let collective_unit = self.create_collective_unit(base_name, contributions).await?;
-            collective_units.push(collective_unit);
-        }
-
-        Ok(collective_units)
-    }
-
-    async fn create_collective_unit(
-        &self,
-        base_name: String,
-        contributions: Vec<(DiscreteNamedUnit, f64)>,
-    ) -> Result<CollectiveNamedUnit, KambuzumaError> {
-        let total_weight: f64 = contributions.iter().map(|(_, w)| w).sum();
-        let weighted_quality: f64 = contributions
+        // Agent naming consistency
+        let naming_consistency: f64 = self
+            .collective_approximation_system
+            .agent_naming_functions
             .iter()
-            .map(|(unit, weight)| unit.approximation_quality * weight)
-            .sum();
+            .map(|a| a.naming_consistency)
+            .sum::<f64>()
+            / self.collective_approximation_system.agent_count as f64;
+        consensus_factors.push(naming_consistency);
 
-        let collective_quality = if total_weight > 0.0 {
-            weighted_quality / total_weight
-        } else {
-            0.0
+        // Coordination willingness
+        let coordination_willingness: f64 = self
+            .collective_approximation_system
+            .agent_naming_functions
+            .iter()
+            .map(|a| a.coordination_willingness)
+            .sum::<f64>()
+            / self.collective_approximation_system.agent_count as f64;
+        consensus_factors.push(coordination_willingness);
+
+        // Pragmatic success alignment
+        let pragmatic_success: f64 = self
+            .collective_approximation_system
+            .agent_naming_functions
+            .iter()
+            .map(|a| a.pragmatic_success_rate)
+            .sum::<f64>()
+            / self.collective_approximation_system.agent_count as f64;
+        consensus_factors.push(pragmatic_success);
+
+        // Calculate overall consensus
+        let consensus_level = consensus_factors.iter().sum::<f64>() / consensus_factors.len() as f64;
+
+        Ok(consensus_level)
+    }
+
+    async fn calculate_agent_participation_rate(&self) -> Result<f64, BuheraError> {
+        // For now, assume all agents participate
+        let active_agents = self.collective_approximation_system.agent_naming_functions.len();
+        let total_agents = self.collective_approximation_system.agent_count;
+
+        let participation_rate = active_agents as f64 / total_agents as f64;
+
+        Ok(participation_rate)
+    }
+
+    async fn calculate_modification_activity(&self) -> Result<f64, BuheraError> {
+        // Calculate based on recent modification attempts
+        let recent_modifications = self
+            .reality_formation_history
+            .iter()
+            .filter(|event| matches!(event.event_type, RealityFormationEventType::RealityModification))
+            .count();
+
+        let activity_level = (recent_modifications as f64 / 10.0).min(1.0);
+
+        Ok(activity_level)
+    }
+
+    async fn calculate_agent_support(
+        &self,
+        agent: &AgentNamingFunction,
+        formulation: &str,
+    ) -> Result<f64, BuheraError> {
+        // Simulate agent support calculation
+        let base_support =
+            agent.naming_consistency * 0.4 + agent.coordination_willingness * 0.3 + agent.pragmatic_success_rate * 0.3;
+
+        // Add some variance based on formulation
+        let formulation_factor = (formulation.len() as f64 / 100.0).min(1.0);
+        let support = base_support * (0.8 + formulation_factor * 0.2);
+
+        Ok(support)
+    }
+
+    async fn calculate_coordinated_modification_success_probability(
+        &self,
+        strategy: &TruthModificationStrategy,
+        agent_count: usize,
+    ) -> Result<f64, BuheraError> {
+        let base_probability = match strategy {
+            TruthModificationStrategy::NamingModification => 0.8,
+            TruthModificationStrategy::FlowPatternModification => 0.75,
+            TruthModificationStrategy::CoordinatedAssertion => 0.85,
+            TruthModificationStrategy::CollectiveModification => 0.9,
+            _ => 0.7,
         };
 
-        Ok(CollectiveNamedUnit {
-            id: Uuid::new_v4(),
-            base_name,
-            contributing_units: contributions.iter().map(|(unit, _)| unit.clone()).collect(),
-            contribution_weights: contributions.iter().map(|(_, weight)| *weight).collect(),
-            collective_quality,
-            consensus_level: self.calculate_consensus_level(&contributions).await?,
-            emergence_strength: total_weight,
-        })
+        // Increase success probability with more agents
+        let coordination_bonus = (agent_count as f64 / 10.0).min(0.2);
+        let success_probability = (base_probability + coordination_bonus).min(1.0);
+
+        Ok(success_probability)
     }
 
-    async fn calculate_consensus_level(
-        &self,
-        contributions: &[(DiscreteNamedUnit, f64)],
-    ) -> Result<f64, KambuzumaError> {
-        if contributions.len() <= 1 {
-            return Ok(1.0);
-        }
+    async fn record_reality_formation_event(
+        &mut self,
+        event_type: RealityFormationEventType,
+        participating_agents: Vec<Uuid>,
+        modification_attempt: Option<RealityModificationAttempt>,
+        consensus_change: f64,
+        stability_impact: f64,
+        coordination_level: f64,
+        success_level: f64,
+    ) -> Result<(), BuheraError> {
+        let event = RealityFormationEvent {
+            event_id: Uuid::new_v4(),
+            event_type,
+            participating_agents,
+            reality_modification_attempt: modification_attempt,
+            consensus_change,
+            stability_impact,
+            coordination_level,
+            success_level,
+            timestamp: Instant::now(),
+        };
 
-        let qualities: Vec<f64> = contributions.iter().map(|(unit, _)| unit.approximation_quality).collect();
-        let mean_quality = qualities.iter().sum::<f64>() / qualities.len() as f64;
-        let variance = qualities.iter().map(|q| (q - mean_quality).powi(2)).sum::<f64>() / qualities.len() as f64;
-
-        let consensus = 1.0 / (1.0 + variance);
-        Ok(consensus)
+        self.reality_formation_history.push(event);
+        Ok(())
     }
 
-    async fn calculate_collective_quality(
-        &self,
-        collective_units: &[CollectiveNamedUnit],
-        assessor: &QualityAssessor,
-    ) -> Result<f64, KambuzumaError> {
-        if collective_units.is_empty() {
-            return Ok(0.0);
-        }
+    /// Shutdown the reality formation engine
+    pub async fn shutdown(&mut self) -> Result<(), BuheraError> {
+        println!("🛑 Shutting down Reality Formation Engine...");
 
-        let total_quality: f64 = collective_units.iter().map(|unit| unit.collective_quality).sum();
-        let average_quality = total_quality / collective_units.len() as f64;
+        // Final reality formation report
+        let stats = self.get_collective_reality_statistics().await?;
+        println!("📊 Final reality formation report:");
+        println!("   Consensus Level: {:.3}", stats.consensus_level);
+        println!("   Stability Level: {:.3}", stats.stability_level);
+        println!("   Modifiability Level: {:.3}", stats.modifiability_level);
+        println!("   Coordination Efficiency: {:.3}", stats.coordination_efficiency);
+        println!("   Agent Count: {}", stats.agent_count);
+        println!(
+            "   Reality Approximation Quality: {:.3}",
+            stats.reality_approximation_quality
+        );
+        println!("   Fire Circle Enhancement: {:.1}×", stats.fire_circle_enhancement);
+        println!("   Reality Formation Events: {}", stats.reality_formation_events);
 
-        match assessor {
-            QualityAssessor::ApproximationAccuracy => Ok(average_quality),
-            QualityAssessor::ConsistencyMeasure => {
-                let consistency = self.calculate_consistency(collective_units).await?;
-                Ok(average_quality * consistency)
-            },
-            QualityAssessor::StabilityMeasure => {
-                let stability = self.calculate_stability(collective_units).await?;
-                Ok(average_quality * stability)
-            },
-        }
-    }
-
-    async fn calculate_consistency(&self, collective_units: &[CollectiveNamedUnit]) -> Result<f64, KambuzumaError> {
-        if collective_units.is_empty() {
-            return Ok(0.0);
-        }
-
-        let consensus_levels: Vec<f64> = collective_units.iter().map(|unit| unit.consensus_level).collect();
-        let average_consensus = consensus_levels.iter().sum::<f64>() / consensus_levels.len() as f64;
-
-        Ok(average_consensus)
-    }
-
-    async fn calculate_stability(&self, collective_units: &[CollectiveNamedUnit]) -> Result<f64, KambuzumaError> {
-        if collective_units.is_empty() {
-            return Ok(0.0);
-        }
-
-        let emergence_strengths: Vec<f64> = collective_units.iter().map(|unit| unit.emergence_strength).collect();
-        let average_strength = emergence_strengths.iter().sum::<f64>() / emergence_strengths.len() as f64;
-
-        let stability = average_strength.min(1.0); // Cap at 1.0
-        Ok(stability)
-    }
-
-    async fn calculate_stability_advantage(
-        &self,
-        collective_units: &[CollectiveNamedUnit],
-    ) -> Result<f64, KambuzumaError> {
-        let stability = self.calculate_stability(collective_units).await?;
-        Ok(stability * 0.9) // Stable approximations have transmission advantage
-    }
-
-    async fn calculate_consistency_advantage(
-        &self,
-        collective_units: &[CollectiveNamedUnit],
-    ) -> Result<f64, KambuzumaError> {
-        let consistency = self.calculate_consistency(collective_units).await?;
-        Ok(consistency * 0.8) // Consistent approximations are easier to transmit
-    }
-
-    async fn calculate_efficiency_advantage(
-        &self,
-        collective_units: &[CollectiveNamedUnit],
-    ) -> Result<f64, KambuzumaError> {
-        let average_quality =
-            collective_units.iter().map(|unit| unit.collective_quality).sum::<f64>() / collective_units.len() as f64;
-        Ok(average_quality * 0.7) // Higher quality approximations are more efficient
+        println!("✅ Reality Formation Engine shutdown complete");
+        Ok(())
     }
 }
 
-/// Reality Modification Coordinator
-/// Coordinates reality modifications across multiple agents
-pub struct RealityModificationCoordinator {
-    /// Coordination strategies
-    pub coordination_strategies: Vec<CoordinationStrategy>,
-
-    /// Modification mechanisms
-    pub modification_mechanisms: Vec<RealityModificationMechanism>,
-
-    /// Change calculators
-    pub change_calculators: Vec<RealityChangeCalculator>,
-}
-
-impl RealityModificationCoordinator {
-    pub fn new() -> Self {
-        Self {
-            coordination_strategies: vec![
-                CoordinationStrategy::ConsensusBuilding,
-                CoordinationStrategy::InfluenceNetwork,
-                CoordinationStrategy::AuthorityBased,
-                CoordinationStrategy::QualityBased,
-            ],
-            modification_mechanisms: vec![
-                RealityModificationMechanism::CollectiveNaming,
-                RealityModificationMechanism::CoordinatedApproximation,
-                RealityModificationMechanism::SharedDiscretization,
-            ],
-            change_calculators: vec![
-                RealityChangeCalculator::MagnitudeBased,
-                RealityChangeCalculator::ConsistencyBased,
-                RealityChangeCalculator::StabilityBased,
-            ],
-        }
+impl Default for RealityFormationEngine {
+    fn default() -> Self {
+        Self::new()
     }
-
-    /// Identify modification targets
-    pub async fn identify_modification_targets(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-    ) -> Result<Vec<ModificationTarget>, KambuzumaError> {
-        let mut targets = Vec::new();
-
-        // Identify units with low consensus for modification
-        for system in agent_systems {
-            for unit in &system.naming_system.active_units {
-                if unit.approximation_quality < 0.7 {
-                    targets.push(ModificationTarget {
-                        id: Uuid::new_v4(),
-                        target_type: ModificationTargetType::LowQualityUnit,
-                        target_unit: unit.clone(),
-                        modification_priority: 1.0 - unit.approximation_quality,
-                        target_description: format!("Low quality unit: {}", unit.name),
-                    });
-                }
-            }
-        }
-
-        Ok(targets)
-    }
-
-    /// Coordinate agent modifications
-    pub async fn coordinate_agent_modifications(
-        &self,
-        agent_systems: &[AgentNamingSystem],
-        targets: &[ModificationTarget],
-    ) -> Result<Vec<CoordinatedModification>, KambuzumaError> {
-        let mut modifications = Vec::new();
-
-        for target in targets {
-            let coordination_strategy = &self.coordination_strategies[0]; // Use ConsensusBuilding
-            let modification_mechanism = &self.modification_mechanisms[0]; // Use CollectiveNaming
-
-            let modification = CoordinatedModification {
-                id: Uuid::new_v4(),
-                target: target.clone(),
-                participating_agents: agent_systems.to_vec(),
-                coordination_strategy: coordination_strategy.clone(),
-                modification_mechanism: modification_mechanism.clone(),
-                coordination_success: true,
-            };
-
-            modifications.push(modification);
-        }
-
-        Ok(modifications)
-    }
-
-    /// Apply coordinated modifications
-    pub async fn apply_coordinated_modifications(
-        &self,
-        modifications: &[CoordinatedModification],
-    ) -> Result<Vec<ModificationResult>, KambuzumaError> {
-        let mut results = Vec::new();
-
-        for modification in modifications {
-            let result = ModificationResult {
-                id: Uuid::new_v4(),
-                modification: modification.clone(),
-                success: modification.coordination_success,
-                quality_change: if modification.coordination_success { 0.2 } else { 0.0 },
-                consensus_change: if modification.coordination_success { 0.15 } else { 0.0 },
-                stability_change: if modification.coordination_success { 0.1 } else { 0.0 },
-            };
-            results.push(result);
-        }
-
-        Ok(results)
-    }
-
-    /// Calculate reality change
-    pub async fn calculate_reality_change(
-        &self,
-        modification_results: &[ModificationResult],
-    ) -> Result<RealityChange, KambuzumaError> {
-        let total_quality_change: f64 = modification_results.iter().map(|r| r.quality_change).sum();
-        let total_consensus_change: f64 = modification_results.iter().map(|r| r.consensus_change).sum();
-        let total_stability_change: f64 = modification_results.iter().map(|r| r.stability_change).sum();
-
-        let change_magnitude = (total_quality_change + total_consensus_change + total_stability_change) / 3.0;
-
-        Ok(RealityChange {
-            id: Uuid::new_v4(),
-            modification_results: modification_results.to_vec(),
-            change_magnitude,
-            quality_impact: total_quality_change,
-            consensus_impact: total_consensus_change,
-            stability_impact: total_stability_change,
-            change_direction: if change_magnitude > 0.0 {
-                RealityChangeDirection::Improvement
-            } else {
-                RealityChangeDirection::Degradation
-            },
-        })
-    }
-
-    /// Calculate modifiability coefficient
-    pub async fn calculate_modifiability_coefficient(
-        &self,
-        reality_change: &RealityChange,
-    ) -> Result<f64, KambuzumaError> {
-        let modifiability = reality_change.change_magnitude / 0.5; // Normalize by expected maximum change
-        Ok(modifiability.min(1.0))
-    }
-}
-
-/// Supporting types and structures
-#[derive(Debug, Clone)]
-pub struct RealityFormation {
-    pub id: Uuid,
-    pub participating_agents: Vec<AgentNamingSystem>,
-    pub formation_stage: RealityFormationStage,
-    pub collective_reality: Option<CollectiveReality>,
-    pub formation_timestamp: chrono::DateTime<chrono::Utc>,
-}
-
-#[derive(Debug, Clone)]
-pub struct AgentNamingSystem {
-    pub id: Uuid,
-    pub agent_id: Uuid,
-    pub agent_identifier: String,
-    pub naming_system: NamingSystem,
-    pub individual_approximation_quality: f64,
-    pub social_interaction_weight: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct RealityConvergence {
-    pub id: Uuid,
-    pub participating_agents: Vec<AgentNamingSystem>,
-    pub initial_divergence: InitialDivergence,
-    pub convergence_mechanisms: Vec<ConvergenceMechanismApplication>,
-    pub convergence_trajectory: ConvergenceTrajectory,
-    pub final_convergence: FinalConvergence,
-    pub convergence_rate: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct CollectiveReality {
-    pub id: Uuid,
-    pub participating_systems: Vec<AgentNamingSystem>,
-    pub collective_approximation: CollectiveApproximation,
-    pub stability_coefficient: f64,
-    pub social_coordination_effects: SocialCoordinationEffects,
-    pub transmission_advantages: TransmissionAdvantages,
-    pub emergence_quality: f64,
-    pub objective_appearance: bool,
-}
-
-#[derive(Debug, Clone)]
-pub struct CoordinatedRealityModification {
-    pub id: Uuid,
-    pub participating_agents: Vec<AgentNamingSystem>,
-    pub modification_targets: Vec<ModificationTarget>,
-    pub coordinated_modifications: Vec<CoordinatedModification>,
-    pub modification_results: Vec<ModificationResult>,
-    pub reality_change: RealityChange,
-    pub modification_success: bool,
-}
-
-// Additional supporting types and enums
-#[derive(Debug, Clone)]
-pub enum RealityFormationStage {
-    Initialization,
-    Divergence,
-    Convergence,
-    Stabilization,
-    Modification,
-}
-
-#[derive(Debug, Clone)]
-pub enum ConvergenceMechanism {
-    SocialCoordination,
-    PragmaticSuccess,
-    ComputationalEfficiency,
-    TransmissionAdvantage,
-}
-
-#[derive(Debug, Clone)]
-pub enum CollectiveApproximationAlgorithm {
-    ArithmeticMean,
-    WeightedMean,
-    MedianBased,
-    QualityWeighted,
-}
-
-#[derive(Debug, Clone)]
-pub enum WeightingStrategy {
-    EqualWeight,
-    QualityBased,
-    SocialInteractionBased,
-    SuccessRateBased,
-}
-
-#[derive(Debug, Clone)]
-pub enum QualityAssessor {
-    ApproximationAccuracy,
-    ConsistencyMeasure,
-    StabilityMeasure,
-}
-
-#[derive(Debug, Clone)]
-pub enum CoordinationStrategy {
-    ConsensusBuilding,
-    InfluenceNetwork,
-    AuthorityBased,
-    QualityBased,
-}
-
-#[derive(Debug, Clone)]
-pub enum RealityModificationMechanism {
-    CollectiveNaming,
-    CoordinatedApproximation,
-    SharedDiscretization,
-}
-
-#[derive(Debug, Clone)]
-pub enum RealityChangeDirection {
-    Improvement,
-    Degradation,
-    Neutral,
-}
-
-#[derive(Debug, Clone)]
-pub enum ModificationTargetType {
-    LowQualityUnit,
-    HighDivergenceUnit,
-    UnstableUnit,
-}
-
-// Complex supporting structures
-#[derive(Debug, Clone)]
-pub struct InitialDivergence {
-    pub id: Uuid,
-    pub participating_systems: Vec<AgentNamingSystem>,
-    pub pairwise_divergences: Vec<PairwiseDivergence>,
-    pub overall_divergence: f64,
-    pub divergence_sources: Vec<DivergenceSource>,
-}
-
-#[derive(Debug, Clone)]
-pub struct CollectiveApproximation {
-    pub id: Uuid,
-    pub contributing_systems: Vec<AgentNamingSystem>,
-    pub algorithm_used: CollectiveApproximationAlgorithm,
-    pub weighting_strategy_used: WeightingStrategy,
-    pub agent_weights: Vec<f64>,
-    pub collective_units: Vec<CollectiveNamedUnit>,
-    pub collective_quality: f64,
-    pub emergence_timestamp: chrono::DateTime<chrono::Utc>,
-}
-
-#[derive(Debug, Clone)]
-pub struct CollectiveNamedUnit {
-    pub id: Uuid,
-    pub base_name: String,
-    pub contributing_units: Vec<DiscreteNamedUnit>,
-    pub contribution_weights: Vec<f64>,
-    pub collective_quality: f64,
-    pub consensus_level: f64,
-    pub emergence_strength: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct RealityChange {
-    pub id: Uuid,
-    pub modification_results: Vec<ModificationResult>,
-    pub change_magnitude: f64,
-    pub quality_impact: f64,
-    pub consensus_impact: f64,
-    pub stability_impact: f64,
-    pub change_direction: RealityChangeDirection,
-}
-
-// Placeholder structures for complex systems
-pub struct StabilityCalculator;
-impl StabilityCalculator {
-    pub fn new() -> Self {
-        Self
-    }
-    pub async fn calculate_stability_coefficient(
-        &self,
-        _approximation: &CollectiveApproximation,
-    ) -> Result<f64, KambuzumaError> {
-        Ok(0.85) // 85% stability coefficient
-    }
-}
-
-pub struct SocialCoordinationAnalyzer;
-impl SocialCoordinationAnalyzer {
-    pub fn new() -> Self {
-        Self
-    }
-    pub async fn analyze_social_coordination_effects(
-        &self,
-        _agent_systems: &[AgentNamingSystem],
-    ) -> Result<SocialCoordinationEffects, KambuzumaError> {
-        Ok(SocialCoordinationEffects::default())
-    }
-}
-
-pub struct ConvergenceTracker;
-impl ConvergenceTracker {
-    pub fn new() -> Self {
-        Self
-    }
-}
-
-// Default implementations for complex types
-#[derive(Debug, Clone, Default)]
-pub struct SocialCoordinationEffects {
-    pub coordination_strength: f64,
-    pub efficiency_gain: f64,
-    pub conflict_reduction: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct TransmissionAdvantages {
-    pub id: Uuid,
-    pub stability_advantage: f64,
-    pub consistency_advantage: f64,
-    pub efficiency_advantage: f64,
-    pub overall_advantage: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct ModificationTarget {
-    pub id: Uuid,
-    pub target_type: ModificationTargetType,
-    pub target_unit: DiscreteNamedUnit,
-    pub modification_priority: f64,
-    pub target_description: String,
-}
-
-#[derive(Debug, Clone)]
-pub struct CoordinatedModification {
-    pub id: Uuid,
-    pub target: ModificationTarget,
-    pub participating_agents: Vec<AgentNamingSystem>,
-    pub coordination_strategy: CoordinationStrategy,
-    pub modification_mechanism: RealityModificationMechanism,
-    pub coordination_success: bool,
-}
-
-#[derive(Debug, Clone)]
-pub struct ModificationResult {
-    pub id: Uuid,
-    pub modification: CoordinatedModification,
-    pub success: bool,
-    pub quality_change: f64,
-    pub consensus_change: f64,
-    pub stability_change: f64,
-}
-
-// Additional placeholder types
-#[derive(Debug, Clone)]
-pub struct PairwiseDivergence {
-    pub id: Uuid,
-    pub system1_id: Uuid,
-    pub system2_id: Uuid,
-    pub naming_difference: f64,
-    pub quality_difference: f64,
-    pub magnitude: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct DivergenceSource {
-    pub source_type: DivergenceSourceType,
-    pub contribution: f64,
-    pub description: String,
-}
-
-#[derive(Debug, Clone)]
-pub enum DivergenceSourceType {
-    NamingStrategy,
-    ApproximationQuality,
-    SocialInteraction,
-}
-
-#[derive(Debug, Clone)]
-pub struct ConvergenceMechanismApplication {
-    pub id: Uuid,
-    pub mechanism: ConvergenceMechanism,
-    pub target_systems: Vec<AgentNamingSystem>,
-    pub effectiveness: f64,
-    pub convergence_contribution: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct ConvergenceTrajectory {
-    pub id: Uuid,
-    pub initial_divergence: InitialDivergence,
-    pub trajectory_points: Vec<ConvergencePoint>,
-    pub convergence_mechanisms: Vec<ConvergenceMechanismApplication>,
-}
-
-#[derive(Debug, Clone)]
-pub struct ConvergencePoint {
-    pub time_step: usize,
-    pub divergence_level: f64,
-    pub convergence_rate: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct FinalConvergence {
-    pub id: Uuid,
-    pub final_divergence: f64,
-    pub convergence_achieved: bool,
-    pub convergence_time: usize,
-    pub convergence_quality: f64,
-    pub shared_reality_stability: f64,
-}
-
-// Additional enum types
-pub enum ConvergenceRateCalculator {
-    InteractionBased,
-    SimilarityBased,
-    SuccessRateBased,
-}
-
-pub enum DivergenceAnalyzer {
-    NamingDifference,
-    ApproximationQuality,
-    FlowRelationships,
-}
-
-pub enum RealityChangeCalculator {
-    MagnitudeBased,
-    ConsistencyBased,
-    StabilityBased,
 }
