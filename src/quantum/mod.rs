@@ -494,6 +494,30 @@ impl QuantumSubsystem {
 
         Ok(())
     }
+
+    /// Run oscillation harvesting cycle
+    pub async fn run_oscillation_cycle(
+        &self,
+        membrane_state: &MembraneState,
+    ) -> Result<OscillationCycleResult, KambuzumaError> {
+        let oscillation_system = self.oscillation_harvesting.read().await;
+        oscillation_system.run_oscillation_cycle(membrane_state).await
+    }
+
+    /// Detect oscillation endpoints
+    pub async fn detect_oscillation_endpoints(&self) -> Result<Vec<OscillationEndpoint>, KambuzumaError> {
+        let oscillation_system = self.oscillation_harvesting.read().await;
+        oscillation_system.detect_oscillation_endpoints().await
+    }
+
+    /// Extract energy from oscillation endpoints
+    pub async fn extract_oscillation_energy(
+        &self,
+        endpoints: &[OscillationEndpoint],
+    ) -> Result<EnergyHarvestResult, KambuzumaError> {
+        let oscillation_system = self.oscillation_harvesting.read().await;
+        oscillation_system.extract_energy(endpoints).await
+    }
 }
 
 /// Quantum computation specification

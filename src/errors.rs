@@ -109,6 +109,74 @@ pub enum QuantumError {
     /// Coherence errors
     #[error("Coherence error: {0}")]
     Coherence(#[from] CoherenceError),
+
+    /// Maxwell demon not found
+    #[error("Maxwell demon not found: {0}")]
+    MaxwellDemonNotFound(uuid::Uuid),
+
+    /// Invalid oscillation pattern
+    #[error("Invalid oscillation pattern: {0}")]
+    InvalidOscillationPattern(String),
+
+    /// Invalid state index
+    #[error("Invalid state index: {0}")]
+    InvalidStateIndex(usize),
+
+    /// Insufficient ATP for operation
+    #[error("Insufficient ATP: required {required}, available {available}")]
+    InsufficientAtp { required: f64, available: f64 },
+
+    /// Thermodynamic violation
+    #[error("Thermodynamic violation: {0}")]
+    ThermodynamicViolation(String),
+
+    /// Information processing error
+    #[error("Information processing error: {0}")]
+    InformationProcessingError(String),
+
+    /// Ion selectivity error
+    #[error("Ion selectivity error: {0}")]
+    IonSelectivityError(String),
+
+    /// Energy conservation violation
+    #[error("Energy conservation violation: {0}")]
+    EnergyConservationViolation(String),
+
+    /// Entropy violation
+    #[error("Entropy violation: {0}")]
+    EntropyViolation(String),
+
+    /// Oscillation endpoint error
+    #[error("Oscillation endpoint error: {0}")]
+    OscillationEndpointError(String),
+
+    /// Voltage clamp error
+    #[error("Voltage clamp error: {0}")]
+    VoltageClampError(String),
+
+    /// State collapse error
+    #[error("State collapse error: {0}")]
+    StateCollapseError(String),
+
+    /// Energy harvesting error
+    #[error("Energy harvesting error: {0}")]
+    EnergyHarvestingError(String),
+
+    /// Conformational change error
+    #[error("Conformational change error: {0}")]
+    ConformationalChangeError(String),
+
+    /// Gate control error
+    #[error("Gate control error: {0}")]
+    GateControlError(String),
+
+    /// Molecular machinery error
+    #[error("Molecular machinery error: {0}")]
+    MolecularMachineryError(String),
+
+    /// Neuron not found
+    #[error("Neuron not found: {0}")]
+    NeuronNotFound(uuid::Uuid),
 }
 
 /// Tunneling-related errors

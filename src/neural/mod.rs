@@ -1,434 +1,586 @@
 //! Neural processing subsystem for Kambuzuma
-//! 
+//!
 //! Implements biological quantum neural networks with specialized processing stages
 
-pub mod imhotep_neurons;
-pub mod processing_stages;
-pub mod thought_currents;
-pub mod network_topology;
-pub mod specialization;
-
+use crate::config::NeuralConfig;
+use crate::errors::KambuzumaError;
+use crate::types::*;
+use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use thiserror::Error;
-use crate::{ComputationalTask, ComputationalResult, ProcessingMetrics, Result, KambuzumaError};
-use std::collections::HashMap;
 use uuid::Uuid;
 
-/// Neural subsystem configuration
-#[derive(Debug, Clone)]
-pub struct NeuralConfig {
-    /// Number of neurons per processing stage
-    pub neurons_per_stage: HashMap<ProcessingStage, usize>,
-    
-    /// Neural network topology parameters
-    pub topology_config: network_topology::TopologyConfig,
-    
-    /// Thought current parameters
-    pub thought_current_config: thought_currents::ThoughtCurrentConfig,
-    
-    /// Specialization parameters
-    pub specialization_config: specialization::SpecializationConfig,
-    
-    /// Learning and adaptation parameters
-    pub learning_config: LearningConfig,
-}
+// Submodules
+pub mod imhotep_neurons;
+pub mod network_topology;
+pub mod processing_stages;
+pub mod specialization;
+pub mod thought_currents;
 
-/// Neural subsystem state
-#[derive(Debug, Clone)]
-pub struct NeuralState {
-    /// Average processing capacity across all neurons
-    pub average_processing_capacity: f64,
-    
-    /// Current thought current flow
-    pub thought_current_flow: f64,
-    
-    /// Neural network connectivity
-    pub network_connectivity: f64,
-    
-    /// Stage-specific states
-    pub stage_states: HashMap<ProcessingStage, StageState>,
-    
-    /// Overall learning progress
-    pub learning_progress: f64,
-}
+// Re-export important types
+pub use imhotep_neurons::*;
+pub use network_topology::*;
+pub use processing_stages::*;
+pub use specialization::*;
+pub use thought_currents::*;
 
-/// Processing stages in the neural system
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum ProcessingStage {
-    QueryProcessing,     // Stage 0
-    SemanticAnalysis,    // Stage 1
-    DomainKnowledge,     // Stage 2
-    LogicalReasoning,    // Stage 3
-    CreativeSynthesis,   // Stage 4
-    Evaluation,          // Stage 5
-    Integration,         // Stage 6
-    Validation,          // Stage 7
-}
-
-/// State of a processing stage
-#[derive(Debug, Clone)]
-pub struct StageState {
-    /// Number of active neurons
-    pub active_neurons: usize,
-    
-    /// Average activation level
-    pub activation_level: f64,
-    
-    /// Processing throughput
-    pub throughput: f64,
-    
-    /// Energy consumption
-    pub energy_consumption: f64,
-    
-    /// Quantum coherence level
-    pub coherence_level: f64,
-}
-
-/// Learning configuration
-#[derive(Debug, Clone)]
-pub struct LearningConfig {
-    /// Learning rate
-    pub learning_rate: f64,
-    
-    /// Plasticity decay rate
-    pub plasticity_decay: f64,
-    
-    /// Hebbian learning enabled
-    pub hebbian_learning: bool,
-    
-    /// Spike-timing dependent plasticity
-    pub stdp_enabled: bool,
-    
-    /// Homeostatic scaling
-    pub homeostatic_scaling: bool,
-}
-
-/// Neural processing subsystem
+/// Neural Processing Subsystem
+/// Implements the eight-stage neural processing pipeline using Imhotep neurons
+/// Honors the Masunda memorial system with quantum-biological neural computation
+#[derive(Debug)]
 pub struct NeuralSubsystem {
+    /// Subsystem identifier
+    pub id: Uuid,
     /// Configuration
-    config: NeuralConfig,
-    
+    pub config: Arc<RwLock<NeuralConfig>>,
+    /// Imhotep neuron arrays
+    pub imhotep_neurons: Arc<RwLock<ImhotepNeuronArray>>,
     /// Processing stages
-    processing_stages: HashMap<ProcessingStage, Arc<RwLock<processing_stages::ProcessingStageSystem>>>,
-    
-    /// Neural network topology
-    network_topology: Arc<RwLock<network_topology::NetworkTopology>>,
-    
+    pub processing_stages: Arc<RwLock<ProcessingStageManager>>,
     /// Thought current system
-    thought_current_system: Arc<RwLock<thought_currents::ThoughtCurrentSystem>>,
-    
+    pub thought_currents: Arc<RwLock<ThoughtCurrentSystem>>,
+    /// Network topology
+    pub network_topology: Arc<RwLock<NetworkTopology>>,
     /// Specialization system
-    specialization_system: Arc<RwLock<specialization::SpecializationSystem>>,
-    
+    pub specialization: Arc<RwLock<SpecializationSystem>>,
+    /// Current neural state
+    pub neural_state: Arc<RwLock<NeuralSystemState>>,
     /// Performance metrics
-    metrics: Arc<RwLock<NeuralMetrics>>,
-}
-
-/// Neural system performance metrics
-#[derive(Debug, Default)]
-pub struct NeuralMetrics {
-    /// Total neural computations performed
-    pub total_computations: u64,
-    
-    /// Average processing latency
-    pub average_latency: std::time::Duration,
-    
-    /// Energy efficiency (computations/ATP)
-    pub energy_efficiency: f64,
-    
-    /// Learning convergence rate
-    pub learning_convergence: f64,
-    
-    /// Network plasticity changes
-    pub plasticity_changes: u64,
-    
-    /// Thought current strength
-    pub thought_current_strength: f64,
+    pub metrics: Arc<RwLock<NeuralMetrics>>,
 }
 
 impl NeuralSubsystem {
-    /// Create new neural subsystem
-    pub fn new(config: &NeuralConfig) -> Result<Self> {
-        // Initialize processing stages
-        let mut processing_stages = HashMap::new();
-        
-        for (stage, neuron_count) in &config.neurons_per_stage {
-            let stage_system = processing_stages::ProcessingStageSystem::new(*stage, *neuron_count)?;
-            processing_stages.insert(*stage, Arc::new(RwLock::new(stage_system)));
-        }
-        
-        // Initialize network topology
-        let network_topology = Arc::new(RwLock::new(
-            network_topology::NetworkTopology::new(&config.topology_config)?
-        ));
-        
-        // Initialize thought current system
-        let thought_current_system = Arc::new(RwLock::new(
-            thought_currents::ThoughtCurrentSystem::new(&config.thought_current_config)?
-        ));
-        
-        // Initialize specialization system
-        let specialization_system = Arc::new(RwLock::new(
-            specialization::SpecializationSystem::new(&config.specialization_config)?
-        ));
-        
-        // Initialize metrics
+    /// Create new neural processing subsystem
+    pub async fn new(config: Arc<RwLock<crate::config::KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
+        let id = Uuid::new_v4();
+        let neural_config = {
+            let config_guard = config.read().await;
+            config_guard.neural.clone()
+        };
+        let neural_config = Arc::new(RwLock::new(neural_config));
+
+        // Initialize components
+        let imhotep_neurons = Arc::new(RwLock::new(ImhotepNeuronArray::new(neural_config.clone()).await?));
+        let processing_stages = Arc::new(RwLock::new(ProcessingStageManager::new(neural_config.clone()).await?));
+        let thought_currents = Arc::new(RwLock::new(ThoughtCurrentSystem::new(neural_config.clone()).await?));
+        let network_topology = Arc::new(RwLock::new(NetworkTopology::new(neural_config.clone()).await?));
+        let specialization = Arc::new(RwLock::new(SpecializationSystem::new(neural_config.clone()).await?));
+
+        // Initialize neural state
+        let neural_state = Arc::new(RwLock::new(NeuralSystemState::default()));
         let metrics = Arc::new(RwLock::new(NeuralMetrics::default()));
-        
+
         Ok(Self {
-            config: config.clone(),
+            id,
+            config: neural_config,
+            imhotep_neurons,
             processing_stages,
+            thought_currents,
             network_topology,
-            thought_current_system,
-            specialization_system,
+            specialization,
+            neural_state,
             metrics,
         })
     }
-    
-    /// Start the neural subsystem
-    pub async fn start(&self) -> Result<()> {
-        // Start all processing stages
-        for stage_system in self.processing_stages.values() {
-            stage_system.write().await.start().await?;
-        }
-        
-        // Start support systems
-        self.network_topology.write().await.start().await?;
-        self.thought_current_system.write().await.start().await?;
-        self.specialization_system.write().await.start().await?;
-        
+
+    /// Start neural processing subsystem
+    pub async fn start(&mut self) -> Result<(), KambuzumaError> {
+        // Initialize neural components
+        self.initialize_neural_components().await?;
+
+        // Start processing stages
+        let mut stages = self.processing_stages.write().await;
+        stages.start_all_stages().await?;
+
+        // Start thought current monitoring
+        let mut currents = self.thought_currents.write().await;
+        currents.start_monitoring().await?;
+
+        // Initialize network topology
+        let mut topology = self.network_topology.write().await;
+        topology.initialize_connections().await?;
+
+        // Start specialization system
+        let mut spec = self.specialization.write().await;
+        spec.initialize_specializations().await?;
+
         Ok(())
     }
-    
-    /// Stop the neural subsystem
-    pub async fn stop(&self) -> Result<()> {
-        // Stop support systems
-        self.specialization_system.write().await.stop().await?;
-        self.thought_current_system.write().await.stop().await?;
-        self.network_topology.write().await.stop().await?;
-        
-        // Stop all processing stages
-        for stage_system in self.processing_stages.values() {
-            stage_system.write().await.stop().await?;
-        }
-        
+
+    /// Stop neural processing subsystem
+    pub async fn stop(&mut self) -> Result<(), KambuzumaError> {
+        // Stop all components in reverse order
+        let mut spec = self.specialization.write().await;
+        spec.shutdown().await?;
+
+        let mut topology = self.network_topology.write().await;
+        topology.shutdown().await?;
+
+        let mut currents = self.thought_currents.write().await;
+        currents.stop_monitoring().await?;
+
+        let mut stages = self.processing_stages.write().await;
+        stages.stop_all_stages().await?;
+
         Ok(())
     }
-    
-    /// Process a computational task through the neural network
-    pub async fn process_task(&self, task: &ComputationalTask) -> Result<ComputationalResult> {
-        let start_time = std::time::Instant::now();
-        
-        // Route task through processing stages in sequence
-        let mut current_data = task.input_data.clone();
-        let mut confidence = 1.0;
-        let mut total_energy_consumed = 0.0;
-        
-        // Process through each stage
-        for stage in self.get_processing_sequence(task).await? {
-            let stage_system = self.processing_stages.get(&stage)
-                .ok_or_else(|| KambuzumaError::NeuralProcessing(
-                    imhotep_neurons::quantum_neuron::NeuronError::LogicProcessingError(
-                        format!("Processing stage {:?} not found", stage)
-                    )
-                ))?;
-            
-            let stage_result = stage_system.read().await.process_stage_data(&current_data, confidence).await?;
-            
-            current_data = stage_result.output_data;
-            confidence *= stage_result.confidence;
-            total_energy_consumed += stage_result.energy_consumed;
-            
-            // Update thought currents between stages
-            self.thought_current_system.write().await
-                .update_current_flow(stage, stage_result.current_strength).await?;
-        }
-        
-        let processing_time = start_time.elapsed();
-        
+
+    /// Process neural input through eight stages
+    pub async fn process_input(&self, input: NeuralInput) -> Result<NeuralOutput, KambuzumaError> {
+        // Get processing stages
+        let stages = self.processing_stages.read().await;
+
+        // Process through all eight stages
+        let output = stages.process_through_stages(input).await?;
+
         // Update metrics
-        let mut metrics = self.metrics.write().await;
-        metrics.total_computations += 1;
-        metrics.average_latency = (metrics.average_latency + processing_time) / 2;
-        
-        // Calculate final result
-        let result = ComputationalResult {
-            task_id: task.id,
-            result_data: current_data,
-            success: confidence > 0.5,
-            confidence,
-            processing_metrics: ProcessingMetrics {
-                processing_time,
-                energy_consumed: total_energy_consumed,
-                coherence_maintained: self.calculate_coherence_maintained().await?,
-                error_rate: 1.0 - confidence,
-                throughput: 1.0 / processing_time.as_secs_f64(),
-            },
-            explanation: format!("Neural processing through {} stages completed", self.processing_stages.len()),
-        };
-        
-        Ok(result)
+        self.update_processing_metrics(&output).await?;
+
+        Ok(output)
     }
-    
+
     /// Get current neural state
-    pub async fn get_state(&self) -> Result<NeuralState> {
-        let mut stage_states = HashMap::new();
-        let mut total_capacity = 0.0;
-        
-        // Collect state from all processing stages
-        for (stage, stage_system) in &self.processing_stages {
-            let stage_state = stage_system.read().await.get_stage_state().await?;
-            total_capacity += stage_state.activation_level;
-            stage_states.insert(*stage, stage_state);
-        }
-        
-        let average_processing_capacity = total_capacity / self.processing_stages.len() as f64;
-        
-        // Get thought current flow
-        let thought_current_flow = self.thought_current_system.read().await.get_total_flow().await?;
-        
-        // Get network connectivity
-        let network_connectivity = self.network_topology.read().await.get_connectivity_level().await?;
-        
-        // Get learning progress
-        let learning_progress = self.calculate_learning_progress().await?;
-        
-        Ok(NeuralState {
-            average_processing_capacity,
-            thought_current_flow,
-            network_connectivity,
-            stage_states,
-            learning_progress,
-        })
+    pub async fn get_neural_state(&self) -> NeuralSystemState {
+        let state = self.neural_state.read().await;
+        state.clone()
     }
-    
-    /// Validate biological constraints
-    pub async fn validate_biological_constraints(&self) -> Result<()> {
-        // Validate each processing stage
-        for stage_system in self.processing_stages.values() {
-            stage_system.read().await.validate_biological_constraints().await?;
-        }
-        
-        // Validate thought current constraints
-        self.thought_current_system.read().await.validate_biological_constraints().await?;
-        
-        // Validate network topology constraints
-        self.network_topology.read().await.validate_biological_constraints().await?;
-        
+
+    /// Get neural metrics
+    pub async fn get_metrics(&self) -> NeuralMetrics {
+        let metrics = self.metrics.read().await;
+        metrics.clone()
+    }
+
+    /// Initialize neural components
+    async fn initialize_neural_components(&self) -> Result<(), KambuzumaError> {
+        // Initialize Imhotep neurons
+        let mut neurons = self.imhotep_neurons.write().await;
+        neurons.initialize_neurons().await?;
+
+        // Initialize processing stages
+        let mut stages = self.processing_stages.write().await;
+        stages.initialize_stages().await?;
+
+        // Initialize thought currents
+        let mut currents = self.thought_currents.write().await;
+        currents.initialize_currents().await?;
+
         Ok(())
     }
-    
-    // Private helper methods
-    
-    async fn get_processing_sequence(&self, task: &ComputationalTask) -> Result<Vec<ProcessingStage>> {
-        // Standard processing sequence for most tasks
-        let standard_sequence = vec![
-            ProcessingStage::QueryProcessing,
-            ProcessingStage::SemanticAnalysis,
-            ProcessingStage::DomainKnowledge,
-            ProcessingStage::LogicalReasoning,
-            ProcessingStage::CreativeSynthesis,
-            ProcessingStage::Evaluation,
-            ProcessingStage::Integration,
-            ProcessingStage::Validation,
-        ];
-        
-        // Could be customized based on task type in the future
-        Ok(standard_sequence)
-    }
-    
-    async fn calculate_coherence_maintained(&self) -> Result<f64> {
-        let mut total_coherence = 0.0;
-        let mut count = 0;
-        
-        for stage_system in self.processing_stages.values() {
-            let coherence = stage_system.read().await.get_quantum_coherence().await?;
-            total_coherence += coherence;
-            count += 1;
+
+    /// Update processing metrics
+    async fn update_processing_metrics(&self, output: &NeuralOutput) -> Result<(), KambuzumaError> {
+        let mut metrics = self.metrics.write().await;
+
+        metrics.total_processes += 1;
+        metrics.total_processing_time += output.processing_time;
+        metrics.average_processing_time = metrics.total_processing_time / metrics.total_processes as f64;
+
+        // Update stage-specific metrics
+        for stage_result in &output.stage_results {
+            let stage_metrics = metrics
+                .stage_metrics
+                .entry(stage_result.stage_id)
+                .or_insert(StageMetrics::default());
+            stage_metrics.update_metrics(stage_result);
         }
-        
-        Ok(if count > 0 { total_coherence / count as f64 } else { 0.0 })
-    }
-    
-    async fn calculate_learning_progress(&self) -> Result<f64> {
-        // Simple learning progress calculation based on plasticity changes
-        let metrics = self.metrics.read().await;
-        let base_progress = (metrics.plasticity_changes as f64 / 1000.0).min(1.0);
-        
-        Ok(base_progress)
+
+        Ok(())
     }
 }
 
-/// Neural subsystem errors
-#[derive(Debug, Error)]
-pub enum NeuralError {
-    #[error("Processing stage error: {0}")]
-    ProcessingStage(String),
-    
-    #[error("Network topology error: {0}")]
-    NetworkTopology(String),
-    
-    #[error("Thought current error: {0}")]
-    ThoughtCurrent(String),
-    
-    #[error("Specialization error: {0}")]
-    Specialization(String),
-    
-    #[error("Learning error: {0}")]
-    Learning(String),
-    
-    #[error("Biological constraint violation: {0}")]
-    BiologicalConstraintViolation(String),
-    
-    #[error("Configuration error: {0}")]
-    Configuration(String),
+/// Neural System State
+/// Represents the current state of the neural processing system
+#[derive(Debug, Clone)]
+pub struct NeuralSystemState {
+    /// Active neurons
+    pub active_neurons: Vec<NeuronState>,
+    /// Current processing stage
+    pub current_stage: ProcessingStage,
+    /// Thought current measurements
+    pub thought_currents: Vec<ThoughtCurrentMeasurement>,
+    /// Network connectivity
+    pub network_connections: Vec<NetworkConnection>,
+    /// Specialization states
+    pub specialization_states: Vec<SpecializationState>,
+    /// Energy consumption
+    pub energy_consumption: f64,
+    /// Processing load
+    pub processing_load: f64,
 }
 
-impl Default for NeuralConfig {
-    fn default() -> Self {
-        let mut neurons_per_stage = HashMap::new();
-        neurons_per_stage.insert(ProcessingStage::QueryProcessing, 50);
-        neurons_per_stage.insert(ProcessingStage::SemanticAnalysis, 100);
-        neurons_per_stage.insert(ProcessingStage::DomainKnowledge, 150);
-        neurons_per_stage.insert(ProcessingStage::LogicalReasoning, 200);
-        neurons_per_stage.insert(ProcessingStage::CreativeSynthesis, 120);
-        neurons_per_stage.insert(ProcessingStage::Evaluation, 80);
-        neurons_per_stage.insert(ProcessingStage::Integration, 100);
-        neurons_per_stage.insert(ProcessingStage::Validation, 60);
-        
-        Self {
-            neurons_per_stage,
-            topology_config: network_topology::TopologyConfig::default(),
-            thought_current_config: thought_currents::ThoughtCurrentConfig::default(),
-            specialization_config: specialization::SpecializationConfig::default(),
-            learning_config: LearningConfig::default(),
-        }
-    }
-}
-
-impl Default for LearningConfig {
+impl Default for NeuralSystemState {
     fn default() -> Self {
         Self {
-            learning_rate: 0.001,
-            plasticity_decay: 0.99,
-            hebbian_learning: true,
-            stdp_enabled: true,
-            homeostatic_scaling: true,
+            active_neurons: Vec::new(),
+            current_stage: ProcessingStage::Stage0Query,
+            thought_currents: Vec::new(),
+            network_connections: Vec::new(),
+            specialization_states: Vec::new(),
+            energy_consumption: 0.0,
+            processing_load: 0.0,
         }
     }
 }
 
-impl NeuralConfig {
-    /// Validate configuration
-    pub fn is_valid(&self) -> bool {
-        !self.neurons_per_stage.is_empty() &&
-        self.neurons_per_stage.values().all(|&count| count > 0) &&
-        self.topology_config.is_valid() &&
-        self.thought_current_config.is_valid() &&
-        self.specialization_config.is_valid() &&
-        self.learning_config.learning_rate > 0.0 &&
-        self.learning_config.plasticity_decay > 0.0 &&
-        self.learning_config.plasticity_decay <= 1.0
+/// Neural Metrics
+/// Performance metrics for the neural processing system
+#[derive(Debug, Clone)]
+pub struct NeuralMetrics {
+    /// Total processes executed
+    pub total_processes: u64,
+    /// Total processing time
+    pub total_processing_time: f64,
+    /// Average processing time
+    pub average_processing_time: f64,
+    /// Stage-specific metrics
+    pub stage_metrics: HashMap<String, StageMetrics>,
+    /// Thought current metrics
+    pub thought_current_metrics: ThoughtCurrentMetrics,
+    /// Network topology metrics
+    pub network_metrics: NetworkMetrics,
+    /// Energy efficiency
+    pub energy_efficiency: f64,
+    /// Error rate
+    pub error_rate: f64,
+}
+
+impl Default for NeuralMetrics {
+    fn default() -> Self {
+        Self {
+            total_processes: 0,
+            total_processing_time: 0.0,
+            average_processing_time: 0.0,
+            stage_metrics: HashMap::new(),
+            thought_current_metrics: ThoughtCurrentMetrics::default(),
+            network_metrics: NetworkMetrics::default(),
+            energy_efficiency: 0.0,
+            error_rate: 0.0,
+        }
     }
-} 
+}
+
+/// Stage Metrics
+/// Metrics for individual processing stages
+#[derive(Debug, Clone)]
+pub struct StageMetrics {
+    /// Stage executions
+    pub executions: u64,
+    /// Total execution time
+    pub total_time: f64,
+    /// Average execution time
+    pub average_time: f64,
+    /// Success rate
+    pub success_rate: f64,
+    /// Energy consumption
+    pub energy_consumption: f64,
+}
+
+impl Default for StageMetrics {
+    fn default() -> Self {
+        Self {
+            executions: 0,
+            total_time: 0.0,
+            average_time: 0.0,
+            success_rate: 0.0,
+            energy_consumption: 0.0,
+        }
+    }
+}
+
+impl StageMetrics {
+    /// Update metrics with stage result
+    pub fn update_metrics(&mut self, result: &StageResult) {
+        self.executions += 1;
+        self.total_time += result.execution_time;
+        self.average_time = self.total_time / self.executions as f64;
+        self.energy_consumption += result.energy_consumed;
+
+        // Update success rate
+        if result.success {
+            self.success_rate = (self.success_rate * (self.executions - 1) as f64 + 1.0) / self.executions as f64;
+        } else {
+            self.success_rate = (self.success_rate * (self.executions - 1) as f64) / self.executions as f64;
+        }
+    }
+}
+
+/// Neural Input
+/// Input to the neural processing system
+#[derive(Debug, Clone)]
+pub struct NeuralInput {
+    /// Input identifier
+    pub id: Uuid,
+    /// Input data
+    pub data: Vec<f64>,
+    /// Input type
+    pub input_type: InputType,
+    /// Processing priority
+    pub priority: Priority,
+    /// Timestamp
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+/// Input Type
+/// Types of neural inputs
+#[derive(Debug, Clone)]
+pub enum InputType {
+    Query,
+    Sensory,
+    Memory,
+    Feedback,
+    Command,
+}
+
+/// Priority
+/// Processing priority levels
+#[derive(Debug, Clone)]
+pub enum Priority {
+    Low,
+    Medium,
+    High,
+    Critical,
+}
+
+/// Neural Output
+/// Output from the neural processing system
+#[derive(Debug, Clone)]
+pub struct NeuralOutput {
+    /// Output identifier
+    pub id: Uuid,
+    /// Input identifier
+    pub input_id: Uuid,
+    /// Output data
+    pub data: Vec<f64>,
+    /// Stage results
+    pub stage_results: Vec<StageResult>,
+    /// Processing time
+    pub processing_time: f64,
+    /// Energy consumed
+    pub energy_consumed: f64,
+    /// Confidence score
+    pub confidence: f64,
+    /// Timestamp
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+/// Stage Result
+/// Result from a processing stage
+#[derive(Debug, Clone)]
+pub struct StageResult {
+    /// Stage identifier
+    pub stage_id: String,
+    /// Stage type
+    pub stage_type: ProcessingStage,
+    /// Success status
+    pub success: bool,
+    /// Output data
+    pub output: Vec<f64>,
+    /// Execution time
+    pub execution_time: f64,
+    /// Energy consumed
+    pub energy_consumed: f64,
+    /// Confidence score
+    pub confidence: f64,
+}
+
+/// Processing Stage
+/// Eight processing stages in the neural pipeline
+#[derive(Debug, Clone, PartialEq)]
+pub enum ProcessingStage {
+    Stage0Query,
+    Stage1Semantic,
+    Stage2Domain,
+    Stage3Logical,
+    Stage4Creative,
+    Stage5Evaluation,
+    Stage6Integration,
+    Stage7Validation,
+}
+
+/// Neuron State
+/// Current state of an individual neuron
+#[derive(Debug, Clone)]
+pub struct NeuronState {
+    /// Neuron identifier
+    pub id: Uuid,
+    /// Neuron type
+    pub neuron_type: NeuronType,
+    /// Membrane potential
+    pub membrane_potential: f64,
+    /// Firing rate
+    pub firing_rate: f64,
+    /// Quantum coherence
+    pub quantum_coherence: f64,
+    /// ATP level
+    pub atp_level: f64,
+    /// Synaptic connections
+    pub synaptic_connections: Vec<SynapticConnection>,
+    /// Activity level
+    pub activity_level: f64,
+}
+
+/// Neuron Type
+/// Types of neurons in the system
+#[derive(Debug, Clone)]
+pub enum NeuronType {
+    Imhotep,
+    Inhibitory,
+    Excitatory,
+    Modulator,
+}
+
+/// Synaptic Connection
+/// Connection between neurons
+#[derive(Debug, Clone)]
+pub struct SynapticConnection {
+    /// Connection identifier
+    pub id: Uuid,
+    /// Source neuron
+    pub source_neuron: Uuid,
+    /// Target neuron
+    pub target_neuron: Uuid,
+    /// Connection strength
+    pub strength: f64,
+    /// Connection type
+    pub connection_type: ConnectionType,
+    /// Plasticity
+    pub plasticity: f64,
+}
+
+/// Connection Type
+/// Types of synaptic connections
+#[derive(Debug, Clone)]
+pub enum ConnectionType {
+    Excitatory,
+    Inhibitory,
+    Modulatory,
+    Quantum,
+}
+
+/// Thought Current Measurement
+/// Measurement of thought currents in the system
+#[derive(Debug, Clone)]
+pub struct ThoughtCurrentMeasurement {
+    /// Measurement identifier
+    pub id: Uuid,
+    /// Current magnitude
+    pub current: f64,
+    /// Voltage
+    pub voltage: f64,
+    /// Frequency
+    pub frequency: f64,
+    /// Phase
+    pub phase: f64,
+    /// Coherence
+    pub coherence: f64,
+    /// Timestamp
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+/// Network Connection
+/// Network-level connections between processing units
+#[derive(Debug, Clone)]
+pub struct NetworkConnection {
+    /// Connection identifier
+    pub id: Uuid,
+    /// Source unit
+    pub source_unit: String,
+    /// Target unit
+    pub target_unit: String,
+    /// Connection strength
+    pub strength: f64,
+    /// Bandwidth
+    pub bandwidth: f64,
+    /// Latency
+    pub latency: f64,
+    /// Active
+    pub active: bool,
+}
+
+/// Specialization State
+/// State of neural specializations
+#[derive(Debug, Clone)]
+pub struct SpecializationState {
+    /// Specialization identifier
+    pub id: Uuid,
+    /// Specialization type
+    pub specialization_type: SpecializationType,
+    /// Activation level
+    pub activation_level: f64,
+    /// Efficiency
+    pub efficiency: f64,
+    /// Active
+    pub active: bool,
+}
+
+/// Specialization Type
+/// Types of neural specializations
+#[derive(Debug, Clone)]
+pub enum SpecializationType {
+    LanguageSuperposition,
+    ConceptEntanglement,
+    QuantumMemory,
+    LogicGates,
+    CoherenceCombination,
+    ErrorCorrection,
+}
+
+/// Thought Current Metrics
+/// Metrics for thought current system
+#[derive(Debug, Clone)]
+pub struct ThoughtCurrentMetrics {
+    /// Average current
+    pub average_current: f64,
+    /// Peak current
+    pub peak_current: f64,
+    /// Current stability
+    pub current_stability: f64,
+    /// Coherence level
+    pub coherence_level: f64,
+    /// Conductance
+    pub conductance: f64,
+}
+
+impl Default for ThoughtCurrentMetrics {
+    fn default() -> Self {
+        Self {
+            average_current: 0.0,
+            peak_current: 0.0,
+            current_stability: 0.0,
+            coherence_level: 0.0,
+            conductance: 0.0,
+        }
+    }
+}
+
+/// Network Metrics
+/// Metrics for network topology
+#[derive(Debug, Clone)]
+pub struct NetworkMetrics {
+    /// Total connections
+    pub total_connections: usize,
+    /// Active connections
+    pub active_connections: usize,
+    /// Average connection strength
+    pub average_connection_strength: f64,
+    /// Network efficiency
+    pub network_efficiency: f64,
+    /// Clustering coefficient
+    pub clustering_coefficient: f64,
+    /// Path length
+    pub average_path_length: f64,
+}
+
+impl Default for NetworkMetrics {
+    fn default() -> Self {
+        Self {
+            total_connections: 0,
+            active_connections: 0,
+            average_connection_strength: 0.0,
+            network_efficiency: 0.0,
+            clustering_coefficient: 0.0,
+            average_path_length: 0.0,
+        }
+    }
+}
