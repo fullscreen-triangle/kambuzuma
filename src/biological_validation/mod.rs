@@ -1,614 +1,928 @@
-//! Biological validation subsystem for Kambuzuma
-//! 
-//! Ensures all quantum processes adhere to biological constraints and physical laws
+//! # Biological Validation Module
+//!
+//! This module provides experimental verification systems for the quantum biological
+//! processes implemented in the Kambuzuma system. It includes cell culture simulation,
+//! electrophysiology measurements, biochemical assays, and quantum validation protocols.
+//!
+//! ## Key Components
+//! - Cell culture array management and monitoring
+//! - Electrophysiological measurement systems
+//! - Biochemical assay protocols
+//! - Quantum effect validation
+//! - Safety and containment systems
 
-pub mod constraint_validation;
-pub mod thermodynamic_validation;
-pub mod quantum_coherence_validation;
-pub mod membrane_integrity_validation;
-pub mod energy_conservation_validation;
-
+use crate::config::Config;
+use crate::errors::KambuzumaError;
+use crate::types::*;
+use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use thiserror::Error;
-use crate::Result;
-use std::collections::HashMap;
+use uuid::Uuid;
 
-/// Biological validation subsystem configuration
-#[derive(Debug, Clone)]
-pub struct BiologicalValidationConfig {
-    /// Constraint validation configuration
-    pub constraint_config: constraint_validation::ConstraintConfig,
-    
-    /// Thermodynamic validation configuration
-    pub thermodynamic_config: thermodynamic_validation::ThermodynamicConfig,
-    
-    /// Quantum coherence validation configuration
-    pub coherence_config: quantum_coherence_validation::CoherenceConfig,
-    
-    /// Membrane integrity validation configuration
-    pub membrane_config: membrane_integrity_validation::MembraneConfig,
-    
-    /// Energy conservation validation configuration
-    pub energy_config: energy_conservation_validation::EnergyConfig,
+pub mod biochemical_assays;
+pub mod cell_culture;
+pub mod electrophysiology;
+pub mod quantum_validation;
+pub mod safety_protocols;
+
+pub use biochemical_assays::*;
+pub use cell_culture::*;
+pub use electrophysiology::*;
+pub use quantum_validation::*;
+pub use safety_protocols::*;
+
+/// Biological Validation System
+/// Main system for biological validation and experimental verification
+#[derive(Debug)]
+pub struct BiologicalValidationSystem {
+    /// System identifier
+    pub id: Uuid,
+    /// System configuration
+    pub config: Arc<RwLock<Config>>,
+    /// Cell culture system
+    pub cell_culture: Arc<RwLock<CellCultureSystem>>,
+    /// Electrophysiology system
+    pub electrophysiology: Arc<RwLock<ElectrophysiologySystem>>,
+    /// Biochemical assay system
+    pub biochemical_assays: Arc<RwLock<BiochemicalAssaySystem>>,
+    /// Quantum validation system
+    pub quantum_validation: Arc<RwLock<QuantumValidationSystem>>,
+    /// Safety protocols
+    pub safety_protocols: Arc<RwLock<SafetyProtocolSystem>>,
+    /// Validation experiments
+    pub experiments: Arc<RwLock<Vec<ValidationExperiment>>>,
+    /// System status
+    pub status: Arc<RwLock<ValidationSystemStatus>>,
+    /// Validation metrics
+    pub metrics: Arc<RwLock<ValidationMetrics>>,
 }
 
-/// Biological validation subsystem state
+/// Validation System Status
+/// Current status of the validation system
 #[derive(Debug, Clone)]
-pub struct BiologicalValidationState {
-    /// Overall validation status
-    pub validation_status: ValidationStatus,
-    
-    /// Constraint validation results
-    pub constraint_results: HashMap<ConstraintType, ValidationResult>,
-    
-    /// Thermodynamic validation results
-    pub thermodynamic_results: ThermodynamicValidationResults,
-    
-    /// Quantum coherence validation results
-    pub coherence_results: CoherenceValidationResults,
-    
-    /// Membrane integrity validation results
-    pub membrane_results: MembraneValidationResults,
-    
-    /// Energy conservation validation results
-    pub energy_results: EnergyValidationResults,
-    
+pub struct ValidationSystemStatus {
+    /// System state
+    pub state: ValidationState,
+    /// Active experiments
+    pub active_experiments: usize,
+    /// System health
+    pub health: f64,
+    /// Error count
+    pub error_count: usize,
+    /// Last update time
+    pub last_update: chrono::DateTime<chrono::Utc>,
+}
+
+/// Validation State
+/// States of the validation system
+#[derive(Debug, Clone, PartialEq)]
+pub enum ValidationState {
+    /// System is offline
+    Offline,
+    /// System is initializing
+    Initializing,
+    /// System is ready
+    Ready,
+    /// System is running experiments
+    Running,
+    /// System is in maintenance mode
+    Maintenance,
+    /// System has errors
+    Error,
+    /// System is shutting down
+    Shutdown,
+}
+
+/// Validation Metrics
+/// Metrics for validation system performance
+#[derive(Debug, Clone)]
+pub struct ValidationMetrics {
+    /// Total experiments run
+    pub total_experiments: u64,
+    /// Successful experiments
+    pub successful_experiments: u64,
+    /// Failed experiments
+    pub failed_experiments: u64,
+    /// Average experiment duration
+    pub average_duration: f64,
+    /// System uptime
+    pub uptime: f64,
+    /// Data quality score
+    pub data_quality: f64,
     /// Validation accuracy
     pub validation_accuracy: f64,
+    /// Error rate
+    pub error_rate: f64,
 }
 
-/// Overall validation status
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum ValidationStatus {
-    /// All constraints satisfied
-    Valid,
-    /// Some constraints violated but system can continue
-    Warning,
-    /// Critical constraints violated, system must stop
-    Critical,
-    /// Unknown state
-    Unknown,
+/// Validation Experiment
+/// Individual validation experiment
+#[derive(Debug, Clone)]
+pub struct ValidationExperiment {
+    /// Experiment identifier
+    pub id: Uuid,
+    /// Experiment name
+    pub name: String,
+    /// Experiment type
+    pub experiment_type: ExperimentType,
+    /// Experiment parameters
+    pub parameters: ExperimentParameters,
+    /// Experiment protocol
+    pub protocol: ExperimentProtocol,
+    /// Experiment status
+    pub status: ExperimentStatus,
+    /// Experiment results
+    pub results: Option<ExperimentResults>,
+    /// Start time
+    pub start_time: chrono::DateTime<chrono::Utc>,
+    /// End time
+    pub end_time: Option<chrono::DateTime<chrono::Utc>>,
+    /// Duration
+    pub duration: Option<f64>,
 }
 
-/// Types of biological constraints
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum ConstraintType {
-    /// Temperature constraints for biological processes
-    Temperature,
-    /// pH constraints for biochemical reactions
-    pH,
-    /// Ion concentration constraints
-    IonicStrength,
-    /// ATP energy constraints
-    EnergyAvailability,
-    /// Membrane potential constraints
+/// Experiment Type
+/// Types of validation experiments
+#[derive(Debug, Clone, PartialEq)]
+pub enum ExperimentType {
+    /// Cell viability test
+    CellViability,
+    /// Membrane potential measurement
     MembranePotential,
-    /// Quantum decoherence time constraints
-    CoherenceTime,
-    /// Osmotic pressure constraints
-    OsmoticPressure,
-    /// Enzyme kinetics constraints
-    EnzymeKinetics,
-}
-
-/// Validation result for a specific constraint
-#[derive(Debug, Clone)]
-pub struct ValidationResult {
-    /// Constraint type
-    pub constraint_type: ConstraintType,
-    
-    /// Whether constraint is satisfied
-    pub satisfied: bool,
-    
-    /// Current value
-    pub current_value: f64,
-    
-    /// Allowed range
-    pub allowed_range: (f64, f64),
-    
-    /// Severity if violated
-    pub severity: ViolationSeverity,
-    
-    /// Explanation
-    pub explanation: String,
-}
-
-/// Severity of constraint violation
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum ViolationSeverity {
-    /// Minor violation, can continue
-    Minor,
-    /// Moderate violation, warning issued
-    Moderate,
-    /// Major violation, system should adjust
-    Major,
-    /// Critical violation, system must stop
-    Critical,
-}
-
-/// Thermodynamic validation results
-#[derive(Debug, Clone)]
-pub struct ThermodynamicValidationResults {
-    /// Entropy change validation
-    pub entropy_change: f64,
-    
-    /// Free energy change validation
-    pub free_energy_change: f64,
-    
-    /// Temperature consistency
-    pub temperature_consistency: bool,
-    
-    /// Heat capacity constraints
-    pub heat_capacity_satisfied: bool,
-    
-    /// Thermodynamic equilibrium status
-    pub equilibrium_status: EquilibriumStatus,
-}
-
-/// Equilibrium status
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum EquilibriumStatus {
-    /// System is in equilibrium
-    Equilibrium,
-    /// System is approaching equilibrium
-    Approaching,
-    /// System is far from equilibrium
-    NonEquilibrium,
-}
-
-/// Quantum coherence validation results
-#[derive(Debug, Clone)]
-pub struct CoherenceValidationResults {
-    /// Coherence time measurements
-    pub coherence_times: Vec<f64>,
-    
-    /// Decoherence rate
-    pub decoherence_rate: f64,
-    
-    /// Quantum state fidelity
-    pub quantum_fidelity: f64,
-    
-    /// Entanglement preservation
-    pub entanglement_preserved: bool,
-    
-    /// Coherence threshold satisfied
-    pub coherence_threshold_satisfied: bool,
-}
-
-/// Membrane integrity validation results
-#[derive(Debug, Clone)]
-pub struct MembraneValidationResults {
-    /// Membrane thickness measurements
-    pub membrane_thickness: f64,
-    
-    /// Membrane potential
-    pub membrane_potential: f64,
-    
-    /// Lipid bilayer stability
-    pub lipid_stability: f64,
-    
-    /// Protein functionality
-    pub protein_functionality: f64,
-    
     /// Ion channel activity
-    pub ion_channel_activity: f64,
-    
-    /// Membrane permeability
-    pub membrane_permeability: f64,
+    IonChannelActivity,
+    /// ATP synthesis measurement
+    AtpSynthesis,
+    /// Protein concentration assay
+    ProteinAssay,
+    /// Enzyme activity assay
+    EnzymeActivity,
+    /// Quantum coherence measurement
+    QuantumCoherence,
+    /// Entanglement verification
+    EntanglementVerification,
+    /// Bell test validation
+    BellTest,
+    /// Tunnel current measurement
+    TunnelCurrent,
+    /// Oscillation harvesting
+    OscillationHarvesting,
+    /// Safety validation
+    SafetyValidation,
 }
 
-/// Energy conservation validation results
+/// Experiment Parameters
+/// Parameters for validation experiments
 #[derive(Debug, Clone)]
-pub struct EnergyValidationResults {
-    /// Total energy input
-    pub total_energy_input: f64,
-    
-    /// Total energy output
-    pub total_energy_output: f64,
-    
-    /// Energy conservation ratio
-    pub conservation_ratio: f64,
-    
-    /// ATP production/consumption balance
-    pub atp_balance: f64,
-    
-    /// Metabolic efficiency
-    pub metabolic_efficiency: f64,
-    
-    /// Energy waste heat
-    pub waste_heat: f64,
+pub struct ExperimentParameters {
+    /// Parameter values
+    pub values: HashMap<String, f64>,
+    /// Parameter units
+    pub units: HashMap<String, String>,
+    /// Parameter ranges
+    pub ranges: HashMap<String, (f64, f64)>,
+    /// Parameter constraints
+    pub constraints: HashMap<String, String>,
 }
 
-/// Biological validation subsystem
-pub struct BiologicalValidationSubsystem {
-    /// Configuration
-    config: BiologicalValidationConfig,
-    
-    /// Constraint validation system
-    constraint_validator: Arc<RwLock<constraint_validation::ConstraintValidator>>,
-    
-    /// Thermodynamic validation system
-    thermodynamic_validator: Arc<RwLock<thermodynamic_validation::ThermodynamicValidator>>,
-    
-    /// Quantum coherence validation system
-    coherence_validator: Arc<RwLock<quantum_coherence_validation::CoherenceValidator>>,
-    
-    /// Membrane integrity validation system
-    membrane_validator: Arc<RwLock<membrane_integrity_validation::MembraneValidator>>,
-    
-    /// Energy conservation validation system
-    energy_validator: Arc<RwLock<energy_conservation_validation::EnergyValidator>>,
-    
-    /// Performance metrics
-    metrics: Arc<RwLock<BiologicalValidationMetrics>>,
+/// Experiment Protocol
+/// Protocol for conducting experiments
+#[derive(Debug, Clone)]
+pub struct ExperimentProtocol {
+    /// Protocol steps
+    pub steps: Vec<ProtocolStep>,
+    /// Protocol duration
+    pub duration: f64,
+    /// Protocol requirements
+    pub requirements: Vec<String>,
+    /// Protocol safety measures
+    pub safety_measures: Vec<String>,
 }
 
-/// Biological validation performance metrics
-#[derive(Debug, Default)]
-pub struct BiologicalValidationMetrics {
-    /// Total validations performed
-    pub total_validations: u64,
-    
-    /// Successful validations
-    pub successful_validations: u64,
-    
-    /// Average validation time
-    pub average_validation_time: std::time::Duration,
-    
-    /// Constraint violation rate
-    pub constraint_violation_rate: f64,
-    
-    /// False positive rate
-    pub false_positive_rate: f64,
-    
-    /// False negative rate
-    pub false_negative_rate: f64,
+/// Protocol Step
+/// Individual step in experiment protocol
+#[derive(Debug, Clone)]
+pub struct ProtocolStep {
+    /// Step identifier
+    pub id: Uuid,
+    /// Step number
+    pub step_number: usize,
+    /// Step description
+    pub description: String,
+    /// Step duration
+    pub duration: f64,
+    /// Step parameters
+    pub parameters: HashMap<String, f64>,
+    /// Step requirements
+    pub requirements: Vec<String>,
+    /// Step completion status
+    pub completed: bool,
 }
 
-impl BiologicalValidationSubsystem {
-    /// Create new biological validation subsystem
-    pub fn new(config: &BiologicalValidationConfig) -> Result<Self> {
-        // Initialize constraint validator
-        let constraint_validator = Arc::new(RwLock::new(
-            constraint_validation::ConstraintValidator::new(&config.constraint_config)?
-        ));
-        
-        // Initialize thermodynamic validator
-        let thermodynamic_validator = Arc::new(RwLock::new(
-            thermodynamic_validation::ThermodynamicValidator::new(&config.thermodynamic_config)?
-        ));
-        
-        // Initialize coherence validator
-        let coherence_validator = Arc::new(RwLock::new(
-            quantum_coherence_validation::CoherenceValidator::new(&config.coherence_config)?
-        ));
-        
-        // Initialize membrane validator
-        let membrane_validator = Arc::new(RwLock::new(
-            membrane_integrity_validation::MembraneValidator::new(&config.membrane_config)?
-        ));
-        
-        // Initialize energy validator
-        let energy_validator = Arc::new(RwLock::new(
-            energy_conservation_validation::EnergyValidator::new(&config.energy_config)?
-        ));
-        
+/// Experiment Status
+/// Status of validation experiment
+#[derive(Debug, Clone, PartialEq)]
+pub enum ExperimentStatus {
+    /// Experiment is queued
+    Queued,
+    /// Experiment is running
+    Running,
+    /// Experiment is paused
+    Paused,
+    /// Experiment completed successfully
+    Completed,
+    /// Experiment failed
+    Failed,
+    /// Experiment was cancelled
+    Cancelled,
+    /// Experiment is being analyzed
+    Analyzing,
+}
+
+/// Experiment Results
+/// Results from validation experiment
+#[derive(Debug, Clone)]
+pub struct ExperimentResults {
+    /// Result identifier
+    pub id: Uuid,
+    /// Raw data
+    pub raw_data: Vec<f64>,
+    /// Processed data
+    pub processed_data: HashMap<String, f64>,
+    /// Statistical analysis
+    pub statistics: StatisticalAnalysis,
+    /// Validation outcome
+    pub outcome: ValidationOutcome,
+    /// Confidence level
+    pub confidence: f64,
+    /// Error analysis
+    pub error_analysis: ErrorAnalysis,
+}
+
+/// Statistical Analysis
+/// Statistical analysis of experiment results
+#[derive(Debug, Clone)]
+pub struct StatisticalAnalysis {
+    /// Sample size
+    pub sample_size: usize,
+    /// Mean values
+    pub means: HashMap<String, f64>,
+    /// Standard deviations
+    pub std_devs: HashMap<String, f64>,
+    /// Confidence intervals
+    pub confidence_intervals: HashMap<String, (f64, f64)>,
+    /// P-values
+    pub p_values: HashMap<String, f64>,
+    /// Effect sizes
+    pub effect_sizes: HashMap<String, f64>,
+}
+
+/// Validation Outcome
+/// Outcome of validation experiment
+#[derive(Debug, Clone)]
+pub struct ValidationOutcome {
+    /// Outcome type
+    pub outcome_type: OutcomeType,
+    /// Validation passed
+    pub passed: bool,
+    /// Validation score
+    pub score: f64,
+    /// Validation message
+    pub message: String,
+    /// Supporting evidence
+    pub evidence: Vec<String>,
+}
+
+/// Outcome Type
+/// Types of validation outcomes
+#[derive(Debug, Clone, PartialEq)]
+pub enum OutcomeType {
+    /// Hypothesis confirmed
+    Confirmed,
+    /// Hypothesis rejected
+    Rejected,
+    /// Inconclusive results
+    Inconclusive,
+    /// Partial confirmation
+    Partial,
+    /// Requires further investigation
+    Investigation,
+}
+
+/// Error Analysis
+/// Analysis of experimental errors
+#[derive(Debug, Clone)]
+pub struct ErrorAnalysis {
+    /// Systematic errors
+    pub systematic_errors: Vec<String>,
+    /// Random errors
+    pub random_errors: Vec<String>,
+    /// Error magnitudes
+    pub error_magnitudes: HashMap<String, f64>,
+    /// Error sources
+    pub error_sources: HashMap<String, String>,
+    /// Error mitigation
+    pub mitigation_strategies: Vec<String>,
+}
+
+impl BiologicalValidationSystem {
+    /// Create new biological validation system
+    pub async fn new(config: Arc<RwLock<Config>>) -> Result<Self, KambuzumaError> {
+        log::info!("Creating biological validation system");
+
+        let id = Uuid::new_v4();
+
+        // Initialize subsystems
+        let cell_culture = Arc::new(RwLock::new(CellCultureSystem::new(config.clone()).await?));
+        let electrophysiology = Arc::new(RwLock::new(ElectrophysiologySystem::new(config.clone()).await?));
+        let biochemical_assays = Arc::new(RwLock::new(BiochemicalAssaySystem::new(config.clone()).await?));
+        let quantum_validation = Arc::new(RwLock::new(QuantumValidationSystem::new(config.clone()).await?));
+        let safety_protocols = Arc::new(RwLock::new(SafetyProtocolSystem::new(config.clone()).await?));
+
+        // Initialize empty experiment list
+        let experiments = Arc::new(RwLock::new(Vec::new()));
+
+        // Initialize system status
+        let status = Arc::new(RwLock::new(ValidationSystemStatus {
+            state: ValidationState::Offline,
+            active_experiments: 0,
+            health: 1.0,
+            error_count: 0,
+            last_update: chrono::Utc::now(),
+        }));
+
         // Initialize metrics
-        let metrics = Arc::new(RwLock::new(BiologicalValidationMetrics::default()));
-        
+        let metrics = Arc::new(RwLock::new(ValidationMetrics {
+            total_experiments: 0,
+            successful_experiments: 0,
+            failed_experiments: 0,
+            average_duration: 0.0,
+            uptime: 0.0,
+            data_quality: 1.0,
+            validation_accuracy: 1.0,
+            error_rate: 0.0,
+        }));
+
         Ok(Self {
-            config: config.clone(),
-            constraint_validator,
-            thermodynamic_validator,
-            coherence_validator,
-            membrane_validator,
-            energy_validator,
+            id,
+            config,
+            cell_culture,
+            electrophysiology,
+            biochemical_assays,
+            quantum_validation,
+            safety_protocols,
+            experiments,
+            status,
             metrics,
         })
     }
-    
-    /// Start the biological validation subsystem
-    pub async fn start(&self) -> Result<()> {
-        self.constraint_validator.write().await.start().await?;
-        self.thermodynamic_validator.write().await.start().await?;
-        self.coherence_validator.write().await.start().await?;
-        self.membrane_validator.write().await.start().await?;
-        self.energy_validator.write().await.start().await?;
-        
+
+    /// Initialize the validation system
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        log::info!("Initializing biological validation system");
+
+        // Update status
+        {
+            let mut status = self.status.write().await;
+            status.state = ValidationState::Initializing;
+            status.last_update = chrono::Utc::now();
+        }
+
+        // Initialize safety protocols first
+        {
+            let mut safety = self.safety_protocols.write().await;
+            safety.initialize().await?;
+        }
+
+        // Initialize subsystems
+        {
+            let mut cell_culture = self.cell_culture.write().await;
+            cell_culture.initialize().await?;
+        }
+
+        {
+            let mut electrophysiology = self.electrophysiology.write().await;
+            electrophysiology.initialize().await?;
+        }
+
+        {
+            let mut biochemical = self.biochemical_assays.write().await;
+            biochemical.initialize().await?;
+        }
+
+        {
+            let mut quantum = self.quantum_validation.write().await;
+            quantum.initialize().await?;
+        }
+
+        // Update status to ready
+        {
+            let mut status = self.status.write().await;
+            status.state = ValidationState::Ready;
+            status.health = 1.0;
+            status.last_update = chrono::Utc::now();
+        }
+
+        log::info!("Biological validation system initialized successfully");
         Ok(())
     }
-    
-    /// Stop the biological validation subsystem
-    pub async fn stop(&self) -> Result<()> {
-        self.energy_validator.write().await.stop().await?;
-        self.membrane_validator.write().await.stop().await?;
-        self.coherence_validator.write().await.stop().await?;
-        self.thermodynamic_validator.write().await.stop().await?;
-        self.constraint_validator.write().await.stop().await?;
-        
+
+    /// Shutdown the validation system
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        log::info!("Shutting down biological validation system");
+
+        // Update status
+        {
+            let mut status = self.status.write().await;
+            status.state = ValidationState::Shutdown;
+            status.last_update = chrono::Utc::now();
+        }
+
+        // Shutdown subsystems
+        {
+            let mut quantum = self.quantum_validation.write().await;
+            quantum.shutdown().await?;
+        }
+
+        {
+            let mut biochemical = self.biochemical_assays.write().await;
+            biochemical.shutdown().await?;
+        }
+
+        {
+            let mut electrophysiology = self.electrophysiology.write().await;
+            electrophysiology.shutdown().await?;
+        }
+
+        {
+            let mut cell_culture = self.cell_culture.write().await;
+            cell_culture.shutdown().await?;
+        }
+
+        {
+            let mut safety = self.safety_protocols.write().await;
+            safety.shutdown().await?;
+        }
+
+        // Update status to offline
+        {
+            let mut status = self.status.write().await;
+            status.state = ValidationState::Offline;
+            status.last_update = chrono::Utc::now();
+        }
+
+        log::info!("Biological validation system shutdown complete");
         Ok(())
     }
-    
-    /// Validate system state against biological constraints
-    pub async fn validate_system(&self, system_state: &SystemState) -> Result<BiologicalValidationState> {
-        let start_time = std::time::Instant::now();
-        
-        // Validate constraints
-        let constraint_results = self.constraint_validator.read().await
-            .validate_constraints(system_state).await?;
-        
-        // Validate thermodynamics
-        let thermodynamic_results = self.thermodynamic_validator.read().await
-            .validate_thermodynamics(system_state).await?;
-        
-        // Validate quantum coherence
-        let coherence_results = self.coherence_validator.read().await
-            .validate_coherence(system_state).await?;
-        
-        // Validate membrane integrity
-        let membrane_results = self.membrane_validator.read().await
-            .validate_membrane(system_state).await?;
-        
-        // Validate energy conservation
-        let energy_results = self.energy_validator.read().await
-            .validate_energy(system_state).await?;
-        
-        // Determine overall validation status
-        let validation_status = self.determine_overall_status(
-            &constraint_results,
-            &thermodynamic_results,
-            &coherence_results,
-            &membrane_results,
-            &energy_results,
-        ).await?;
-        
-        // Calculate validation accuracy
-        let validation_accuracy = self.calculate_validation_accuracy(
-            &constraint_results,
-            &thermodynamic_results,
-            &coherence_results,
-            &membrane_results,
-            &energy_results,
-        ).await?;
-        
-        let validation_time = start_time.elapsed();
-        
-        // Update metrics
-        let mut metrics = self.metrics.write().await;
-        metrics.total_validations += 1;
-        if validation_status == ValidationStatus::Valid {
-            metrics.successful_validations += 1;
-        }
-        metrics.average_validation_time = (metrics.average_validation_time + validation_time) / 2;
-        
-        Ok(BiologicalValidationState {
-            validation_status,
-            constraint_results,
-            thermodynamic_results,
-            coherence_results,
-            membrane_results,
-            energy_results,
-            validation_accuracy,
-        })
-    }
-    
-    /// Get current validation state
-    pub async fn get_state(&self) -> Result<BiologicalValidationState> {
-        // Create a default system state for validation
-        let system_state = SystemState::default();
-        
-        // Perform validation
-        self.validate_system(&system_state).await
-    }
-    
-    /// Check if a specific constraint is satisfied
-    pub async fn check_constraint(&self, constraint_type: ConstraintType, value: f64) -> Result<ValidationResult> {
-        self.constraint_validator.read().await.check_constraint(constraint_type, value).await
-    }
-    
-    /// Get validation metrics
-    pub async fn get_metrics(&self) -> Result<BiologicalValidationMetrics> {
-        Ok(self.metrics.read().await.clone())
-    }
-    
-    // Private helper methods
-    
-    async fn determine_overall_status(
-        &self,
-        constraint_results: &HashMap<ConstraintType, ValidationResult>,
-        thermodynamic_results: &ThermodynamicValidationResults,
-        coherence_results: &CoherenceValidationResults,
-        membrane_results: &MembraneValidationResults,
-        energy_results: &EnergyValidationResults,
-    ) -> Result<ValidationStatus> {
-        // Check for critical violations
-        for result in constraint_results.values() {
-            if !result.satisfied && result.severity == ViolationSeverity::Critical {
-                return Ok(ValidationStatus::Critical);
+
+    /// Run validation experiment
+    pub async fn run_experiment(&self, experiment: ValidationExperiment) -> Result<ExperimentResults, KambuzumaError> {
+        log::info!("Running validation experiment: {}", experiment.name);
+
+        // Check system readiness
+        {
+            let status = self.status.read().await;
+            if status.state != ValidationState::Ready {
+                return Err(KambuzumaError::ValidationError(
+                    "System not ready for experiments".to_string(),
+                ));
             }
         }
-        
-        // Check thermodynamic constraints
-        if !thermodynamic_results.temperature_consistency || 
-           !thermodynamic_results.heat_capacity_satisfied {
-            return Ok(ValidationStatus::Critical);
+
+        // Update system state
+        {
+            let mut status = self.status.write().await;
+            status.state = ValidationState::Running;
+            status.active_experiments += 1;
+            status.last_update = chrono::Utc::now();
         }
-        
-        // Check quantum coherence
-        if !coherence_results.coherence_threshold_satisfied {
-            return Ok(ValidationStatus::Warning);
+
+        // Add experiment to list
+        {
+            let mut experiments = self.experiments.write().await;
+            experiments.push(experiment.clone());
         }
-        
-        // Check energy conservation
-        if energy_results.conservation_ratio < 0.9 {
-            return Ok(ValidationStatus::Warning);
-        }
-        
-        // Check for any moderate violations
-        for result in constraint_results.values() {
-            if !result.satisfied && result.severity == ViolationSeverity::Moderate {
-                return Ok(ValidationStatus::Warning);
-            }
-        }
-        
-        Ok(ValidationStatus::Valid)
-    }
-    
-    async fn calculate_validation_accuracy(
-        &self,
-        constraint_results: &HashMap<ConstraintType, ValidationResult>,
-        thermodynamic_results: &ThermodynamicValidationResults,
-        coherence_results: &CoherenceValidationResults,
-        membrane_results: &MembraneValidationResults,
-        energy_results: &EnergyValidationResults,
-    ) -> Result<f64> {
-        let mut total_score = 0.0;
-        let mut total_weight = 0.0;
-        
-        // Score constraint validations
-        for result in constraint_results.values() {
-            let weight = match result.constraint_type {
-                ConstraintType::Temperature => 0.2,
-                ConstraintType::pH => 0.15,
-                ConstraintType::EnergyAvailability => 0.25,
-                ConstraintType::MembranePotential => 0.15,
-                ConstraintType::CoherenceTime => 0.15,
-                _ => 0.1,
-            };
-            
-            total_score += if result.satisfied { weight } else { 0.0 };
-            total_weight += weight;
-        }
-        
-        // Score thermodynamic validation
-        let thermo_weight = 0.2;
-        let thermo_score = if thermodynamic_results.temperature_consistency && 
-                             thermodynamic_results.heat_capacity_satisfied {
-            thermo_weight
-        } else {
-            0.0
+
+        // Run experiment based on type
+        let results = match experiment.experiment_type {
+            ExperimentType::CellViability => {
+                let cell_culture = self.cell_culture.read().await;
+                cell_culture.run_viability_test(&experiment.parameters).await?
+            },
+            ExperimentType::MembranePotential => {
+                let electrophysiology = self.electrophysiology.read().await;
+                electrophysiology.measure_membrane_potential(&experiment.parameters).await?
+            },
+            ExperimentType::IonChannelActivity => {
+                let electrophysiology = self.electrophysiology.read().await;
+                electrophysiology.measure_ion_channel_activity(&experiment.parameters).await?
+            },
+            ExperimentType::AtpSynthesis => {
+                let biochemical = self.biochemical_assays.read().await;
+                biochemical.measure_atp_synthesis(&experiment.parameters).await?
+            },
+            ExperimentType::ProteinAssay => {
+                let biochemical = self.biochemical_assays.read().await;
+                biochemical.run_protein_assay(&experiment.parameters).await?
+            },
+            ExperimentType::EnzymeActivity => {
+                let biochemical = self.biochemical_assays.read().await;
+                biochemical.measure_enzyme_activity(&experiment.parameters).await?
+            },
+            ExperimentType::QuantumCoherence => {
+                let quantum = self.quantum_validation.read().await;
+                quantum.measure_quantum_coherence(&experiment.parameters).await?
+            },
+            ExperimentType::EntanglementVerification => {
+                let quantum = self.quantum_validation.read().await;
+                quantum.verify_entanglement(&experiment.parameters).await?
+            },
+            ExperimentType::BellTest => {
+                let quantum = self.quantum_validation.read().await;
+                quantum.run_bell_test(&experiment.parameters).await?
+            },
+            ExperimentType::TunnelCurrent => {
+                let electrophysiology = self.electrophysiology.read().await;
+                electrophysiology.measure_tunnel_current(&experiment.parameters).await?
+            },
+            ExperimentType::OscillationHarvesting => {
+                let electrophysiology = self.electrophysiology.read().await;
+                electrophysiology.measure_oscillation_harvesting(&experiment.parameters).await?
+            },
+            ExperimentType::SafetyValidation => {
+                let safety = self.safety_protocols.read().await;
+                safety.run_safety_validation(&experiment.parameters).await?
+            },
         };
-        total_score += thermo_score;
-        total_weight += thermo_weight;
-        
-        // Score coherence validation
-        let coherence_weight = 0.15;
-        let coherence_score = coherence_results.quantum_fidelity * coherence_weight;
-        total_score += coherence_score;
-        total_weight += coherence_weight;
-        
-        // Score energy conservation
-        let energy_weight = 0.2;
-        let energy_score = energy_results.conservation_ratio * energy_weight;
-        total_score += energy_score;
-        total_weight += energy_weight;
-        
-        Ok(if total_weight > 0.0 { total_score / total_weight } else { 0.0 })
+
+        // Update metrics
+        {
+            let mut metrics = self.metrics.write().await;
+            metrics.total_experiments += 1;
+            if results.outcome.passed {
+                metrics.successful_experiments += 1;
+            } else {
+                metrics.failed_experiments += 1;
+            }
+            metrics.error_rate = metrics.failed_experiments as f64 / metrics.total_experiments as f64;
+        }
+
+        // Update system state
+        {
+            let mut status = self.status.write().await;
+            status.active_experiments -= 1;
+            if status.active_experiments == 0 {
+                status.state = ValidationState::Ready;
+            }
+            status.last_update = chrono::Utc::now();
+        }
+
+        log::info!("Experiment completed: {}", experiment.name);
+        Ok(results)
+    }
+
+    /// Get system status
+    pub async fn get_status(&self) -> ValidationSystemStatus {
+        self.status.read().await.clone()
+    }
+
+    /// Get system metrics
+    pub async fn get_metrics(&self) -> ValidationMetrics {
+        self.metrics.read().await.clone()
+    }
+
+    /// Get experiment history
+    pub async fn get_experiments(&self) -> Vec<ValidationExperiment> {
+        self.experiments.read().await.clone()
+    }
+
+    /// Perform health check
+    pub async fn health_check(&self) -> Result<f64, KambuzumaError> {
+        log::debug!("Performing system health check");
+
+        let mut health_score = 1.0;
+        let mut checks = 0;
+
+        // Check cell culture system
+        {
+            let cell_culture = self.cell_culture.read().await;
+            let cell_health = cell_culture.health_check().await?;
+            health_score *= cell_health;
+            checks += 1;
+        }
+
+        // Check electrophysiology system
+        {
+            let electrophysiology = self.electrophysiology.read().await;
+            let electro_health = electrophysiology.health_check().await?;
+            health_score *= electro_health;
+            checks += 1;
+        }
+
+        // Check biochemical assay system
+        {
+            let biochemical = self.biochemical_assays.read().await;
+            let biochemical_health = biochemical.health_check().await?;
+            health_score *= biochemical_health;
+            checks += 1;
+        }
+
+        // Check quantum validation system
+        {
+            let quantum = self.quantum_validation.read().await;
+            let quantum_health = quantum.health_check().await?;
+            health_score *= quantum_health;
+            checks += 1;
+        }
+
+        // Check safety protocols
+        {
+            let safety = self.safety_protocols.read().await;
+            let safety_health = safety.health_check().await?;
+            health_score *= safety_health;
+            checks += 1;
+        }
+
+        // Calculate overall health
+        let overall_health = health_score.powf(1.0 / checks as f64);
+
+        // Update system health
+        {
+            let mut status = self.status.write().await;
+            status.health = overall_health;
+            status.last_update = chrono::Utc::now();
+        }
+
+        log::debug!("System health check completed: {:.2}%", overall_health * 100.0);
+        Ok(overall_health)
+    }
+
+    /// Emergency shutdown
+    pub async fn emergency_shutdown(&self) -> Result<(), KambuzumaError> {
+        log::warn!("Emergency shutdown initiated");
+
+        // Activate emergency protocols
+        {
+            let safety = self.safety_protocols.read().await;
+            safety.emergency_shutdown().await?;
+        }
+
+        // Shutdown all subsystems immediately
+        self.shutdown().await?;
+
+        log::warn!("Emergency shutdown completed");
+        Ok(())
     }
 }
 
-/// System state for validation
-#[derive(Debug, Clone)]
-pub struct SystemState {
-    /// Current temperature in Kelvin
-    pub temperature: f64,
-    
-    /// Current pH
-    pub ph: f64,
-    
-    /// Ion concentrations
-    pub ion_concentrations: HashMap<String, f64>,
-    
-    /// ATP concentration
-    pub atp_concentration: f64,
-    
-    /// Membrane potential
-    pub membrane_potential: f64,
-    
-    /// Quantum coherence time
-    pub coherence_time: f64,
-    
-    /// Energy input rate
-    pub energy_input_rate: f64,
-    
-    /// Energy output rate
-    pub energy_output_rate: f64,
-    
-    /// Membrane thickness
-    pub membrane_thickness: f64,
-    
-    /// System entropy
-    pub entropy: f64,
-}
-
-impl Default for SystemState {
+impl Default for ValidationMetrics {
     fn default() -> Self {
-        let mut ion_concentrations = HashMap::new();
-        ion_concentrations.insert("Na+".to_string(), 0.140); // 140 mM
-        ion_concentrations.insert("K+".to_string(), 0.005);  // 5 mM
-        ion_concentrations.insert("Ca2+".to_string(), 0.001); // 1 mM
-        ion_concentrations.insert("Cl-".to_string(), 0.120);  // 120 mM
-        
         Self {
-            temperature: 310.15,  // 37°C in Kelvin
-            ph: 7.4,             // Physiological pH
-            ion_concentrations,
-            atp_concentration: 0.005,  // 5 mM ATP
-            membrane_potential: -0.070, // -70 mV
-            coherence_time: 1e-12,     // 1 ps
-            energy_input_rate: 100.0,  // Arbitrary units
-            energy_output_rate: 95.0,  // Arbitrary units
-            membrane_thickness: 5e-9,  // 5 nm
-            entropy: 1000.0,           // Arbitrary units
+            total_experiments: 0,
+            successful_experiments: 0,
+            failed_experiments: 0,
+            average_duration: 0.0,
+            uptime: 0.0,
+            data_quality: 1.0,
+            validation_accuracy: 1.0,
+            error_rate: 0.0,
         }
     }
 }
 
-/// Biological validation subsystem errors
-#[derive(Debug, Error)]
-pub enum BiologicalValidationError {
-    #[error("Constraint validation error: {0}")]
-    ConstraintValidation(String),
-    
-    #[error("Thermodynamic validation error: {0}")]
-    ThermodynamicValidation(String),
-    
-    #[error("Coherence validation error: {0}")]
-    CoherenceValidation(String),
-    
-    #[error("Membrane validation error: {0}")]
-    MembraneValidation(String),
-    
-    #[error("Energy validation error: {0}")]
-    EnergyValidation(String),
-    
-    #[error("Critical constraint violation: {0}")]
-    CriticalConstraintViolation(String),
-    
-    #[error("Configuration error: {0}")]
-    Configuration(String),
-}
-
-impl Default for BiologicalValidationConfig {
+impl Default for ExperimentParameters {
     fn default() -> Self {
         Self {
-            constraint_config: constraint_validation::ConstraintConfig::default(),
-            thermodynamic_config: thermodynamic_validation::ThermodynamicConfig::default(),
-            coherence_config: quantum_coherence_validation::CoherenceConfig::default(),
-            membrane_config: membrane_integrity_validation::MembraneConfig::default(),
-            energy_config: energy_conservation_validation::EnergyConfig::default(),
+            values: HashMap::new(),
+            units: HashMap::new(),
+            ranges: HashMap::new(),
+            constraints: HashMap::new(),
         }
     }
 }
 
-impl BiologicalValidationConfig {
-    /// Validate configuration
-    pub fn is_valid(&self) -> bool {
-        self.constraint_config.is_valid() &&
-        self.thermodynamic_config.is_valid() &&
-        self.coherence_config.is_valid() &&
-        self.membrane_config.is_valid() &&
-        self.energy_config.is_valid()
+impl ValidationExperiment {
+    /// Create new validation experiment
+    pub fn new(
+        name: String,
+        experiment_type: ExperimentType,
+        parameters: ExperimentParameters,
+        protocol: ExperimentProtocol,
+    ) -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            name,
+            experiment_type,
+            parameters,
+            protocol,
+            status: ExperimentStatus::Queued,
+            results: None,
+            start_time: chrono::Utc::now(),
+            end_time: None,
+            duration: None,
+        }
     }
-} 
+
+    /// Start experiment
+    pub fn start(&mut self) {
+        self.status = ExperimentStatus::Running;
+        self.start_time = chrono::Utc::now();
+    }
+
+    /// Complete experiment
+    pub fn complete(&mut self, results: ExperimentResults) {
+        self.status = ExperimentStatus::Completed;
+        self.end_time = Some(chrono::Utc::now());
+        self.duration = Some((self.end_time.unwrap() - self.start_time).num_milliseconds() as f64 / 1000.0);
+        self.results = Some(results);
+    }
+
+    /// Fail experiment
+    pub fn fail(&mut self, error: String) {
+        self.status = ExperimentStatus::Failed;
+        self.end_time = Some(chrono::Utc::now());
+        self.duration = Some((self.end_time.unwrap() - self.start_time).num_milliseconds() as f64 / 1000.0);
+
+        // Create error result
+        let error_result = ExperimentResults {
+            id: Uuid::new_v4(),
+            raw_data: Vec::new(),
+            processed_data: HashMap::new(),
+            statistics: StatisticalAnalysis {
+                sample_size: 0,
+                means: HashMap::new(),
+                std_devs: HashMap::new(),
+                confidence_intervals: HashMap::new(),
+                p_values: HashMap::new(),
+                effect_sizes: HashMap::new(),
+            },
+            outcome: ValidationOutcome {
+                outcome_type: OutcomeType::Rejected,
+                passed: false,
+                score: 0.0,
+                message: error,
+                evidence: Vec::new(),
+            },
+            confidence: 0.0,
+            error_analysis: ErrorAnalysis {
+                systematic_errors: Vec::new(),
+                random_errors: Vec::new(),
+                error_magnitudes: HashMap::new(),
+                error_sources: HashMap::new(),
+                mitigation_strategies: Vec::new(),
+            },
+        };
+
+        self.results = Some(error_result);
+    }
+
+    /// Cancel experiment
+    pub fn cancel(&mut self) {
+        self.status = ExperimentStatus::Cancelled;
+        self.end_time = Some(chrono::Utc::now());
+        self.duration = Some((self.end_time.unwrap() - self.start_time).num_milliseconds() as f64 / 1000.0);
+    }
+}
+
+/// Validation experiment builder
+pub struct ExperimentBuilder {
+    name: String,
+    experiment_type: ExperimentType,
+    parameters: ExperimentParameters,
+    protocol: ExperimentProtocol,
+}
+
+impl ExperimentBuilder {
+    /// Create new experiment builder
+    pub fn new(name: String, experiment_type: ExperimentType) -> Self {
+        Self {
+            name,
+            experiment_type,
+            parameters: ExperimentParameters::default(),
+            protocol: ExperimentProtocol {
+                steps: Vec::new(),
+                duration: 0.0,
+                requirements: Vec::new(),
+                safety_measures: Vec::new(),
+            },
+        }
+    }
+
+    /// Add parameter
+    pub fn parameter(mut self, name: String, value: f64, unit: String) -> Self {
+        self.parameters.values.insert(name.clone(), value);
+        self.parameters.units.insert(name, unit);
+        self
+    }
+
+    /// Add parameter range
+    pub fn parameter_range(mut self, name: String, min: f64, max: f64) -> Self {
+        self.parameters.ranges.insert(name, (min, max));
+        self
+    }
+
+    /// Add protocol step
+    pub fn protocol_step(mut self, description: String, duration: f64) -> Self {
+        let step = ProtocolStep {
+            id: Uuid::new_v4(),
+            step_number: self.protocol.steps.len() + 1,
+            description,
+            duration,
+            parameters: HashMap::new(),
+            requirements: Vec::new(),
+            completed: false,
+        };
+        self.protocol.steps.push(step);
+        self.protocol.duration += duration;
+        self
+    }
+
+    /// Add requirement
+    pub fn requirement(mut self, requirement: String) -> Self {
+        self.protocol.requirements.push(requirement);
+        self
+    }
+
+    /// Add safety measure
+    pub fn safety_measure(mut self, measure: String) -> Self {
+        self.protocol.safety_measures.push(measure);
+        self
+    }
+
+    /// Build experiment
+    pub fn build(self) -> ValidationExperiment {
+        ValidationExperiment::new(self.name, self.experiment_type, self.parameters, self.protocol)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tokio;
+
+    #[tokio::test]
+    async fn test_experiment_builder() {
+        let experiment = ExperimentBuilder::new("Test Cell Viability".to_string(), ExperimentType::CellViability)
+            .parameter("temperature".to_string(), 37.0, "°C".to_string())
+            .parameter("ph".to_string(), 7.4, "pH".to_string())
+            .parameter_range("concentration".to_string(), 0.1, 10.0)
+            .protocol_step("Prepare cell culture".to_string(), 300.0)
+            .protocol_step("Apply treatment".to_string(), 1800.0)
+            .protocol_step("Measure viability".to_string(), 600.0)
+            .requirement("Sterile environment".to_string())
+            .safety_measure("Biological containment".to_string())
+            .build();
+
+        assert_eq!(experiment.name, "Test Cell Viability");
+        assert_eq!(experiment.experiment_type, ExperimentType::CellViability);
+        assert_eq!(experiment.protocol.steps.len(), 3);
+        assert_eq!(experiment.protocol.duration, 2700.0);
+        assert_eq!(experiment.status, ExperimentStatus::Queued);
+    }
+
+    #[tokio::test]
+    async fn test_experiment_lifecycle() {
+        let mut experiment =
+            ExperimentBuilder::new("Test Experiment".to_string(), ExperimentType::CellViability).build();
+
+        // Start experiment
+        experiment.start();
+        assert_eq!(experiment.status, ExperimentStatus::Running);
+
+        // Complete experiment
+        let results = ExperimentResults {
+            id: Uuid::new_v4(),
+            raw_data: vec![1.0, 2.0, 3.0],
+            processed_data: HashMap::new(),
+            statistics: StatisticalAnalysis {
+                sample_size: 3,
+                means: HashMap::new(),
+                std_devs: HashMap::new(),
+                confidence_intervals: HashMap::new(),
+                p_values: HashMap::new(),
+                effect_sizes: HashMap::new(),
+            },
+            outcome: ValidationOutcome {
+                outcome_type: OutcomeType::Confirmed,
+                passed: true,
+                score: 0.95,
+                message: "Test passed".to_string(),
+                evidence: Vec::new(),
+            },
+            confidence: 0.95,
+            error_analysis: ErrorAnalysis {
+                systematic_errors: Vec::new(),
+                random_errors: Vec::new(),
+                error_magnitudes: HashMap::new(),
+                error_sources: HashMap::new(),
+                mitigation_strategies: Vec::new(),
+            },
+        };
+
+        experiment.complete(results);
+        assert_eq!(experiment.status, ExperimentStatus::Completed);
+        assert!(experiment.results.is_some());
+        assert!(experiment.end_time.is_some());
+        assert!(experiment.duration.is_some());
+    }
+}
