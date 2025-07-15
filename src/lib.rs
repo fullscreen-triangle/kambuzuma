@@ -13,6 +13,8 @@ use uuid::Uuid;
 // Core Buhera OS Modules
 pub mod autonomous;
 pub mod biological_validation;
+pub mod interfaces;
+pub mod mathematics;
 pub mod metacognition;
 pub mod neural;
 pub mod quantum;
