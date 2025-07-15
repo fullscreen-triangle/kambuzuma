@@ -5,7 +5,7 @@
   <img src="assets/img/logo.png" alt="Logo" width="300"/>
 </p>
 
-
+> **Note:** This README includes visual diagrams to enhance understanding of the complex quantum biological processes. The detailed diagrams illustrate membrane quantum tunneling, oscillation endpoint harvesting, biological Maxwell demons, Imhotep neuron architecture, thought current flow, and complete system integration.
 
 # A Biomimetic Metacognitive Orchestration System for Autonomous Computational Reasoning
 
@@ -35,6 +35,11 @@ This paper introduces Kambuzuma, a biomimetic metacognitive orchestration system
 ### 2.1 Membrane Quantum Tunneling Foundation
 
 The Kambuzuma architecture implements actual biological quantum processes that occur naturally in living systems. The foundation layer leverages quantum tunneling effects in phospholipid bilayers:
+
+<p align="center">
+  <img src="assets/img/membrane-quantum-tunneling.png" alt="Membrane Quantum Tunneling" width="600"/>
+  <br><em>Real quantum tunneling effects in biological membranes</em>
+</p>
 
 ```
 BIOLOGICAL MEMBRANE QUANTUM ARCHITECTURE
@@ -70,6 +75,7 @@ T = |t|² = [1 + (V₀²sinh²(κa))/(4E(V₀-E))]⁻¹
 ```
 
 Where:
+
 - `V₀`: Membrane potential barrier height (0.1-0.5 eV)
 - `κ = √(2m(V₀-E))/ℏ`: Decay constant
 - `a`: Membrane thickness (~5nm)
@@ -88,6 +94,11 @@ With normalization constraint: `|α|² + |β|² + |γ|² = 1`
 ### 2.2 Oscillation Endpoint Harvesting
 
 The system harvests quantum states at oscillation termination points:
+
+<p align="center">
+  <img src="assets/img/oscillation-endpoint-harvesting.png" alt="Oscillation Endpoint Harvesting" width="600"/>
+  <br><em>Quantum state harvesting at oscillation termination points</em>
+</p>
 
 ```
 OSCILLATION ENDPOINT HARVESTING MECHANISM
@@ -136,6 +147,11 @@ Where `Ω` represents the number of accessible microstates at oscillation termin
 
 Each processing stage consists of specialized neural processing units implementing biological quantum computation:
 
+<p align="center">
+  <img src="assets/img/imhotep-neuron-architecture.png" alt="Imhotep Neuron Architecture" width="700"/>
+  <br><em>Biological quantum neuron with three-component architecture</em>
+</p>
+
 ```
 IMHOTEP NEURON - BIOLOGICAL QUANTUM PROCESSOR
 ==============================================
@@ -174,6 +190,7 @@ V(t) = V_rest + ∫[I_syn(τ) - I_leak(τ) - I_ATP(τ)]dτ
 ```
 
 Where:
+
 - `V(t)`: membrane potential at time t
 - `V_rest`: resting potential (-70mV baseline)
 - `I_syn(τ)`: synaptic input current
@@ -187,6 +204,7 @@ ATP(t+1) = ATP(t) + P_syn(t) - C_proc(t) - C_maint
 ```
 
 Where:
+
 - `P_syn(t)`: ATP synthesis rate from quantum processes
 - `C_proc(t)`: ATP consumption for computational operations
 - `C_maint`: baseline maintenance cost
@@ -195,22 +213,27 @@ Where:
 
 The eight processing stages are organized as specialized neuron stacks:
 
-| Stage | Function | Neuron Count | Quantum Specialization |
-|-------|----------|--------------|------------------------|
-| 0 | Query Processing | 75-100 | Natural language quantum superposition |
-| 1 | Semantic Analysis | 50-75 | Concept entanglement networks |
-| 2 | Domain Knowledge | 150-200 | Distributed quantum memory |
-| 3 | Logical Reasoning | 100-125 | Quantum logic gates |
-| 4 | Creative Synthesis | 75-100 | Quantum coherence combination |
-| 5 | Evaluation | 50-75 | Measurement and collapse |
-| 6 | Integration | 60-80 | Multi-state superposition |
-| 7 | Validation | 40-60 | Error correction protocols |
+| Stage | Function           | Neuron Count | Quantum Specialization                 |
+| ----- | ------------------ | ------------ | -------------------------------------- |
+| 0     | Query Processing   | 75-100       | Natural language quantum superposition |
+| 1     | Semantic Analysis  | 50-75        | Concept entanglement networks          |
+| 2     | Domain Knowledge   | 150-200      | Distributed quantum memory             |
+| 3     | Logical Reasoning  | 100-125      | Quantum logic gates                    |
+| 4     | Creative Synthesis | 75-100       | Quantum coherence combination          |
+| 5     | Evaluation         | 50-75        | Measurement and collapse               |
+| 6     | Integration        | 60-80        | Multi-state superposition              |
+| 7     | Validation         | 40-60        | Error correction protocols             |
 
 ## 4. Biological Maxwell Demon Implementation
 
 ### 4.1 Molecular Machinery Architecture
 
 The system implements Maxwell demons using real molecular machinery:
+
+<p align="center">
+  <img src="assets/img/biological-maxwell-demon.png" alt="Biological Maxwell Demon" width="650"/>
+  <br><em>Real molecular machinery for biological information processing</em>
+</p>
 
 ```
 BIOLOGICAL MAXWELL DEMON - REAL MOLECULAR MACHINERY
@@ -259,6 +282,7 @@ The Maxwell demon operates under strict thermodynamic constraints:
 ```
 
 Information processing cost:
+
 ```
 W_min = kBT ln(2) per bit erasure
 ```
@@ -280,6 +304,11 @@ Where `φ_i` are molecular feature functions and `w_i` are learned weights.
 ### 5.1 Quantum Information Flow
 
 Thought currents represent quantum information flow between processing stages:
+
+<p align="center">
+  <img src="assets/img/thought-current-flow.png" alt="Thought Current Flow" width="700"/>
+  <br><em>Quantum information flow as measurable thought currents</em>
+</p>
 
 ```
 QUANTUM INFORMATION FLOW BETWEEN PROCESSING STAGES
@@ -344,6 +373,7 @@ I_ij(t) = α × ΔV_ij(t) × G_ij(t)
 ```
 
 Where:
+
 - `α`: scaling constant (typically 0.1-1.0)
 - `ΔV_ij(t)`: potential difference between stages
 - `G_ij(t)`: conductance based on semantic similarity
@@ -357,10 +387,12 @@ The metacognitive orchestrator implements a probabilistic graphical model with n
 #### 6.1.1 Network Structure
 
 The Bayesian network B = (G, Θ) consists of:
+
 - **G**: Directed acyclic graph with 8 primary nodes (processing stages) plus auxiliary nodes
 - **Θ**: Conditional probability distributions for each node
 
 **Primary Nodes**:
+
 - S₀, S₁, ..., S₇: Processing stage states
 - C: Context state
 - M: Memory state
@@ -428,11 +460,12 @@ The system autonomously selects computational tools based on problem characteris
 #### 7.1.1 Multi-Language Decision Matrix
 
 ```
-Decision_score(language, problem) = 
+Decision_score(language, problem) =
     ∑(weight_i × compatibility_i × efficiency_i × availability_i)
 ```
 
 Where compatibility factors include:
+
 - Computational complexity requirements
 - Library ecosystem availability
 - Performance characteristics
@@ -449,6 +482,7 @@ Optimal_tools = argmax{
 ```
 
 Subject to:
+
 - Resource constraints
 - Compatibility requirements
 - Performance thresholds
@@ -480,6 +514,11 @@ Resource_allocation = optimize{
 ### 8.1 Eight-Stage Biological Quantum Network
 
 The complete system architecture:
+
+<p align="center">
+  <img src="assets/img/complete-system-integration.png" alt="Complete System Integration" width="800"/>
+  <br><em>Complete biological quantum computing system architecture</em>
+</p>
 
 ```
 KAMBUZUMA: COMPLETE BIOLOGICAL QUANTUM COMPUTING SYSTEM
@@ -524,6 +563,11 @@ KAMBUZUMA: COMPLETE BIOLOGICAL QUANTUM COMPUTING SYSTEM
 
 Information flows through quantum currents:
 
+<p align="center">
+  <img src="assets/img/thought-current-networks.png" alt="Thought Current Networks" width="750"/>
+  <br><em>Eight-stage quantum information flow with feedback loops</em>
+</p>
+
 ```
 I₀₁ ──→ I₁₂ ──→ I₂₃ ──→ I₃₄ ──→ I₄₅ ──→ I₅₆ ──→ I₆₇ ──→ Output
  │       │       │       │       │       │       │
@@ -540,24 +584,24 @@ I₀₁ ──→ I₁₂ ──→ I₂₃ ──→ I₃₄ ──→ I₄₅ 
 
 ### 9.1 Measurable Quantum Parameters
 
-| Parameter | Range | Measurement Method |
-|-----------|-------|-------------------|
-| Tunneling Currents | 1-100 pA | Patch-clamp electrophysiology |
-| Coherence Time | 100 μs - 10 ms | Quantum interferometry |
-| Entanglement Fidelity | 0.85-0.99 | State tomography |
-| Energy Gap | 0.1-0.5 eV | Spectroscopic analysis |
-| Decoherence Rate | 10²-10⁶ Hz | Time-resolved measurements |
-| ATP Consumption | 30.5 kJ/mol | Biochemical assays |
+| Parameter             | Range          | Measurement Method            |
+| --------------------- | -------------- | ----------------------------- |
+| Tunneling Currents    | 1-100 pA       | Patch-clamp electrophysiology |
+| Coherence Time        | 100 μs - 10 ms | Quantum interferometry        |
+| Entanglement Fidelity | 0.85-0.99      | State tomography              |
+| Energy Gap            | 0.1-0.5 eV     | Spectroscopic analysis        |
+| Decoherence Rate      | 10²-10⁶ Hz     | Time-resolved measurements    |
+| ATP Consumption       | 30.5 kJ/mol    | Biochemical assays            |
 
 ### 9.2 Physical Quantum Gates
 
-| Gate Type | Physical Implementation | Operation Time |
-|-----------|------------------------|----------------|
-| X-Gate | Ion channel flip | 10-100 μs |
-| CNOT | Ion pair correlation | 50-200 μs |
-| Hadamard | Superposition creation | 20-80 μs |
-| Phase | Energy level shift | 5-50 μs |
-| Measurement | Quantum state collapse | 1-10 μs |
+| Gate Type   | Physical Implementation | Operation Time |
+| ----------- | ----------------------- | -------------- |
+| X-Gate      | Ion channel flip        | 10-100 μs      |
+| CNOT        | Ion pair correlation    | 50-200 μs      |
+| Hadamard    | Superposition creation  | 20-80 μs       |
+| Phase       | Energy level shift      | 5-50 μs        |
+| Measurement | Quantum state collapse  | 1-10 μs        |
 
 ### 9.3 Performance Metrics
 
@@ -575,6 +619,7 @@ The system demonstrates:
 The system undergoes comprehensive validation:
 
 **Quantum State Verification**:
+
 - Cell viability testing (>95% viable)
 - Membrane integrity verification (gigaseal formation)
 - Quantum coherence measurement (interferometry)
@@ -582,6 +627,7 @@ The system undergoes comprehensive validation:
 - Information processing validation (computational benchmarks)
 
 **Physical Reality Verification**:
+
 - Single-molecule detection (quantum dots, fluorescence)
 - Real-time ion current recording (patch-clamp)
 - ATP consumption monitoring (biochemical assays)
@@ -607,6 +653,7 @@ BIOLOGICAL VALIDATION PROTOCOL:
 Kambuzuma represents a novel approach to computational architecture through biological quantum implementation. The system demonstrates that real quantum effects in biological membranes can be harnessed for computational purposes, enabling autonomous orchestration of complex reasoning tasks.
 
 The key innovations include:
+
 1. Implementation of actual quantum tunneling in biological membranes
 2. Biological Maxwell demon realization using molecular machinery
 3. Autonomous computational ecosystem management
