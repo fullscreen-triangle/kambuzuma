@@ -1922,3 +1922,469 @@ pub enum SearchAlgorithm {
     HashSearch,
     SemanticSearch,
 }
+
+/// Monkey-Tail Semantic Identity Integration
+/// Represents user-specific semantic identity for personalized BMD processing
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SemanticIdentity {
+    /// User identifier
+    pub user_id: Uuid,
+    /// Semantic understanding vector
+    pub semantic_vector: SemanticUnderstandingVector,
+    /// Knowledge depth matrix
+    pub knowledge_depth: KnowledgeDepthMatrix,
+    /// Motivation mapping
+    pub motivation_map: MotivationMapping,
+    /// Communication patterns
+    pub communication_patterns: CommunicationPatterns,
+    /// Temporal context
+    pub temporal_context: TemporalContext,
+    /// Emotional state vector
+    pub emotional_state: EmotionalStateVector,
+    /// Competency assessments
+    pub competency_assessments: HashMap<String, CompetencyAssessment>,
+    /// Identity confidence level
+    pub confidence_level: f64,
+    /// Last update timestamp
+    pub last_updated: chrono::DateTime<chrono::Utc>,
+}
+
+/// Semantic Understanding Vector
+/// Captures genuine comprehension across domains
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SemanticUnderstandingVector {
+    /// Domain competencies
+    pub domain_competencies: HashMap<String, DomainCompetency>,
+    /// Cross-domain connections
+    pub cross_domain_connections: Vec<DomainConnection>,
+    /// Learning trajectory
+    pub learning_trajectory: LearningTrajectory,
+    /// Expertise evolution rate
+    pub evolution_rate: f64,
+}
+
+/// Domain Competency
+/// Competency level in specific domain
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DomainCompetency {
+    /// Domain name
+    pub domain: String,
+    /// Competency level (0.0 to 1.0)
+    pub level: f64,
+    /// Confidence in assessment
+    pub confidence: f64,
+    /// Weight in user identity
+    pub weight: f64,
+    /// Evidence sources
+    pub evidence_sources: Vec<String>,
+    /// Assessment timestamp
+    pub assessed_at: chrono::DateTime<chrono::Utc>,
+}
+
+/// Knowledge Depth Matrix
+/// Hierarchical knowledge representation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct KnowledgeDepthMatrix {
+    /// Number of domains
+    pub domain_count: usize,
+    /// Abstraction levels
+    pub abstraction_levels: Vec<AbstractionLevel>,
+    /// Competency matrix
+    pub competency_matrix: Vec<Vec<f64>>,
+    /// Knowledge confidence
+    pub knowledge_confidence: Vec<Vec<f64>>,
+}
+
+/// Abstraction Level
+/// Levels of understanding from surface to revolutionary
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum AbstractionLevel {
+    /// Surface level awareness (0.0-0.3)
+    Surface,
+    /// Functional application capability (0.3-0.6)
+    Functional,
+    /// Systems understanding (0.6-0.8)
+    Systems,
+    /// Meta-reasoning capability (0.8-0.9)
+    Meta,
+    /// Revolutionary transformation ability (0.9-1.0)
+    Revolutionary,
+}
+
+/// Motivation Mapping
+/// User goals and incentives
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MotivationMapping {
+    /// Current goals
+    pub current_goals: Vec<UserGoal>,
+    /// Long-term objectives
+    pub long_term_objectives: Vec<String>,
+    /// Incentive structures
+    pub incentive_structures: HashMap<String, f64>,
+    /// Value alignment
+    pub value_alignment: ValueAlignment,
+}
+
+/// User Goal
+/// Specific user goal with context
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserGoal {
+    /// Goal identifier
+    pub id: Uuid,
+    /// Goal description
+    pub description: String,
+    /// Goal priority
+    pub priority: f64,
+    /// Goal deadline
+    pub deadline: Option<chrono::DateTime<chrono::Utc>>,
+    /// Goal progress
+    pub progress: f64,
+    /// Related domains
+    pub related_domains: Vec<String>,
+}
+
+/// Communication Patterns
+/// How user prefers to interact
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CommunicationPatterns {
+    /// Preferred communication style
+    pub communication_style: CommunicationStyle,
+    /// Detail level preference
+    pub detail_level: DetailLevel,
+    /// Explanation preferences
+    pub explanation_preferences: ExplanationPreferences,
+    /// Interaction frequency
+    pub interaction_frequency: f64,
+}
+
+/// Communication Style
+/// Preferred communication approaches
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum CommunicationStyle {
+    /// Direct and concise
+    Direct,
+    /// Detailed and comprehensive
+    Detailed,
+    /// Interactive and conversational
+    Interactive,
+    /// Technical and precise
+    Technical,
+    /// Creative and analogical
+    Creative,
+}
+
+/// Detail Level
+/// Preferred level of detail in responses
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum DetailLevel {
+    /// High-level overview only
+    Overview,
+    /// Moderate detail with examples
+    Moderate,
+    /// Comprehensive detail
+    Comprehensive,
+    /// Expert-level technical depth
+    Expert,
+}
+
+/// Temporal Context
+/// Current situation and historical context
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TemporalContext {
+    /// Current situation
+    pub current_situation: String,
+    /// Recent interactions
+    pub recent_interactions: Vec<InteractionHistory>,
+    /// Context timeline
+    pub context_timeline: Vec<ContextEvent>,
+    /// Situational factors
+    pub situational_factors: HashMap<String, f64>,
+}
+
+/// Interaction History
+/// Record of past interactions
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InteractionHistory {
+    /// Interaction identifier
+    pub id: Uuid,
+    /// Interaction type
+    pub interaction_type: String,
+    /// User query
+    pub user_query: String,
+    /// System response quality
+    pub response_quality: f64,
+    /// User satisfaction
+    pub user_satisfaction: f64,
+    /// Timestamp
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+/// Emotional State Vector
+/// Cognitive and affective patterns
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EmotionalStateVector {
+    /// Current emotional state
+    pub current_state: EmotionalState,
+    /// Emotional patterns
+    pub emotional_patterns: Vec<EmotionalPattern>,
+    /// Stress level
+    pub stress_level: f64,
+    /// Motivation level
+    pub motivation_level: f64,
+    /// Confidence level
+    pub confidence_level: f64,
+}
+
+/// Competency Assessment
+/// Assessment of user competency in specific area
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CompetencyAssessment {
+    /// Assessment identifier
+    pub id: Uuid,
+    /// Domain assessed
+    pub domain: String,
+    /// Competency score
+    pub competency_score: f64,
+    /// Assessment confidence
+    pub confidence: f64,
+    /// Evidence quality
+    pub evidence_quality: f64,
+    /// Assessment method
+    pub assessment_method: AssessmentMethod,
+    /// Assessment timestamp
+    pub assessed_at: chrono::DateTime<chrono::Utc>,
+}
+
+/// Assessment Method
+/// How competency was assessed
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum AssessmentMethod {
+    /// Interaction pattern analysis
+    InteractionAnalysis,
+    /// Question complexity analysis
+    QuestionAnalysis,
+    /// Response quality evaluation
+    ResponseEvaluation,
+    /// Cross-domain validation
+    CrossDomainValidation,
+    /// Temporal consistency check
+    TemporalConsistency,
+    /// Multi-model consensus
+    MultiModelConsensus,
+}
+
+/// Domain Connection
+/// Connection between different knowledge domains
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DomainConnection {
+    /// Source domain
+    pub source_domain: String,
+    /// Target domain
+    pub target_domain: String,
+    /// Connection strength
+    pub strength: f64,
+    /// Connection type
+    pub connection_type: ConnectionType,
+    /// Evidence for connection
+    pub evidence: Vec<String>,
+}
+
+/// Connection Type
+/// Types of connections between domains
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ConnectionType {
+    /// Conceptual similarity
+    Conceptual,
+    /// Methodological overlap
+    Methodological,
+    /// Causal relationship
+    Causal,
+    /// Analogical connection
+    Analogical,
+    /// Foundational dependency
+    Foundational,
+}
+
+/// Learning Trajectory
+/// User's learning path and progression
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LearningTrajectory {
+    /// Learning milestones
+    pub milestones: Vec<LearningMilestone>,
+    /// Learning velocity
+    pub learning_velocity: f64,
+    /// Preferred learning style
+    pub learning_style: LearningStyle,
+    /// Learning goals
+    pub learning_goals: Vec<String>,
+}
+
+/// Learning Milestone
+/// Significant learning achievement
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LearningMilestone {
+    /// Milestone identifier
+    pub id: Uuid,
+    /// Domain
+    pub domain: String,
+    /// Achievement description
+    pub achievement: String,
+    /// Competency level reached
+    pub competency_level: f64,
+    /// Achievement timestamp
+    pub achieved_at: chrono::DateTime<chrono::Utc>,
+}
+
+/// Learning Style
+/// Preferred approach to learning
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum LearningStyle {
+    /// Visual learning preference
+    Visual,
+    /// Auditory learning preference
+    Auditory,
+    /// Kinesthetic learning preference
+    Kinesthetic,
+    /// Reading/writing preference
+    ReadingWriting,
+    /// Multimodal approach
+    Multimodal,
+}
+
+/// Value Alignment
+/// User's values and ethical framework
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ValueAlignment {
+    /// Core values
+    pub core_values: Vec<String>,
+    /// Ethical principles
+    pub ethical_principles: Vec<String>,
+    /// Value priorities
+    pub value_priorities: HashMap<String, f64>,
+    /// Ethical constraints
+    pub ethical_constraints: Vec<String>,
+}
+
+/// Explanation Preferences
+/// How user prefers explanations
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExplanationPreferences {
+    /// Preferred explanation style
+    pub explanation_style: ExplanationStyle,
+    /// Use analogies
+    pub use_analogies: bool,
+    /// Include examples
+    pub include_examples: bool,
+    /// Step-by-step breakdown
+    pub step_by_step: bool,
+    /// Visual aids preference
+    pub visual_aids: bool,
+}
+
+/// Explanation Style
+/// Style of explanations
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ExplanationStyle {
+    /// Concise and direct
+    Concise,
+    /// Detailed and thorough
+    Detailed,
+    /// Interactive with questions
+    Interactive,
+    /// Story-based narrative
+    Narrative,
+    /// Technical and precise
+    Technical,
+}
+
+/// Context Event
+/// Event in user's context timeline
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContextEvent {
+    /// Event identifier
+    pub id: Uuid,
+    /// Event description
+    pub description: String,
+    /// Event importance
+    pub importance: f64,
+    /// Related domains
+    pub related_domains: Vec<String>,
+    /// Event timestamp
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+/// Emotional State
+/// Current emotional state
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum EmotionalState {
+    /// Calm and focused
+    Calm,
+    /// Excited and energetic
+    Excited,
+    /// Frustrated or stressed
+    Frustrated,
+    /// Curious and engaged
+    Curious,
+    /// Confident and motivated
+    Confident,
+    /// Uncertain or confused
+    Uncertain,
+    /// Satisfied and content
+    Satisfied,
+}
+
+/// Emotional Pattern
+/// Pattern in emotional responses
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EmotionalPattern {
+    /// Pattern name
+    pub name: String,
+    /// Trigger conditions
+    pub triggers: Vec<String>,
+    /// Typical emotional response
+    pub response: EmotionalState,
+    /// Pattern frequency
+    pub frequency: f64,
+    /// Pattern intensity
+    pub intensity: f64,
+}
+
+/// Personalized Processing Result
+/// Result from user-specific Kambuzuma processing
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PersonalizedProcessingResult {
+    /// Personalized response
+    pub response: String,
+    /// Semantic identity confidence
+    pub semantic_identity_confidence: f64,
+    /// Competency alignment score
+    pub competency_alignment_score: f64,
+    /// BMD effectiveness score
+    pub bmd_effectiveness_score: f64,
+    /// Processing trace
+    pub processing_trace: Vec<String>,
+    /// Quantum states involved
+    pub quantum_states: Vec<QuantumState>,
+    /// Thought currents measured
+    pub thought_currents: Vec<f64>,
+    /// Energy consumption (J)
+    pub energy_consumption: f64,
+    /// Processing time (ms)
+    pub processing_time_ms: u64,
+}
+
+/// Standard Processing Result
+/// Result from standard Kambuzuma processing (before personalization)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StandardProcessingResult {
+    /// Processing trace
+    pub processing_trace: Vec<String>,
+    /// Quantum states involved
+    pub quantum_states: Vec<QuantumState>,
+    /// Thought currents measured
+    pub thought_currents: Vec<f64>,
+    /// Energy consumption (J)
+    pub energy_consumption: f64,
+    /// Processing time (ms)
+    pub processing_time_ms: u64,
+}

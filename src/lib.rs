@@ -32,11 +32,13 @@ pub mod turbulance_dsl;
 
 // Ultimate Atmospheric Universal Clock System
 pub mod atmospheric_molecular_network;
-pub mod atmospheric_universal_clock;
 pub mod electromagnetic_signal_universe;
 pub mod memorial_harmonic_integration;
 pub mod processor_clock_duality;
 pub mod universal_recursive_enhancement;
+
+// Revolutionary Monkey-Tail semantic identity integration
+pub mod monkey_tail_integration;
 
 // System Infrastructure
 pub mod config;
@@ -71,6 +73,7 @@ pub struct BuheraVirtualProcessorOS {
 /// The Kambuzuma Processor - Revolutionary computational substrate with neural stacks
 /// The single "application" in Buhera OS that instantiates audio, image, and all other components
 /// Interface through Turbulance DSL for consciousness-aware computation
+/// Now enhanced with Monkey-Tail semantic identity for user-specific BMD processing
 pub struct KambuzumaProcessor {
     // Original quantum computing and neural systems
     pub quantum_computing: quantum::QuantumSubsystem,
@@ -88,6 +91,9 @@ pub struct KambuzumaProcessor {
     pub fire_circle_evolution: fire_circle_evolution::FireCircleEvolutionEngine,
     pub bmd_catalysts: bmd_information_catalysts::BMDInformationCatalysts,
     pub turbulance_interface: turbulance_dsl::TurbulanceDSLInterface,
+
+    // Monkey-Tail semantic identity system
+    pub monkey_tail_engine: monkey_tail_integration::MonkeyTailEngine,
 
     // Neural stack containing all processing units
     pub neural_stacks: Vec<NeuralStack>,
@@ -995,6 +1001,9 @@ impl KambuzumaProcessor {
             bmd_catalysts: bmd_information_catalysts::BMDInformationCatalysts::new(),
             turbulance_interface: turbulance_dsl::TurbulanceDSLInterface::new(),
 
+            // Monkey-Tail semantic identity system
+            monkey_tail_engine: monkey_tail_integration::MonkeyTailEngine::new(),
+
             // Neural stacks
             neural_stacks,
 
@@ -1054,6 +1063,206 @@ impl KambuzumaProcessor {
 
         println!("✅ Kambuzuma Processor shutdown complete");
         Ok(())
+    }
+
+    /// Process query with user-specific semantic identity
+    /// This is the revolutionary enhancement that makes Kambuzuma truly personal
+    pub async fn process_query_with_semantic_identity(
+        &mut self,
+        user_id: Uuid,
+        query: &str,
+        context: Option<&str>,
+        interaction_data: &monkey_tail_integration::InteractionData,
+    ) -> Result<PersonalizedProcessingResult, KambuzumaError> {
+        log::info!("Processing query with semantic identity for user: {}", user_id);
+        
+        // Step 1: Create or update user's semantic identity
+        let semantic_identity = self.monkey_tail_engine
+            .create_or_update_identity(user_id, interaction_data)
+            .await?;
+        
+        log::info!("Semantic identity confidence: {}", semantic_identity.confidence_level);
+        
+        // Step 2: Generate standard Kambuzuma stage inputs
+        let mut stage_inputs = self.generate_stage_inputs(query, context).await?;
+        
+        // Step 3: Enhance stage inputs with semantic identity
+        stage_inputs = self.monkey_tail_engine
+            .enhance_kambuzuma_processing(user_id, query, stage_inputs)
+            .await?;
+        
+        // Step 4: Process through enhanced neural stages
+        let processing_results = self.process_through_neural_stages(stage_inputs).await?;
+        
+        // Step 5: Apply user-specific response formatting
+        let formatted_response = self.format_response_for_user(
+            &processing_results,
+            &semantic_identity,
+        ).await?;
+        
+        // Step 6: Create interaction history entry
+        let interaction_history = monkey_tail_integration::InteractionHistory {
+            id: Uuid::new_v4(),
+            interaction_type: "query_processing".to_string(),
+            user_query: query.to_string(),
+            response_quality: self.calculate_response_quality(&formatted_response).await?,
+            user_satisfaction: 0.0, // Will be updated based on user feedback
+            timestamp: chrono::Utc::now(),
+        };
+        
+        // Step 7: Update interaction history
+        self.monkey_tail_engine
+            .update_interaction_history(user_id, interaction_history)
+            .await?;
+        
+        let result = PersonalizedProcessingResult {
+            response: formatted_response,
+            semantic_identity_confidence: semantic_identity.confidence_level,
+            competency_alignment_score: self.calculate_competency_alignment(&semantic_identity, query).await?,
+            bmd_effectiveness_score: self.calculate_bmd_effectiveness(&semantic_identity, &processing_results).await?,
+            processing_trace: processing_results.processing_trace,
+            quantum_states: processing_results.quantum_states,
+            thought_currents: processing_results.thought_currents,
+            energy_consumption: processing_results.energy_consumption,
+            processing_time_ms: processing_results.processing_time_ms,
+        };
+        
+        log::info!("Personalized processing completed with BMD effectiveness: {}", 
+                  result.bmd_effectiveness_score);
+        
+        Ok(result)
+    }
+
+    /// Get ephemeral identity observations for user
+    pub async fn get_ephemeral_observations(
+        &self,
+        user_id: Uuid,
+        interaction_data: &monkey_tail_integration::InteractionData,
+    ) -> Result<monkey_tail_integration::EphemeralObservations, KambuzumaError> {
+        self.monkey_tail_engine
+            .get_ephemeral_observations(user_id, interaction_data)
+            .await
+    }
+    
+    /// Validate user ecosystem authenticity
+    pub async fn validate_user_authenticity(
+        &self,
+        user_id: Uuid,
+        claimed_signature: &monkey_tail_integration::ephemeral_identity::MachineEcosystemSignature,
+    ) -> Result<monkey_tail_integration::ephemeral_identity::AuthenticityValidation, KambuzumaError> {
+        self.monkey_tail_engine
+            .ephemeral_processor
+            .read().await
+            .validate_ecosystem_authenticity(user_id, claimed_signature)
+            .await
+    }
+
+    // Private helper methods for user-specific processing
+
+    async fn generate_stage_inputs(
+        &self,
+        query: &str,
+        context: Option<&str>,
+    ) -> Result<Vec<neural::processing_stages::StageInput>, KambuzumaError> {
+        // Generate standard stage inputs (this would call existing Kambuzuma logic)
+        let mut stage_inputs = Vec::new();
+        
+        // Create input for each processing stage
+        for stage_num in 0..8 {
+            let stage_input = neural::processing_stages::StageInput {
+                id: Uuid::new_v4(),
+                data: vec![stage_num as f64; 100], // Placeholder data
+                metadata: {
+                    let mut metadata = std::collections::HashMap::new();
+                    metadata.insert("query".to_string(), query.to_string());
+                    if let Some(ctx) = context {
+                        metadata.insert("context".to_string(), ctx.to_string());
+                    }
+                    metadata
+                },
+                priority: neural::Priority::High,
+                quantum_state: None,
+                timestamp: chrono::Utc::now(),
+            };
+            stage_inputs.push(stage_input);
+        }
+        
+        Ok(stage_inputs)
+    }
+
+    async fn process_through_neural_stages(
+        &self,
+        stage_inputs: Vec<neural::processing_stages::StageInput>,
+    ) -> Result<StandardProcessingResult, KambuzumaError> {
+        // This would call the existing neural processing pipeline
+        // For now, return a placeholder result
+        Ok(StandardProcessingResult {
+            processing_trace: vec!["Stage processing completed".to_string()],
+            quantum_states: Vec::new(),
+            thought_currents: Vec::new(),
+            energy_consumption: 1e-9, // 1 nJ
+            processing_time_ms: 50,
+        })
+    }
+
+    async fn format_response_for_user(
+        &self,
+        processing_results: &StandardProcessingResult,
+        semantic_identity: &SemanticIdentity,
+    ) -> Result<String, KambuzumaError> {
+        // Format response based on user's communication preferences
+        let style = &semantic_identity.communication_patterns.communication_style;
+        let detail_level = &semantic_identity.communication_patterns.detail_level;
+        
+        let base_response = "Based on the quantum biological processing through 8 neural stages...";
+        
+        let formatted_response = match (style, detail_level) {
+            (CommunicationStyle::Technical, DetailLevel::Expert) => {
+                format!("TECHNICAL ANALYSIS: {} Processing involved {} quantum states with {} nJ energy consumption.", 
+                       base_response, processing_results.quantum_states.len(), processing_results.energy_consumption)
+            },
+            (CommunicationStyle::Direct, DetailLevel::Overview) => {
+                format!("RESULT: {}", base_response)
+            },
+            (CommunicationStyle::Interactive, DetailLevel::Moderate) => {
+                format!("Here's what I found: {} Would you like me to explain any specific aspect in more detail?", base_response)
+            },
+            _ => base_response.to_string(),
+        };
+        
+        Ok(formatted_response)
+    }
+
+    async fn calculate_response_quality(&self, _response: &str) -> Result<f64, KambuzumaError> {
+        // Placeholder quality calculation
+        Ok(0.85)
+    }
+
+    async fn calculate_competency_alignment(
+        &self,
+        semantic_identity: &SemanticIdentity,
+        query: &str,
+    ) -> Result<f64, KambuzumaError> {
+        // Calculate how well the response aligns with user's competency level
+        let avg_competency: f64 = semantic_identity.semantic_vector.domain_competencies
+            .values()
+            .map(|comp| comp.level)
+            .sum::<f64>() / semantic_identity.semantic_vector.domain_competencies.len() as f64;
+        
+        // For now, return a function of average competency and query complexity
+        let query_complexity = query.len() as f64 / 100.0; // Simple complexity measure
+        Ok((avg_competency + query_complexity) / 2.0)
+    }
+
+    async fn calculate_bmd_effectiveness(
+        &self,
+        semantic_identity: &SemanticIdentity,
+        _processing_results: &StandardProcessingResult,
+    ) -> Result<f64, KambuzumaError> {
+        // BMD effectiveness increases with semantic identity confidence
+        let base_effectiveness = 0.6;
+        let identity_bonus = semantic_identity.confidence_level * 0.4;
+        Ok(base_effectiveness + identity_bonus)
     }
 }
 
