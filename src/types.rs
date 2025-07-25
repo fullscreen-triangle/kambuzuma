@@ -1923,6 +1923,335 @@ pub enum SearchAlgorithm {
     SemanticSearch,
 }
 
+/// Algorithm Execution Mode
+/// Dual mode support for fuzzy or deterministic processing
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum AlgorithmExecutionMode {
+    /// Deterministic processing with exact outputs
+    Deterministic {
+        precision_level: f64,
+        repeatability_guarantee: bool,
+    },
+    /// Fuzzy processing with probabilistic outputs
+    Fuzzy {
+        uncertainty_tolerance: f64,
+        adaptation_rate: f64,
+        learning_enabled: bool,
+    },
+    /// Hybrid mode switching between deterministic and fuzzy
+    Hybrid {
+        switching_threshold: f64,
+        primary_mode: Box<AlgorithmExecutionMode>,
+        secondary_mode: Box<AlgorithmExecutionMode>,
+    },
+}
+
+/// Dual Redundancy Configuration
+/// Every component has primary and backup processing paths
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DualRedundancyConfig {
+    /// Primary processing path
+    pub primary_path: ProcessingPath,
+    /// Secondary/backup processing path
+    pub secondary_path: ProcessingPath,
+    /// Failover threshold for switching to backup
+    pub failover_threshold: f64,
+    /// Cross-validation between paths
+    pub cross_validation_enabled: bool,
+    /// Result reconciliation strategy
+    pub reconciliation_strategy: ReconciliationStrategy,
+}
+
+/// Processing Path Configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProcessingPath {
+    /// Path identifier
+    pub id: Uuid,
+    /// Algorithm execution mode
+    pub execution_mode: AlgorithmExecutionMode,
+    /// Resource allocation
+    pub resource_allocation: ResourceAllocation,
+    /// Performance characteristics
+    pub performance_profile: PerformanceProfile,
+    /// Reliability metrics
+    pub reliability_metrics: ReliabilityMetrics,
+}
+
+/// Result Reconciliation Strategy
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ReconciliationStrategy {
+    /// Use primary result unless failure
+    PrimaryPreferred,
+    /// Average results from both paths
+    Averaging,
+    /// Use most confident result
+    ConfidenceBased,
+    /// Weighted combination based on performance
+    WeightedCombination {
+        primary_weight: f64,
+        secondary_weight: f64,
+    },
+    /// Consensus-based decision making
+    Consensus {
+        agreement_threshold: f64,
+    },
+}
+
+/// Resource Allocation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ResourceAllocation {
+    /// CPU allocation percentage
+    pub cpu_allocation: f64,
+    /// Memory allocation in bytes
+    pub memory_allocation: u64,
+    /// Energy budget in joules
+    pub energy_budget: f64,
+    /// Processing time limit
+    pub time_limit: std::time::Duration,
+}
+
+/// Performance Profile
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceProfile {
+    /// Expected latency
+    pub expected_latency: f64,
+    /// Throughput capacity
+    pub throughput_capacity: f64,
+    /// Accuracy target
+    pub accuracy_target: f64,
+    /// Energy efficiency
+    pub energy_efficiency: f64,
+}
+
+/// Reliability Metrics
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ReliabilityMetrics {
+    /// Mean time between failures
+    pub mtbf: f64,
+    /// Mean time to repair
+    pub mttr: f64,
+    /// Availability percentage
+    pub availability: f64,
+    /// Error rate
+    pub error_rate: f64,
+}
+
+/// Fuzzy Logic Parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FuzzyLogicParameters {
+    /// Membership function type
+    pub membership_function: MembershipFunction,
+    /// Defuzzification method
+    pub defuzzification_method: DefuzzificationMethod,
+    /// Rule base configuration
+    pub rule_base: FuzzyRuleBase,
+    /// Uncertainty handling
+    pub uncertainty_handling: UncertaintyHandling,
+}
+
+/// Membership Function Types
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum MembershipFunction {
+    Triangular { min: f64, peak: f64, max: f64 },
+    Trapezoidal { min: f64, left: f64, right: f64, max: f64 },
+    Gaussian { center: f64, sigma: f64 },
+    Sigmoid { center: f64, slope: f64 },
+}
+
+/// Defuzzification Methods
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum DefuzzificationMethod {
+    CentroidMethod,
+    BisectorMethod,
+    MiddleOfMaximum,
+    LargestOfMaximum,
+    SmallestOfMaximum,
+}
+
+/// Fuzzy Rule Base
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FuzzyRuleBase {
+    /// Rule set
+    pub rules: Vec<FuzzyRule>,
+    /// Rule evaluation strategy
+    pub evaluation_strategy: RuleEvaluationStrategy,
+    /// Conflict resolution method
+    pub conflict_resolution: ConflictResolution,
+}
+
+/// Individual Fuzzy Rule
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FuzzyRule {
+    /// Rule identifier
+    pub id: Uuid,
+    /// Antecedent conditions
+    pub antecedents: Vec<FuzzyCondition>,
+    /// Consequent actions
+    pub consequents: Vec<FuzzyConsequent>,
+    /// Rule weight
+    pub weight: f64,
+    /// Rule confidence
+    pub confidence: f64,
+}
+
+/// Fuzzy Condition
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FuzzyCondition {
+    /// Variable name
+    pub variable: String,
+    /// Linguistic value
+    pub linguistic_value: String,
+    /// Membership degree
+    pub membership_degree: f64,
+}
+
+/// Fuzzy Consequent
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FuzzyConsequent {
+    /// Output variable
+    pub variable: String,
+    /// Output value
+    pub value: String,
+    /// Confidence level
+    pub confidence: f64,
+}
+
+/// Rule Evaluation Strategy
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum RuleEvaluationStrategy {
+    /// All rules evaluated in parallel
+    Parallel,
+    /// Rules evaluated sequentially
+    Sequential,
+    /// Hierarchical rule evaluation
+    Hierarchical,
+    /// Priority-based evaluation
+    PriorityBased,
+}
+
+/// Conflict Resolution Methods
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ConflictResolution {
+    /// Use rule with highest weight
+    HighestWeight,
+    /// Average conflicting results
+    Averaging,
+    /// Use most recent rule
+    MostRecent,
+    /// Expert system resolution
+    ExpertSystem,
+}
+
+/// Uncertainty Handling
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UncertaintyHandling {
+    /// Uncertainty representation method
+    pub representation: UncertaintyRepresentation,
+    /// Propagation strategy
+    pub propagation: UncertaintyPropagation,
+    /// Reduction techniques
+    pub reduction: UncertaintyReduction,
+}
+
+/// Uncertainty Representation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum UncertaintyRepresentation {
+    Probabilistic,
+    PossibilityTheory,
+    DempsterShafer,
+    FuzzyNumbers,
+    IntervalArithmetic,
+}
+
+/// Uncertainty Propagation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum UncertaintyPropagation {
+    MonteCarlo,
+    AnalyticalMethods,
+    BayesianInference,
+    FuzzyArithmetic,
+}
+
+/// Uncertainty Reduction
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum UncertaintyReduction {
+    AdditionalInformation,
+    ExpertKnowledge,
+    DataFusion,
+    ConsensusBuilding,
+}
+
+/// Adaptive Algorithm Configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdaptiveAlgorithmConfig {
+    /// Learning rate for adaptation
+    pub learning_rate: f64,
+    /// Adaptation triggers
+    pub adaptation_triggers: Vec<AdaptationTrigger>,
+    /// Performance monitoring
+    pub performance_monitoring: PerformanceMonitoring,
+    /// Adaptation boundaries
+    pub adaptation_boundaries: AdaptationBoundaries,
+}
+
+/// Adaptation Triggers
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum AdaptationTrigger {
+    PerformanceDegradation { threshold: f64 },
+    EnvironmentalChange { sensitivity: f64 },
+    UserFeedback { weight: f64 },
+    TimeBasedDecay { decay_rate: f64 },
+    ErrorRateIncrease { threshold: f64 },
+}
+
+/// Performance Monitoring
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PerformanceMonitoring {
+    /// Metrics to track
+    pub tracked_metrics: Vec<String>,
+    /// Monitoring frequency
+    pub monitoring_frequency: std::time::Duration,
+    /// Alert thresholds
+    pub alert_thresholds: HashMap<String, f64>,
+    /// Historical data retention
+    pub retention_period: std::time::Duration,
+}
+
+/// Adaptation Boundaries
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdaptationBoundaries {
+    /// Minimum performance threshold
+    pub min_performance: f64,
+    /// Maximum resource usage
+    pub max_resource_usage: f64,
+    /// Stability requirements
+    pub stability_requirements: StabilityRequirements,
+    /// Safety constraints
+    pub safety_constraints: SafetyConstraints,
+}
+
+/// Stability Requirements
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StabilityRequirements {
+    /// Maximum change rate
+    pub max_change_rate: f64,
+    /// Convergence criteria
+    pub convergence_criteria: f64,
+    /// Oscillation damping
+    pub oscillation_damping: f64,
+}
+
+/// Safety Constraints
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SafetyConstraints {
+    /// Fail-safe modes
+    pub fail_safe_modes: Vec<String>,
+    /// Emergency shutdown triggers
+    pub emergency_triggers: Vec<String>,
+    /// Recovery procedures
+    pub recovery_procedures: Vec<String>,
+}
+
 /// Monkey-Tail Semantic Identity Integration
 /// Represents user-specific semantic identity for personalized BMD processing
 #[derive(Debug, Clone, Serialize, Deserialize)]

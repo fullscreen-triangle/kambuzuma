@@ -722,3 +722,1073 @@ impl Default for BMDInformationCatalysts {
         Self::new()
     }
 } 
+
+/// BMD Information Catalyst Manager
+/// Manages dual redundant BMD catalysts with fuzzy/deterministic processing modes
+#[derive(Debug)]
+pub struct BMDInformationCatalystManager {
+    /// Manager identifier
+    pub id: Uuid,
+    /// Configuration
+    pub config: Arc<RwLock<KambuzumaConfig>>,
+    /// Primary BMD catalysts (deterministic)
+    pub primary_catalysts: Arc<RwLock<Vec<BMDCatalyst>>>,
+    /// Secondary BMD catalysts (fuzzy)
+    pub secondary_catalysts: Arc<RwLock<Vec<BMDCatalyst>>>,
+    /// Dual redundancy configuration
+    pub redundancy_config: Arc<RwLock<DualRedundancyConfig>>,
+    /// Pattern recognition engine with dual modes
+    pub pattern_engine: DualModePatternEngine,
+    /// Output channeling system with redundancy
+    pub output_channeling: DualModeOutputChanneling,
+    /// Catalytic efficiency monitor
+    pub efficiency_monitor: CatalyticEfficiencyMonitor,
+    /// Algorithm mode controller
+    pub algorithm_controller: CatalyticAlgorithmController,
+    /// Performance metrics
+    pub metrics: Arc<RwLock<BMDCatalystMetrics>>,
+}
+
+impl BMDInformationCatalystManager {
+    /// Create new BMD catalyst manager with dual redundancy
+    pub async fn new(config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
+        // Initialize primary catalysts with deterministic algorithms
+        let primary_catalysts = Arc::new(RwLock::new(vec![
+            BMDCatalyst::new_with_mode(
+                CatalystType::PatternRecognition,
+                AlgorithmExecutionMode::Deterministic {
+                    precision_level: 0.99,
+                    repeatability_guarantee: true,
+                }
+            ).await?,
+            BMDCatalyst::new_with_mode(
+                CatalystType::OutputChanneling,
+                AlgorithmExecutionMode::Deterministic {
+                    precision_level: 0.95,
+                    repeatability_guarantee: true,
+                }
+            ).await?,
+            BMDCatalyst::new_with_mode(
+                CatalystType::InformationOrdering,
+                AlgorithmExecutionMode::Deterministic {
+                    precision_level: 0.97,
+                    repeatability_guarantee: true,
+                }
+            ).await?,
+        ]));
+
+        // Initialize secondary catalysts with fuzzy algorithms
+        let secondary_catalysts = Arc::new(RwLock::new(vec![
+            BMDCatalyst::new_with_mode(
+                CatalystType::PatternRecognition,
+                AlgorithmExecutionMode::Fuzzy {
+                    uncertainty_tolerance: 0.2,
+                    adaptation_rate: 0.15,
+                    learning_enabled: true,
+                }
+            ).await?,
+            BMDCatalyst::new_with_mode(
+                CatalystType::OutputChanneling,
+                AlgorithmExecutionMode::Fuzzy {
+                    uncertainty_tolerance: 0.25,
+                    adaptation_rate: 0.2,
+                    learning_enabled: true,
+                }
+            ).await?,
+            BMDCatalyst::new_with_mode(
+                CatalystType::InformationOrdering,
+                AlgorithmExecutionMode::Fuzzy {
+                    uncertainty_tolerance: 0.18,
+                    adaptation_rate: 0.12,
+                    learning_enabled: true,
+                }
+            ).await?,
+        ]));
+
+        // Create dual redundancy configuration
+        let redundancy_config = Arc::new(RwLock::new(DualRedundancyConfig {
+            primary_path: ProcessingPath {
+                id: Uuid::new_v4(),
+                execution_mode: AlgorithmExecutionMode::Deterministic {
+                    precision_level: 0.97,
+                    repeatability_guarantee: true,
+                },
+                resource_allocation: ResourceAllocation {
+                    cpu_allocation: 0.7,
+                    memory_allocation: 2 * 1024 * 1024 * 1024, // 2GB
+                    energy_budget: 2e-6, // 2 µJ
+                    time_limit: std::time::Duration::from_millis(80),
+                },
+                performance_profile: PerformanceProfile {
+                    expected_latency: 0.04,
+                    throughput_capacity: 1500.0,
+                    accuracy_target: 0.97,
+                    energy_efficiency: 0.88,
+                },
+                reliability_metrics: ReliabilityMetrics {
+                    mtbf: 12000.0,
+                    mttr: 4.0,
+                    availability: 0.9995,
+                    error_rate: 0.0005,
+                },
+            },
+            secondary_path: ProcessingPath {
+                id: Uuid::new_v4(),
+                execution_mode: AlgorithmExecutionMode::Fuzzy {
+                    uncertainty_tolerance: 0.2,
+                    adaptation_rate: 0.15,
+                    learning_enabled: true,
+                },
+                resource_allocation: ResourceAllocation {
+                    cpu_allocation: 0.3,
+                    memory_allocation: 1024 * 1024 * 1024, // 1GB
+                    energy_budget: 1e-6, // 1 µJ
+                    time_limit: std::time::Duration::from_millis(120),
+                },
+                performance_profile: PerformanceProfile {
+                    expected_latency: 0.06,
+                    throughput_capacity: 1200.0,
+                    accuracy_target: 0.90,
+                    energy_efficiency: 0.92,
+                },
+                reliability_metrics: ReliabilityMetrics {
+                    mtbf: 9000.0,
+                    mttr: 6.0,
+                    availability: 0.998,
+                    error_rate: 0.002,
+                },
+            },
+            failover_threshold: 0.85,
+            cross_validation_enabled: true,
+            reconciliation_strategy: ReconciliationStrategy::WeightedCombination {
+                primary_weight: 0.7,
+                secondary_weight: 0.3,
+            },
+        }));
+
+        Ok(Self {
+            id: Uuid::new_v4(),
+            config,
+            primary_catalysts,
+            secondary_catalysts,
+            redundancy_config,
+            pattern_engine: DualModePatternEngine::new().await?,
+            output_channeling: DualModeOutputChanneling::new().await?,
+            efficiency_monitor: CatalyticEfficiencyMonitor::new(),
+            algorithm_controller: CatalyticAlgorithmController::new(),
+            metrics: Arc::new(RwLock::new(BMDCatalystMetrics::default())),
+        })
+    }
+
+    /// Process information through dual redundant BMD catalysts
+    pub async fn process_dual_catalytic_information(
+        &self,
+        input_data: &[f64],
+        processing_context: &CatalyticProcessingContext,
+    ) -> Result<CatalyticProcessingResult, KambuzumaError> {
+        let start_time = std::time::Instant::now();
+        
+        // Determine optimal algorithm mode based on context
+        let optimal_mode = self.algorithm_controller.determine_optimal_catalytic_mode(processing_context).await?;
+        
+        // Process through primary path (deterministic)
+        let primary_result = self.process_primary_catalytic_path(input_data, &optimal_mode).await;
+        
+        // Process through secondary path (fuzzy)
+        let secondary_result = self.process_secondary_catalytic_path(input_data, &optimal_mode).await;
+        
+        // Reconcile results using configured strategy
+        let reconciled_result = self.reconcile_catalytic_results(primary_result, secondary_result).await?;
+        
+        let processing_time = start_time.elapsed();
+        
+        // Update metrics
+        self.update_catalytic_metrics(&reconciled_result, processing_time).await?;
+        
+        Ok(reconciled_result)
+    }
+
+    /// Process through primary deterministic catalytic path
+    async fn process_primary_catalytic_path(
+        &self,
+        input_data: &[f64],
+        mode: &AlgorithmExecutionMode,
+    ) -> Result<CatalyticProcessingResult, KambuzumaError> {
+        let primary_catalysts = self.primary_catalysts.read().await;
+        
+        // Pattern recognition through deterministic BMD
+        let pattern_recognition = self.pattern_engine.recognize_patterns_deterministic(input_data).await?;
+        
+        // Process through each primary catalyst
+        let mut catalytic_outputs = Vec::new();
+        for catalyst in primary_catalysts.iter() {
+            let catalyst_output = catalyst.process_information_deterministic(
+                input_data,
+                &pattern_recognition,
+                mode
+            ).await?;
+            catalytic_outputs.push(catalyst_output);
+        }
+        
+        // Channel outputs through deterministic system
+        let channeled_output = self.output_channeling.channel_outputs_deterministic(&catalytic_outputs).await?;
+        
+        // Calculate catalytic efficiency
+        let efficiency = self.efficiency_monitor.calculate_deterministic_efficiency(&catalytic_outputs).await?;
+        
+        Ok(CatalyticProcessingResult {
+            id: Uuid::new_v4(),
+            processing_path: ProcessingPathType::Primary,
+            algorithm_mode: mode.clone(),
+            pattern_recognition,
+            catalytic_outputs,
+            channeled_output,
+            catalytic_efficiency: efficiency,
+            energy_consumed: 1.5e-9, // 1.5 nJ
+            processing_confidence: 0.95,
+            thermodynamic_cost: self.calculate_thermodynamic_cost(&catalytic_outputs).await?,
+        })
+    }
+
+    /// Process through secondary fuzzy catalytic path
+    async fn process_secondary_catalytic_path(
+        &self,
+        input_data: &[f64],
+        mode: &AlgorithmExecutionMode,
+    ) -> Result<CatalyticProcessingResult, KambuzumaError> {
+        let secondary_catalysts = self.secondary_catalysts.read().await;
+        
+        // Pattern recognition through fuzzy BMD with uncertainty handling
+        let pattern_recognition = self.pattern_engine.recognize_patterns_fuzzy(input_data).await?;
+        
+        // Process through each secondary catalyst with fuzzy logic
+        let mut catalytic_outputs = Vec::new();
+        for catalyst in secondary_catalysts.iter() {
+            let catalyst_output = catalyst.process_information_fuzzy(
+                input_data,
+                &pattern_recognition,
+                mode
+            ).await?;
+            catalytic_outputs.push(catalyst_output);
+        }
+        
+        // Channel outputs through fuzzy system with adaptation
+        let channeled_output = self.output_channeling.channel_outputs_fuzzy(&catalytic_outputs).await?;
+        
+        // Calculate catalytic efficiency with uncertainty
+        let efficiency = self.efficiency_monitor.calculate_fuzzy_efficiency(&catalytic_outputs).await?;
+        
+        Ok(CatalyticProcessingResult {
+            id: Uuid::new_v4(),
+            processing_path: ProcessingPathType::Secondary,
+            algorithm_mode: mode.clone(),
+            pattern_recognition,
+            catalytic_outputs,
+            channeled_output,
+            catalytic_efficiency: efficiency,
+            energy_consumed: 1.2e-9, // 1.2 nJ (more efficient fuzzy)
+            processing_confidence: 0.88,
+            thermodynamic_cost: self.calculate_thermodynamic_cost(&catalytic_outputs).await?,
+        })
+    }
+
+    /// Reconcile results from dual catalytic processing paths
+    async fn reconcile_catalytic_results(
+        &self,
+        primary_result: Result<CatalyticProcessingResult, KambuzumaError>,
+        secondary_result: Result<CatalyticProcessingResult, KambuzumaError>,
+    ) -> Result<CatalyticProcessingResult, KambuzumaError> {
+        let config = self.redundancy_config.read().await;
+        
+        match (&primary_result, &secondary_result) {
+            (Ok(primary), Ok(secondary)) => {
+                // Both paths succeeded - apply reconciliation strategy
+                match &config.reconciliation_strategy {
+                    ReconciliationStrategy::WeightedCombination { primary_weight, secondary_weight } => {
+                        self.weighted_combine_catalytic_results(primary, secondary, *primary_weight, *secondary_weight).await
+                    },
+                    ReconciliationStrategy::ConfidenceBased => {
+                        if primary.processing_confidence >= secondary.processing_confidence {
+                            Ok(primary.clone())
+                        } else {
+                            Ok(secondary.clone())
+                        }
+                    },
+                    ReconciliationStrategy::Consensus { agreement_threshold } => {
+                        self.consensus_catalytic_reconciliation(primary, secondary, *agreement_threshold).await
+                    },
+                    _ => {
+                        // Default to primary preferred
+                        Ok(primary.clone())
+                    }
+                }
+            },
+            (Ok(primary), Err(_)) => {
+                // Primary succeeded, secondary failed
+                Ok(primary.clone())
+            },
+            (Err(_), Ok(secondary)) => {
+                // Primary failed, secondary succeeded
+                Ok(secondary.clone())
+            },
+            (Err(primary_err), Err(_secondary_err)) => {
+                // Both failed - return primary error
+                Err(primary_err.clone())
+            },
+        }
+    }
+
+    /// Weighted combination of catalytic results
+    async fn weighted_combine_catalytic_results(
+        &self,
+        primary: &CatalyticProcessingResult,
+        secondary: &CatalyticProcessingResult,
+        primary_weight: f64,
+        secondary_weight: f64,
+    ) -> Result<CatalyticProcessingResult, KambuzumaError> {
+        let total_weight = primary_weight + secondary_weight;
+        let normalized_primary = primary_weight / total_weight;
+        let normalized_secondary = secondary_weight / total_weight;
+
+        // Combine channeled outputs
+        let combined_output = primary.channeled_output.iter()
+            .zip(&secondary.channeled_output)
+            .map(|(p, s)| p * normalized_primary + s * normalized_secondary)
+            .collect();
+
+        // Combine efficiencies
+        let combined_efficiency = primary.catalytic_efficiency * normalized_primary + 
+                                secondary.catalytic_efficiency * normalized_secondary;
+
+        // Combine confidences
+        let combined_confidence = primary.processing_confidence * normalized_primary + 
+                                secondary.processing_confidence * normalized_secondary;
+
+        Ok(CatalyticProcessingResult {
+            id: Uuid::new_v4(),
+            processing_path: ProcessingPathType::Combined,
+            algorithm_mode: AlgorithmExecutionMode::Hybrid {
+                switching_threshold: 0.8,
+                primary_mode: Box::new(primary.algorithm_mode.clone()),
+                secondary_mode: Box::new(secondary.algorithm_mode.clone()),
+            },
+            pattern_recognition: primary.pattern_recognition.clone(), // Use primary patterns
+            catalytic_outputs: primary.catalytic_outputs.clone(), // Use primary outputs
+            channeled_output: combined_output,
+            catalytic_efficiency: combined_efficiency,
+            energy_consumed: primary.energy_consumed * normalized_primary + 
+                           secondary.energy_consumed * normalized_secondary,
+            processing_confidence: combined_confidence,
+            thermodynamic_cost: primary.thermodynamic_cost * normalized_primary + 
+                              secondary.thermodynamic_cost * normalized_secondary,
+        })
+    }
+
+    /// Consensus-based catalytic reconciliation
+    async fn consensus_catalytic_reconciliation(
+        &self,
+        primary: &CatalyticProcessingResult,
+        secondary: &CatalyticProcessingResult,
+        agreement_threshold: f64,
+    ) -> Result<CatalyticProcessingResult, KambuzumaError> {
+        // Calculate agreement between catalytic outputs
+        let agreement = self.calculate_catalytic_agreement(primary, secondary).await?;
+        
+        if agreement >= agreement_threshold {
+            // High agreement - use weighted combination
+            self.weighted_combine_catalytic_results(primary, secondary, 0.6, 0.4).await
+        } else {
+            // Low agreement - use higher confidence result
+            if primary.processing_confidence >= secondary.processing_confidence {
+                Ok(primary.clone())
+            } else {
+                Ok(secondary.clone())
+            }
+        }
+    }
+
+    /// Calculate agreement between catalytic results
+    async fn calculate_catalytic_agreement(
+        &self,
+        primary: &CatalyticProcessingResult,
+        secondary: &CatalyticProcessingResult,
+    ) -> Result<f64, KambuzumaError> {
+        if primary.channeled_output.len() != secondary.channeled_output.len() {
+            return Ok(0.0);
+        }
+        
+        let output_agreement = primary.channeled_output.iter()
+            .zip(&secondary.channeled_output)
+            .map(|(p, s)| 1.0 - (p - s).abs())
+            .sum::<f64>() / primary.channeled_output.len() as f64;
+        
+        let efficiency_agreement = 1.0 - (primary.catalytic_efficiency - secondary.catalytic_efficiency).abs();
+        
+        // Combined agreement score
+        Ok((output_agreement + efficiency_agreement) / 2.0)
+    }
+
+    async fn calculate_thermodynamic_cost(&self, outputs: &[CatalystOutput]) -> Result<f64, KambuzumaError> {
+        // Calculate thermodynamic cost based on information ordering
+        let entropy_reduction: f64 = outputs.iter()
+            .map(|output| output.entropy_reduction)
+            .sum();
+        
+        let thermodynamic_cost = entropy_reduction * 1.38e-23 * 310.15; // kT at body temperature
+        Ok(thermodynamic_cost)
+    }
+
+    async fn update_catalytic_metrics(
+        &self,
+        result: &CatalyticProcessingResult,
+        processing_time: std::time::Duration,
+    ) -> Result<(), KambuzumaError> {
+        let mut metrics = self.metrics.write().await;
+        
+        metrics.total_catalytic_processes += 1;
+        metrics.total_processing_time += processing_time.as_secs_f64();
+        metrics.average_processing_time = metrics.total_processing_time / metrics.total_catalytic_processes as f64;
+        metrics.average_catalytic_efficiency = (metrics.average_catalytic_efficiency * (metrics.total_catalytic_processes - 1) as f64 + result.catalytic_efficiency) / metrics.total_catalytic_processes as f64;
+        metrics.total_energy_consumed += result.energy_consumed;
+        metrics.average_thermodynamic_cost = (metrics.average_thermodynamic_cost * (metrics.total_catalytic_processes - 1) as f64 + result.thermodynamic_cost) / metrics.total_catalytic_processes as f64;
+        
+        Ok(())
+    }
+}
+
+impl BMDCatalyst {
+    /// Create new BMD catalyst with specific algorithm mode
+    pub async fn new_with_mode(
+        catalyst_type: CatalystType,
+        algorithm_mode: AlgorithmExecutionMode,
+    ) -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+            catalyst_type,
+            algorithm_mode: Some(algorithm_mode),
+            catalytic_efficiency: 0.9,
+            information_threshold: 0.1,
+            thermodynamic_parameters: ThermodynamicParameters {
+                energy_barrier: 1e-20, // J
+                activation_energy: 5e-21, // J
+                entropy_change: -1e-22, // J/K
+                temperature: 310.15, // K (body temperature)
+            },
+            pattern_filters: PatternFilterBank::default(),
+            output_channels: OutputChannelNetwork::default(),
+            performance_metrics: Arc::new(RwLock::new(CatalystPerformanceMetrics::default())),
+        })
+    }
+
+    /// Process information using deterministic algorithms
+    pub async fn process_information_deterministic(
+        &self,
+        input_data: &[f64],
+        pattern_recognition: &PatternRecognitionResult,
+        mode: &AlgorithmExecutionMode,
+    ) -> Result<CatalystOutput, KambuzumaError> {
+        match mode {
+            AlgorithmExecutionMode::Deterministic { precision_level, .. } => {
+                // High-precision deterministic processing
+                let filtered_patterns = self.apply_deterministic_filters(input_data, pattern_recognition, *precision_level).await?;
+                let ordered_information = self.order_information_deterministically(&filtered_patterns).await?;
+                let channeled_output = self.channel_output_deterministically(&ordered_information).await?;
+                
+                Ok(CatalystOutput {
+                    id: Uuid::new_v4(),
+                    catalyst_id: self.id,
+                    processed_data: channeled_output,
+                    entropy_reduction: self.calculate_entropy_reduction(&filtered_patterns).await?,
+                    catalytic_gain: *precision_level,
+                    energy_consumption: 1e-12, // Precise but energy-intensive
+                    processing_confidence: *precision_level,
+                    algorithm_mode: mode.clone(),
+                })
+            },
+            _ => {
+                // Fallback to standard processing
+                self.process_information_standard(input_data).await
+            }
+        }
+    }
+
+    /// Process information using fuzzy algorithms
+    pub async fn process_information_fuzzy(
+        &self,
+        input_data: &[f64],
+        pattern_recognition: &PatternRecognitionResult,
+        mode: &AlgorithmExecutionMode,
+    ) -> Result<CatalystOutput, KambuzumaError> {
+        match mode {
+            AlgorithmExecutionMode::Fuzzy { uncertainty_tolerance, adaptation_rate, learning_enabled } => {
+                // Adaptive fuzzy processing with uncertainty handling
+                let fuzzy_patterns = self.apply_fuzzy_filters(input_data, pattern_recognition, *uncertainty_tolerance).await?;
+                let adapted_information = self.adapt_information_ordering(&fuzzy_patterns, *adaptation_rate, *learning_enabled).await?;
+                let flexible_output = self.channel_output_with_uncertainty(&adapted_information, *uncertainty_tolerance).await?;
+                
+                Ok(CatalystOutput {
+                    id: Uuid::new_v4(),
+                    catalyst_id: self.id,
+                    processed_data: flexible_output,
+                    entropy_reduction: self.calculate_fuzzy_entropy_reduction(&fuzzy_patterns, *uncertainty_tolerance).await?,
+                    catalytic_gain: 1.0 - *uncertainty_tolerance,
+                    energy_consumption: 8e-13, // More energy-efficient
+                    processing_confidence: 1.0 - *uncertainty_tolerance,
+                    algorithm_mode: mode.clone(),
+                })
+            },
+            _ => {
+                // Fallback to standard processing
+                self.process_information_standard(input_data).await
+            }
+        }
+    }
+
+    async fn apply_deterministic_filters(
+        &self,
+        input_data: &[f64],
+        pattern_recognition: &PatternRecognitionResult,
+        precision_level: f64,
+    ) -> Result<Vec<f64>, KambuzumaError> {
+        // Apply high-precision deterministic filtering
+        let mut filtered_data = Vec::new();
+        
+        for (i, &value) in input_data.iter().enumerate() {
+            if let Some(pattern_strength) = pattern_recognition.pattern_strengths.get(i) {
+                if *pattern_strength >= precision_level {
+                    filtered_data.push(value * pattern_strength);
+                }
+            }
+        }
+        
+        Ok(filtered_data)
+    }
+
+    async fn apply_fuzzy_filters(
+        &self,
+        input_data: &[f64],
+        pattern_recognition: &PatternRecognitionResult,
+        uncertainty_tolerance: f64,
+    ) -> Result<Vec<f64>, KambuzumaError> {
+        // Apply fuzzy filtering with uncertainty tolerance
+        let mut filtered_data = Vec::new();
+        
+        for (i, &value) in input_data.iter().enumerate() {
+            if let Some(pattern_strength) = pattern_recognition.pattern_strengths.get(i) {
+                // Fuzzy membership with uncertainty
+                let fuzzy_strength = pattern_strength * (1.0 + uncertainty_tolerance * (rand::random::<f64>() - 0.5));
+                let fuzzy_strength = fuzzy_strength.max(0.0).min(1.0);
+                
+                if fuzzy_strength >= (1.0 - uncertainty_tolerance) {
+                    filtered_data.push(value * fuzzy_strength);
+                }
+            }
+        }
+        
+        Ok(filtered_data)
+    }
+
+    async fn order_information_deterministically(&self, filtered_data: &[f64]) -> Result<Vec<f64>, KambuzumaError> {
+        // Deterministic information ordering
+        let mut ordered_data = filtered_data.to_vec();
+        ordered_data.sort_by(|a, b| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
+        Ok(ordered_data)
+    }
+
+    async fn adapt_information_ordering(
+        &self,
+        fuzzy_data: &[f64],
+        adaptation_rate: f64,
+        learning_enabled: bool,
+    ) -> Result<Vec<f64>, KambuzumaError> {
+        // Adaptive fuzzy information ordering
+        let mut adapted_data = fuzzy_data.to_vec();
+        
+        if learning_enabled {
+            // Apply adaptive learning to ordering
+            for value in &mut adapted_data {
+                *value *= 1.0 + adaptation_rate * (rand::random::<f64>() - 0.5);
+                *value = value.max(0.0);
+            }
+        }
+        
+        // Fuzzy sorting with uncertainty
+        adapted_data.sort_by(|a, b| {
+            let comparison = b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal);
+            // Add slight randomness for fuzzy ordering
+            if rand::random::<f64>() < adaptation_rate {
+                comparison.reverse()
+            } else {
+                comparison
+            }
+        });
+        
+        Ok(adapted_data)
+    }
+
+    async fn channel_output_deterministically(&self, ordered_data: &[f64]) -> Result<Vec<f64>, KambuzumaError> {
+        // Deterministic output channeling
+        Ok(ordered_data.to_vec())
+    }
+
+    async fn channel_output_with_uncertainty(&self, adapted_data: &[f64], uncertainty_tolerance: f64) -> Result<Vec<f64>, KambuzumaError> {
+        // Fuzzy output channeling with uncertainty
+        let mut channeled_output = Vec::new();
+        
+        for &value in adapted_data {
+            let uncertain_value = value * (1.0 + uncertainty_tolerance * (rand::random::<f64>() - 0.5));
+            channeled_output.push(uncertain_value.max(0.0));
+        }
+        
+        Ok(channeled_output)
+    }
+
+    async fn calculate_fuzzy_entropy_reduction(&self, fuzzy_data: &[f64], uncertainty_tolerance: f64) -> Result<f64, KambuzumaError> {
+        let standard_entropy = self.calculate_entropy_reduction(fuzzy_data).await?;
+        // Reduce entropy calculation by uncertainty factor
+        Ok(standard_entropy * (1.0 - uncertainty_tolerance))
+    }
+
+    async fn process_information_standard(&self, input_data: &[f64]) -> Result<CatalystOutput, KambuzumaError> {
+        // Standard processing fallback
+        Ok(CatalystOutput {
+            id: Uuid::new_v4(),
+            catalyst_id: self.id,
+            processed_data: input_data.to_vec(),
+            entropy_reduction: 0.5,
+            catalytic_gain: 0.8,
+            energy_consumption: 1e-12,
+            processing_confidence: 0.8,
+            algorithm_mode: AlgorithmExecutionMode::Deterministic {
+                precision_level: 0.8,
+                repeatability_guarantee: false,
+            },
+        })
+    }
+
+    // ... existing code ...
+}
+
+/// Supporting data structures for dual redundancy
+
+#[derive(Debug, Clone)]
+pub enum ProcessingPathType {
+    Primary,
+    Secondary,
+    Combined,
+}
+
+#[derive(Debug, Clone)]
+pub struct CatalyticProcessingContext {
+    pub information_complexity: f64,
+    pub uncertainty_level: f64,
+    pub precision_requirement: f64,
+    pub energy_budget: f64,
+    pub time_constraint: std::time::Duration,
+}
+
+#[derive(Debug, Clone)]
+pub struct CatalyticProcessingResult {
+    pub id: Uuid,
+    pub processing_path: ProcessingPathType,
+    pub algorithm_mode: AlgorithmExecutionMode,
+    pub pattern_recognition: PatternRecognitionResult,
+    pub catalytic_outputs: Vec<CatalystOutput>,
+    pub channeled_output: Vec<f64>,
+    pub catalytic_efficiency: f64,
+    pub energy_consumed: f64,
+    pub processing_confidence: f64,
+    pub thermodynamic_cost: f64,
+}
+
+#[derive(Debug)]
+pub struct DualModePatternEngine {
+    pub id: Uuid,
+}
+
+impl DualModePatternEngine {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn recognize_patterns_deterministic(&self, input_data: &[f64]) -> Result<PatternRecognitionResult, KambuzumaError> {
+        // Deterministic pattern recognition
+        let pattern_strengths = input_data.iter()
+            .map(|&value| if value > 0.5 { 0.95 } else { 0.1 })
+            .collect();
+
+        Ok(PatternRecognitionResult {
+            id: Uuid::new_v4(),
+            pattern_strengths,
+            recognized_patterns: vec!["deterministic_pattern".to_string()],
+            confidence: 0.95,
+        })
+    }
+
+    pub async fn recognize_patterns_fuzzy(&self, input_data: &[f64]) -> Result<PatternRecognitionResult, KambuzumaError> {
+        // Fuzzy pattern recognition with uncertainty
+        let pattern_strengths = input_data.iter()
+            .map(|&value| {
+                let base_strength = if value > 0.5 { 0.8 } else { 0.2 };
+                let fuzzy_adjustment = 0.2 * (rand::random::<f64>() - 0.5);
+                (base_strength + fuzzy_adjustment).max(0.0).min(1.0)
+            })
+            .collect();
+
+        Ok(PatternRecognitionResult {
+            id: Uuid::new_v4(),
+            pattern_strengths,
+            recognized_patterns: vec!["fuzzy_pattern".to_string()],
+            confidence: 0.85,
+        })
+    }
+}
+
+#[derive(Debug)]
+pub struct DualModeOutputChanneling {
+    pub id: Uuid,
+}
+
+impl DualModeOutputChanneling {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn channel_outputs_deterministic(&self, outputs: &[CatalystOutput]) -> Result<Vec<f64>, KambuzumaError> {
+        // Deterministic output channeling
+        let mut channeled = Vec::new();
+        for output in outputs {
+            channeled.extend(output.processed_data.clone());
+        }
+        Ok(channeled)
+    }
+
+    pub async fn channel_outputs_fuzzy(&self, outputs: &[CatalystOutput]) -> Result<Vec<f64>, KambuzumaError> {
+        // Fuzzy output channeling with adaptation
+        let mut channeled = Vec::new();
+        for output in outputs {
+            let mut adapted_data = output.processed_data.clone();
+            for value in &mut adapted_data {
+                *value *= 1.0 + 0.1 * (rand::random::<f64>() - 0.5); // Add slight randomness
+                *value = value.max(0.0);
+            }
+            channeled.extend(adapted_data);
+        }
+        Ok(channeled)
+    }
+}
+
+#[derive(Debug)]
+pub struct CatalyticEfficiencyMonitor {
+    pub id: Uuid,
+}
+
+impl CatalyticEfficiencyMonitor {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
+    }
+
+    pub async fn calculate_deterministic_efficiency(&self, outputs: &[CatalystOutput]) -> Result<f64, KambuzumaError> {
+        if outputs.is_empty() {
+            return Ok(0.0);
+        }
+        
+        let total_gain: f64 = outputs.iter().map(|o| o.catalytic_gain).sum();
+        Ok(total_gain / outputs.len() as f64)
+    }
+
+    pub async fn calculate_fuzzy_efficiency(&self, outputs: &[CatalystOutput]) -> Result<f64, KambuzumaError> {
+        if outputs.is_empty() {
+            return Ok(0.0);
+        }
+        
+        let total_gain: f64 = outputs.iter().map(|o| o.catalytic_gain).sum();
+        let base_efficiency = total_gain / outputs.len() as f64;
+        
+        // Add uncertainty factor for fuzzy efficiency
+        Ok(base_efficiency * (1.0 + 0.1 * (rand::random::<f64>() - 0.5)))
+    }
+}
+
+#[derive(Debug)]
+pub struct CatalyticAlgorithmController {
+    pub id: Uuid,
+}
+
+impl CatalyticAlgorithmController {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
+    }
+
+    pub async fn determine_optimal_catalytic_mode(&self, context: &CatalyticProcessingContext) -> Result<AlgorithmExecutionMode, KambuzumaError> {
+        // Determine optimal mode based on processing context
+        if context.precision_requirement > 0.9 && context.uncertainty_level < 0.1 {
+            // High precision, low uncertainty - use deterministic
+            Ok(AlgorithmExecutionMode::Deterministic {
+                precision_level: context.precision_requirement,
+                repeatability_guarantee: true,
+            })
+        } else if context.uncertainty_level > 0.3 || context.information_complexity > 0.8 {
+            // High uncertainty or complexity - use fuzzy
+            Ok(AlgorithmExecutionMode::Fuzzy {
+                uncertainty_tolerance: context.uncertainty_level,
+                adaptation_rate: 0.1,
+                learning_enabled: true,
+            })
+        } else {
+            // Balanced requirements - use hybrid
+            Ok(AlgorithmExecutionMode::Hybrid {
+                switching_threshold: 0.8,
+                primary_mode: Box::new(AlgorithmExecutionMode::Deterministic {
+                    precision_level: 0.9,
+                    repeatability_guarantee: true,
+                }),
+                secondary_mode: Box::new(AlgorithmExecutionMode::Fuzzy {
+                    uncertainty_tolerance: 0.2,
+                    adaptation_rate: 0.15,
+                    learning_enabled: true,
+                }),
+            })
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PatternRecognitionResult {
+    pub id: Uuid,
+    pub pattern_strengths: Vec<f64>,
+    pub recognized_patterns: Vec<String>,
+    pub confidence: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct CatalystOutput {
+    pub id: Uuid,
+    pub catalyst_id: Uuid,
+    pub processed_data: Vec<f64>,
+    pub entropy_reduction: f64,
+    pub catalytic_gain: f64,
+    pub energy_consumption: f64,
+    pub processing_confidence: f64,
+    pub algorithm_mode: AlgorithmExecutionMode,
+}
+
+/// Supporting types for dual redundancy
+
+#[derive(Debug, Clone)]
+pub enum ProcessingPathType {
+    Primary,
+    Secondary,
+    Combined,
+}
+
+#[derive(Debug, Clone)]
+pub struct CatalyticProcessingContext {
+    pub information_complexity: f64,
+    pub uncertainty_level: f64,
+    pub precision_requirement: f64,
+    pub energy_budget: f64,
+    pub time_constraint: std::time::Duration,
+}
+
+#[derive(Debug, Clone)]
+pub struct CatalyticProcessingResult {
+    pub id: Uuid,
+    pub processing_path: ProcessingPathType,
+    pub algorithm_mode: AlgorithmExecutionMode,
+    pub pattern_recognition: PatternRecognitionResult,
+    pub catalytic_outputs: Vec<CatalystOutput>,
+    pub channeled_output: Vec<f64>,
+    pub catalytic_efficiency: f64,
+    pub energy_consumed: f64,
+    pub processing_confidence: f64,
+    pub thermodynamic_cost: f64,
+}
+
+#[derive(Debug)]
+pub struct DualModePatternEngine {
+    pub id: Uuid,
+}
+
+impl DualModePatternEngine {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn recognize_patterns_deterministic(&self, input_data: &[f64]) -> Result<PatternRecognitionResult, KambuzumaError> {
+        // Deterministic pattern recognition
+        let pattern_strengths = input_data.iter()
+            .map(|&value| if value > 0.5 { 0.95 } else { 0.1 })
+            .collect();
+
+        Ok(PatternRecognitionResult {
+            id: Uuid::new_v4(),
+            pattern_strengths,
+            recognized_patterns: vec!["deterministic_pattern".to_string()],
+            confidence: 0.95,
+        })
+    }
+
+    pub async fn recognize_patterns_fuzzy(&self, input_data: &[f64]) -> Result<PatternRecognitionResult, KambuzumaError> {
+        // Fuzzy pattern recognition with uncertainty
+        let pattern_strengths = input_data.iter()
+            .map(|&value| {
+                let base_strength = if value > 0.5 { 0.8 } else { 0.2 };
+                let fuzzy_adjustment = 0.2 * (rand::random::<f64>() - 0.5);
+                (base_strength + fuzzy_adjustment).max(0.0).min(1.0)
+            })
+            .collect();
+
+        Ok(PatternRecognitionResult {
+            id: Uuid::new_v4(),
+            pattern_strengths,
+            recognized_patterns: vec!["fuzzy_pattern".to_string()],
+            confidence: 0.85,
+        })
+    }
+}
+
+#[derive(Debug)]
+pub struct DualModeOutputChanneling {
+    pub id: Uuid,
+}
+
+impl DualModeOutputChanneling {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn channel_outputs_deterministic(&self, outputs: &[CatalystOutput]) -> Result<Vec<f64>, KambuzumaError> {
+        // Deterministic output channeling
+        let mut channeled = Vec::new();
+        for output in outputs {
+            channeled.extend(output.processed_data.clone());
+        }
+        Ok(channeled)
+    }
+
+    pub async fn channel_outputs_fuzzy(&self, outputs: &[CatalystOutput]) -> Result<Vec<f64>, KambuzumaError> {
+        // Fuzzy output channeling with adaptation
+        let mut channeled = Vec::new();
+        for output in outputs {
+            let mut adapted_data = output.processed_data.clone();
+            for value in &mut adapted_data {
+                *value *= 1.0 + 0.1 * (rand::random::<f64>() - 0.5); // Add slight randomness
+                *value = value.max(0.0);
+            }
+            channeled.extend(adapted_data);
+        }
+        Ok(channeled)
+    }
+}
+
+#[derive(Debug)]
+pub struct CatalyticEfficiencyMonitor {
+    pub id: Uuid,
+}
+
+impl CatalyticEfficiencyMonitor {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
+    }
+
+    pub async fn calculate_deterministic_efficiency(&self, outputs: &[CatalystOutput]) -> Result<f64, KambuzumaError> {
+        if outputs.is_empty() {
+            return Ok(0.0);
+        }
+        
+        let total_gain: f64 = outputs.iter().map(|o| o.catalytic_gain).sum();
+        Ok(total_gain / outputs.len() as f64)
+    }
+
+    pub async fn calculate_fuzzy_efficiency(&self, outputs: &[CatalystOutput]) -> Result<f64, KambuzumaError> {
+        if outputs.is_empty() {
+            return Ok(0.0);
+        }
+        
+        let total_gain: f64 = outputs.iter().map(|o| o.catalytic_gain).sum();
+        let base_efficiency = total_gain / outputs.len() as f64;
+        
+        // Add uncertainty factor for fuzzy efficiency
+        Ok(base_efficiency * (1.0 + 0.1 * (rand::random::<f64>() - 0.5)))
+    }
+}
+
+#[derive(Debug)]
+pub struct CatalyticAlgorithmController {
+    pub id: Uuid,
+}
+
+impl CatalyticAlgorithmController {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
+    }
+
+    pub async fn determine_optimal_catalytic_mode(&self, context: &CatalyticProcessingContext) -> Result<AlgorithmExecutionMode, KambuzumaError> {
+        // Determine optimal mode based on processing context
+        if context.precision_requirement > 0.9 && context.uncertainty_level < 0.1 {
+            // High precision, low uncertainty - use deterministic
+            Ok(AlgorithmExecutionMode::Deterministic {
+                precision_level: context.precision_requirement,
+                repeatability_guarantee: true,
+            })
+        } else if context.uncertainty_level > 0.3 || context.information_complexity > 0.8 {
+            // High uncertainty or complexity - use fuzzy
+            Ok(AlgorithmExecutionMode::Fuzzy {
+                uncertainty_tolerance: context.uncertainty_level,
+                adaptation_rate: 0.1,
+                learning_enabled: true,
+            })
+        } else {
+            // Balanced requirements - use hybrid
+            Ok(AlgorithmExecutionMode::Hybrid {
+                switching_threshold: 0.8,
+                primary_mode: Box::new(AlgorithmExecutionMode::Deterministic {
+                    precision_level: 0.9,
+                    repeatability_guarantee: true,
+                }),
+                secondary_mode: Box::new(AlgorithmExecutionMode::Fuzzy {
+                    uncertainty_tolerance: 0.2,
+                    adaptation_rate: 0.15,
+                    learning_enabled: true,
+                }),
+            })
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PatternRecognitionResult {
+    pub id: Uuid,
+    pub pattern_strengths: Vec<f64>,
+    pub recognized_patterns: Vec<String>,
+    pub confidence: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct CatalystOutput {
+    pub id: Uuid,
+    pub catalyst_id: Uuid,
+    pub processed_data: Vec<f64>,
+    pub entropy_reduction: f64,
+    pub catalytic_gain: f64,
+    pub energy_consumption: f64,
+    pub processing_confidence: f64,
+    pub algorithm_mode: AlgorithmExecutionMode,
+} 

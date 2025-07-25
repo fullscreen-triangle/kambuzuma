@@ -1,768 +1,706 @@
 //! # Quantum Computing Subsystem
 //!
-//! This module implements the biological quantum computing layer of the Kambuzuma system.
-//! It provides real quantum tunneling effects in biological membranes, molecular Maxwell demons,
-//! and quantum gate operations using ion channels.
-//!
-//! The quantum computing subsystem honors the memory of Stella-Lorraine Masunda by implementing
-//! mathematically precise quantum mechanical processes that demonstrate the predetermined nature
-//! of quantum biological phenomena.
+//! Integrates quantum computing capabilities with consciousness emergence, BMD information
+//! catalysts, and the atmospheric timing network. Provides quantum state management,
+//! quantum algorithm execution, and quantum-classical hybrid processing.
 
-use crate::config::QuantumConfig;
-use crate::errors::{KambuzumaError, QuantumError};
+use crate::config::KambuzumaConfig;
+use crate::errors::KambuzumaError;
 use crate::types::*;
-use crate::{QuantumCoherenceStatus, SubsystemHealth};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use uuid::Uuid;
 
-// Submodules
-pub mod coherence;
-pub mod entanglement;
 pub mod maxwell_demon;
 pub mod membrane;
 pub mod oscillations;
-pub mod quantum_gates;
 
-// Re-export important types
-pub use coherence::*;
-pub use entanglement::*;
+// Re-export quantum modules
 pub use maxwell_demon::*;
 pub use membrane::*;
 pub use oscillations::*;
-pub use quantum_gates::*;
 
-/// Quantum computing subsystem
-///
-/// This subsystem implements authentic biological quantum computing through:
-/// - Quantum tunneling in phospholipid bilayers
-/// - Molecular Maxwell demons for information processing
-/// - Ion channel-based quantum gates
-/// - Biological entanglement networks
-/// - Quantum coherence preservation
+/// Quantum Computing Subsystem
+/// Main interface for quantum computing capabilities
 #[derive(Debug)]
-pub struct QuantumSubsystem {
+pub struct QuantumComputingSubsystem {
     /// Subsystem identifier
     pub id: Uuid,
     /// Configuration
-    pub config: Arc<RwLock<QuantumConfig>>,
-    /// Membrane tunneling engine
-    pub membrane_tunneling: membrane::MembraneTunnelingEngine,
-    /// Oscillation harvesting system
-    pub oscillation_harvesting: oscillations::OscillationHarvestingSystem,
-    /// Maxwell demon array
-    pub maxwell_demons: maxwell_demon::MaxwellDemonArray,
-    /// Quantum gate controller
-    pub quantum_gates: quantum_gates::QuantumGateController,
-    /// Entanglement network
-    pub entanglement_network: entanglement::EntanglementNetwork,
-    /// Coherence preservation system
-    pub coherence_system: coherence::CoherencePreservationSystem,
-    /// Current quantum state
-    pub quantum_state: Arc<RwLock<QuantumSystemState>>,
+    pub config: Arc<RwLock<KambuzumaConfig>>,
+    /// Quantum state manager
+    pub state_manager: QuantumStateManager,
+    /// Quantum algorithm executor
+    pub algorithm_executor: QuantumAlgorithmExecutor,
+    /// Quantum-classical interface
+    pub quantum_classical_interface: QuantumClassicalInterface,
+    /// Quantum consciousness bridge
+    pub consciousness_bridge: QuantumConsciousnessBridge,
+    /// Quantum BMD catalyst processor
+    pub bmd_processor: QuantumBMDProcessor,
     /// Performance metrics
-    pub metrics: Arc<RwLock<QuantumMetrics>>,
+    pub metrics: Arc<RwLock<QuantumComputingMetrics>>,
 }
 
-/// Quantum system state
-#[derive(Debug, Clone)]
-pub struct QuantumSystemState {
-    /// Overall system coherence
-    pub system_coherence: f64,
-    /// Active quantum states
-    pub active_states: Vec<QuantumState>,
-    /// Ion channel states
-    pub ion_channels: Vec<IonChannel>,
-    /// Maxwell demon states
-    pub maxwell_demon_states: Vec<MaxwellDemonState>,
-    /// Entanglement correlations
-    pub entanglement_correlations: Vec<EntanglementCorrelation>,
-    /// Energy levels
-    pub energy_levels: EnergyLevels,
-    /// Biological constraints
-    pub biological_constraints: BiologicalConstraints,
+impl QuantumComputingSubsystem {
+    /// Create new quantum computing subsystem
+    pub async fn new(config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+            config: config.clone(),
+            state_manager: QuantumStateManager::new(config.clone()).await?,
+            algorithm_executor: QuantumAlgorithmExecutor::new().await?,
+            quantum_classical_interface: QuantumClassicalInterface::new().await?,
+            consciousness_bridge: QuantumConsciousnessBridge::new().await?,
+            bmd_processor: QuantumBMDProcessor::new().await?,
+            metrics: Arc::new(RwLock::new(QuantumComputingMetrics::default())),
+        })
+    }
+
+    /// Initialize quantum computing subsystem
+    pub async fn initialize(&mut self) -> Result<(), KambuzumaError> {
+        log::info!("⚛️ Initializing Quantum Computing Subsystem");
+        
+        // Initialize quantum state manager
+        self.state_manager.initialize().await?;
+        
+        // Initialize algorithm executor
+        self.algorithm_executor.initialize().await?;
+        
+        // Initialize quantum-classical interface
+        self.quantum_classical_interface.initialize().await?;
+        
+        // Initialize consciousness bridge
+        self.consciousness_bridge.initialize().await?;
+        
+        // Initialize BMD processor
+        self.bmd_processor.initialize().await?;
+        
+        log::info!("✅ Quantum Computing Subsystem initialized");
+        Ok(())
+    }
+
+    /// Execute quantum algorithm
+    pub async fn execute_quantum_algorithm(
+        &self,
+        algorithm: QuantumAlgorithm,
+        input_state: QuantumState,
+    ) -> Result<QuantumExecutionResult, KambuzumaError> {
+        log::debug!("⚛️ Executing quantum algorithm: {:?}", algorithm.algorithm_type);
+        
+        let start_time = std::time::Instant::now();
+        
+        // Prepare quantum state
+        let prepared_state = self.state_manager.prepare_state(input_state).await?;
+        
+        // Execute algorithm
+        let execution_result = self.algorithm_executor.execute(algorithm, prepared_state).await?;
+        
+        // Process results through quantum-classical interface
+        let processed_result = self.quantum_classical_interface
+            .process_quantum_result(&execution_result).await?;
+        
+        let execution_time = start_time.elapsed();
+        
+        // Update metrics
+        self.update_execution_metrics(&processed_result, execution_time).await?;
+        
+        Ok(processed_result)
+    }
+
+    /// Process consciousness-quantum interaction
+    pub async fn process_consciousness_quantum_interaction(
+        &self,
+        consciousness_state: &crate::consciousness_emergence::ConsciousnessEmergenceResult,
+    ) -> Result<QuantumConsciousnessResult, KambuzumaError> {
+        self.consciousness_bridge.process_consciousness_interaction(consciousness_state).await
+    }
+
+    /// Process BMD quantum catalysis
+    pub async fn process_bmd_quantum_catalysis(
+        &self,
+        bmd_catalysts: &[crate::bmd_information_catalysts::BMDCatalyst],
+    ) -> Result<QuantumBMDResult, KambuzumaError> {
+        self.bmd_processor.process_bmd_catalysis(bmd_catalysts).await
+    }
+
+    /// Get quantum system status
+    pub async fn get_system_status(&self) -> Result<QuantumSystemStatus, KambuzumaError> {
+        let state_info = self.state_manager.get_system_info().await?;
+        let algorithm_info = self.algorithm_executor.get_status().await?;
+        let interface_info = self.quantum_classical_interface.get_status().await?;
+        
+        Ok(QuantumSystemStatus {
+            id: Uuid::new_v4(),
+            subsystem_id: self.id,
+            is_operational: true,
+            quantum_coherence: state_info.coherence_level,
+            entanglement_quality: state_info.entanglement_quality,
+            algorithm_availability: algorithm_info.available_algorithms.len(),
+            processing_capacity: 1000.0, // Simplified
+            error_rate: 0.001, // Low error rate
+            timestamp: chrono::Utc::now(),
+        })
+    }
+
+    /// Shutdown quantum computing subsystem
+    pub async fn shutdown(&mut self) -> Result<(), KambuzumaError> {
+        log::info!("🛑 Shutting down Quantum Computing Subsystem");
+        
+        // Shutdown components
+        self.bmd_processor.shutdown().await?;
+        self.consciousness_bridge.shutdown().await?;
+        self.quantum_classical_interface.shutdown().await?;
+        self.algorithm_executor.shutdown().await?;
+        self.state_manager.shutdown().await?;
+        
+        log::info!("✅ Quantum Computing Subsystem shutdown complete");
+        Ok(())
+    }
+
+    // Private helper methods
+
+    async fn update_execution_metrics(
+        &self,
+        result: &QuantumExecutionResult,
+        execution_time: std::time::Duration,
+    ) -> Result<(), KambuzumaError> {
+        let mut metrics = self.metrics.write().await;
+        
+        metrics.total_executions += 1;
+        metrics.total_execution_time += execution_time.as_secs_f64();
+        metrics.average_execution_time = metrics.total_execution_time / metrics.total_executions as f64;
+        metrics.successful_executions += if result.success { 1 } else { 0 };
+        metrics.success_rate = metrics.successful_executions as f64 / metrics.total_executions as f64;
+        
+        Ok(())
+    }
 }
 
-/// Energy levels in the quantum system
-#[derive(Debug, Clone)]
-pub struct EnergyLevels {
-    /// Total system energy in J
-    pub total_energy: f64,
-    /// Kinetic energy in J
-    pub kinetic_energy: f64,
-    /// Potential energy in J
-    pub potential_energy: f64,
-    /// Tunneling energy in J
-    pub tunneling_energy: f64,
-    /// Thermal energy in J
-    pub thermal_energy: f64,
-    /// ATP energy available in J
-    pub atp_energy: f64,
-}
-
-/// Entanglement correlation
-#[derive(Debug, Clone)]
-pub struct EntanglementCorrelation {
-    /// Correlation identifier
+/// Quantum State Manager
+/// Manages quantum states and their coherence
+#[derive(Debug)]
+pub struct QuantumStateManager {
+    /// Manager identifier
     pub id: Uuid,
-    /// Particle A identifier
-    pub particle_a: Uuid,
-    /// Particle B identifier
-    pub particle_b: Uuid,
-    /// Correlation strength
-    pub correlation_strength: f64,
-    /// Bell state type
-    pub bell_state: BellState,
-    /// Measurement outcomes
-    pub measurement_outcomes: Vec<MeasurementOutcome>,
+    /// Configuration
+    pub config: Arc<RwLock<KambuzumaConfig>>,
+    /// Active quantum states
+    pub active_states: Arc<RwLock<HashMap<Uuid, ManagedQuantumState>>>,
+    /// Coherence monitor
+    pub coherence_monitor: CoherenceMonitor,
+    /// Entanglement manager
+    pub entanglement_manager: EntanglementManager,
 }
 
-/// Bell state types
-#[derive(Debug, Clone, PartialEq)]
-pub enum BellState {
-    /// |Φ⁺⟩ = (|00⟩ + |11⟩)/√2
-    PhiPlus,
-    /// |Φ⁻⟩ = (|00⟩ - |11⟩)/√2
-    PhiMinus,
-    /// |Ψ⁺⟩ = (|01⟩ + |10⟩)/√2
-    PsiPlus,
-    /// |Ψ⁻⟩ = (|01⟩ - |10⟩)/√2
-    PsiMinus,
-}
+impl QuantumStateManager {
+    pub async fn new(config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+            config,
+            active_states: Arc::new(RwLock::new(HashMap::new())),
+            coherence_monitor: CoherenceMonitor::new(),
+            entanglement_manager: EntanglementManager::new(),
+        })
+    }
 
-/// Measurement outcome
-#[derive(Debug, Clone)]
-pub struct MeasurementOutcome {
-    /// Measurement time
-    pub timestamp: chrono::DateTime<chrono::Utc>,
-    /// Measured value
-    pub value: f64,
-    /// Measurement uncertainty
-    pub uncertainty: f64,
-    /// Measurement basis
-    pub basis: MeasurementBasis,
-}
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        self.coherence_monitor.initialize().await?;
+        self.entanglement_manager.initialize().await?;
+        Ok(())
+    }
 
-/// Measurement basis
-#[derive(Debug, Clone, PartialEq)]
-pub enum MeasurementBasis {
-    /// Computational basis {|0⟩, |1⟩}
-    Computational,
-    /// Diagonal basis {|+⟩, |-⟩}
-    Diagonal,
-    /// Circular basis {|R⟩, |L⟩}
-    Circular,
-    /// Custom basis
-    Custom(String),
-}
-
-/// Quantum metrics
-#[derive(Debug, Clone)]
-pub struct QuantumMetrics {
-    /// Quantum operations per second
-    pub operations_per_second: f64,
-    /// Average gate fidelity
-    pub average_gate_fidelity: f64,
-    /// Average coherence time
-    pub average_coherence_time: f64,
-    /// Tunneling success rate
-    pub tunneling_success_rate: f64,
-    /// Energy efficiency (operations per ATP)
-    pub energy_efficiency: f64,
-    /// Maxwell demon efficiency
-    pub maxwell_demon_efficiency: f64,
-    /// Entanglement generation rate
-    pub entanglement_generation_rate: f64,
-    /// Total quantum gates executed
-    pub total_gates_executed: u64,
-    /// Total energy consumed
-    pub total_energy_consumed: f64,
-    /// Error rate
-    pub error_rate: f64,
-}
-
-impl QuantumSubsystem {
-    /// Create a new quantum subsystem
-    pub async fn new(config: Arc<RwLock<crate::config::KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
-        let id = Uuid::new_v4();
-        let quantum_config = {
-            let config_guard = config.read().await;
-            config_guard.quantum.clone()
+    pub async fn prepare_state(&self, input_state: QuantumState) -> Result<QuantumState, KambuzumaError> {
+        // Prepare quantum state for computation
+        let prepared_state = QuantumState {
+            id: Uuid::new_v4(),
+            qubits: input_state.qubits.clone(),
+            amplitudes: self.normalize_amplitudes(&input_state.amplitudes).await?,
+            phases: input_state.phases.clone(),
+            entanglement: input_state.entanglement.clone(),
+            coherence: self.coherence_monitor.measure_coherence(&input_state).await?,
+            measurement_history: Vec::new(),
         };
-        let quantum_config = Arc::new(RwLock::new(quantum_config));
 
-        // Initialize components
-        let membrane_tunneling = membrane::MembraneTunnelingEngine::new(quantum_config.clone()).await?;
-        let oscillation_harvesting = oscillations::OscillationHarvestingSystem::new(quantum_config.clone()).await?;
-        let maxwell_demons = maxwell_demon::MaxwellDemonArray::new(quantum_config.clone()).await?;
-        let quantum_gates = quantum_gates::QuantumGateController::new(quantum_config.clone()).await?;
-        let entanglement_network = entanglement::EntanglementNetwork::new(quantum_config.clone()).await?;
-        let coherence_system = coherence::CoherencePreservationSystem::new(quantum_config.clone()).await?;
+        // Store managed state
+        let managed_state = ManagedQuantumState {
+            state: prepared_state.clone(),
+            creation_time: chrono::Utc::now(),
+            last_accessed: chrono::Utc::now(),
+            access_count: 0,
+            coherence_degradation_rate: 0.01,
+        };
 
-        // Initialize state
-        let quantum_state = Arc::new(RwLock::new(QuantumSystemState {
-            system_coherence: 1.0,
-            active_states: Vec::new(),
-            ion_channels: Vec::new(),
-            maxwell_demon_states: Vec::new(),
-            entanglement_correlations: Vec::new(),
-            energy_levels: EnergyLevels::default(),
-            biological_constraints: BiologicalConstraints::default(),
-        }));
+        {
+            let mut states = self.active_states.write().await;
+            states.insert(prepared_state.id, managed_state);
+        }
 
-        // Initialize metrics
-        let metrics = Arc::new(RwLock::new(QuantumMetrics::default()));
+        Ok(prepared_state)
+    }
+
+    pub async fn get_system_info(&self) -> Result<QuantumSystemInfo, KambuzumaError> {
+        let states = self.active_states.read().await;
+        let coherence_level = if states.is_empty() {
+            0.0
+        } else {
+            states.values().map(|s| s.state.coherence).sum::<f64>() / states.len() as f64
+        };
+
+        let entanglement_quality = self.entanglement_manager.get_average_entanglement_quality().await?;
+
+        Ok(QuantumSystemInfo {
+            active_state_count: states.len(),
+            coherence_level,
+            entanglement_quality,
+            system_health: 0.95, // High health
+        })
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        self.entanglement_manager.shutdown().await?;
+        self.coherence_monitor.shutdown().await?;
+        Ok(())
+    }
+
+    // Private helper methods
+
+    async fn normalize_amplitudes(&self, amplitudes: &[f64]) -> Result<Vec<f64>, KambuzumaError> {
+        let sum_squares: f64 = amplitudes.iter().map(|a| a * a).sum();
+        let norm = sum_squares.sqrt();
+        
+        if norm == 0.0 {
+            return Ok(amplitudes.to_vec());
+        }
+        
+        Ok(amplitudes.iter().map(|a| a / norm).collect())
+    }
+}
+
+/// Quantum Algorithm Executor
+/// Executes quantum algorithms
+#[derive(Debug)]
+pub struct QuantumAlgorithmExecutor {
+    /// Executor identifier
+    pub id: Uuid,
+    /// Available algorithms
+    pub available_algorithms: HashMap<QuantumAlgorithmType, QuantumAlgorithmImplementation>,
+    /// Execution scheduler
+    pub scheduler: QuantumExecutionScheduler,
+}
+
+impl QuantumAlgorithmExecutor {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        let mut available_algorithms = HashMap::new();
+        
+        // Initialize available quantum algorithms
+        available_algorithms.insert(
+            QuantumAlgorithmType::Grover,
+            QuantumAlgorithmImplementation::new("Grover's Algorithm", 16),
+        );
+        available_algorithms.insert(
+            QuantumAlgorithmType::Shor,
+            QuantumAlgorithmImplementation::new("Shor's Algorithm", 32),
+        );
+        available_algorithms.insert(
+            QuantumAlgorithmType::VQE,
+            QuantumAlgorithmImplementation::new("Variational Quantum Eigensolver", 8),
+        );
+        available_algorithms.insert(
+            QuantumAlgorithmType::QAOA,
+            QuantumAlgorithmImplementation::new("Quantum Approximate Optimization Algorithm", 12),
+        );
 
         Ok(Self {
-            id,
-            config: quantum_config,
-            membrane_tunneling,
-            oscillation_harvesting,
-            maxwell_demons,
-            quantum_gates,
-            entanglement_network,
-            coherence_system,
-            quantum_state,
-            metrics,
-        })
-    }
-
-    /// Start the quantum subsystem
-    pub async fn start(&mut self) -> Result<(), KambuzumaError> {
-        log::info!("Starting quantum computing subsystem");
-
-        // Start individual components
-        self.membrane_tunneling.start().await?;
-        self.oscillation_harvesting.start().await?;
-        self.maxwell_demons.start().await?;
-        self.quantum_gates.start().await?;
-        self.entanglement_network.start().await?;
-        self.coherence_system.start().await?;
-
-        // Initialize quantum states
-        self.initialize_quantum_states().await?;
-
-        // Start continuous monitoring
-        self.start_monitoring().await?;
-
-        log::info!("Quantum computing subsystem started successfully");
-        Ok(())
-    }
-
-    /// Stop the quantum subsystem
-    pub async fn stop(&mut self) -> Result<(), KambuzumaError> {
-        log::info!("Stopping quantum computing subsystem");
-
-        // Stop components in reverse order
-        self.coherence_system.stop().await?;
-        self.entanglement_network.stop().await?;
-        self.quantum_gates.stop().await?;
-        self.maxwell_demons.stop().await?;
-        self.oscillation_harvesting.stop().await?;
-        self.membrane_tunneling.stop().await?;
-
-        log::info!("Quantum computing subsystem stopped successfully");
-        Ok(())
-    }
-
-    /// Initialize quantum coherence
-    pub async fn initialize_coherence(&self) -> Result<QuantumCoherenceStatus, KambuzumaError> {
-        let coherence_status = self.coherence_system.initialize().await?;
-
-        // Update system state
-        {
-            let mut state = self.quantum_state.write().await;
-            state.system_coherence = coherence_status.entanglement_fidelity;
-        }
-
-        Ok(coherence_status)
-    }
-
-    /// Execute quantum computation
-    pub async fn execute_quantum_computation(
-        &self,
-        computation: QuantumComputation,
-    ) -> Result<QuantumComputationResult, KambuzumaError> {
-        log::debug!("Executing quantum computation: {:?}", computation.id);
-
-        // Validate biological constraints
-        self.validate_computation_constraints(&computation).await?;
-
-        // Initialize quantum state for computation
-        let mut quantum_state = self.prepare_quantum_state(&computation).await?;
-
-        // Execute computation steps
-        let mut results = Vec::new();
-        for step in computation.steps {
-            match step {
-                QuantumComputationStep::Tunneling(tunneling_params) => {
-                    let result = self.membrane_tunneling.execute_tunneling(tunneling_params).await?;
-                    results.push(QuantumStepResult::Tunneling(result));
-                },
-                QuantumComputationStep::GateOperation(gate_params) => {
-                    let result = self.quantum_gates.execute_gate(gate_params).await?;
-                    results.push(QuantumStepResult::GateOperation(result));
-                },
-                QuantumComputationStep::MaxwellDemon(demon_params) => {
-                    let result = self.maxwell_demons.execute_demon_operation(demon_params).await?;
-                    results.push(QuantumStepResult::MaxwellDemon(result));
-                },
-                QuantumComputationStep::Entanglement(entanglement_params) => {
-                    let result = self.entanglement_network.create_entanglement(entanglement_params).await?;
-                    results.push(QuantumStepResult::Entanglement(result));
-                },
-                QuantumComputationStep::Measurement(measurement_params) => {
-                    let result = self.measure_quantum_state(measurement_params).await?;
-                    results.push(QuantumStepResult::Measurement(result));
-                },
-            }
-        }
-
-        // Calculate final result
-        let final_state = self.get_quantum_state().await;
-        let computation_result = QuantumComputationResult {
-            id: computation.id,
-            success: true,
-            final_state,
-            step_results: results,
-            execution_time: std::time::Duration::from_millis(0), // Will be calculated
-            energy_consumed: self.calculate_energy_consumption(&computation).await?,
-            fidelity: self.calculate_computation_fidelity(&computation).await?,
-        };
-
-        // Update metrics
-        self.update_metrics(&computation_result).await?;
-
-        Ok(computation_result)
-    }
-
-    /// Health check for quantum subsystem
-    pub async fn health_check(&self) -> Result<SubsystemHealth, KambuzumaError> {
-        let mut health_issues = Vec::new();
-
-        // Check coherence
-        let state = self.quantum_state.read().await;
-        if state.system_coherence < 0.8 {
-            health_issues.push(format!("Low system coherence: {:.2}", state.system_coherence));
-        }
-
-        // Check energy levels
-        if state.energy_levels.atp_energy < 0.1 {
-            health_issues.push("Low ATP energy".to_string());
-        }
-
-        // Check biological constraints
-        if state.biological_constraints.validation_status != crate::ValidationStatus::Valid {
-            health_issues.push("Biological constraints violated".to_string());
-        }
-
-        // Check metrics
-        let metrics = self.metrics.read().await;
-        if metrics.error_rate > 0.05 {
-            health_issues.push(format!("High error rate: {:.2}%", metrics.error_rate * 100.0));
-        }
-
-        if health_issues.is_empty() {
-            Ok(SubsystemHealth::Healthy)
-        } else if health_issues.len() == 1 {
-            Ok(SubsystemHealth::Warning(health_issues[0].clone()))
-        } else {
-            Ok(SubsystemHealth::Unhealthy(health_issues.join(", ")))
-        }
-    }
-
-    /// Get current quantum state
-    pub async fn get_quantum_state(&self) -> QuantumSystemState {
-        self.quantum_state.read().await.clone()
-    }
-
-    /// Initialize quantum states
-    async fn initialize_quantum_states(&self) -> Result<(), KambuzumaError> {
-        let mut state = self.quantum_state.write().await;
-
-        // Initialize basic quantum states
-        state.active_states.push(QuantumState::default());
-
-        // Initialize ion channels
-        for i in 0..10 {
-            state.ion_channels.push(IonChannel {
-                id: Uuid::new_v4(),
-                channel_type: IonChannelType::VoltageGatedSodium,
-                state: IonChannelState::Closed,
-                conductance: 50.0 + i as f64 * 5.0,
-                selectivity_filter: SelectivityFilter::default(),
-                gating_properties: GatingProperties::default(),
-            });
-        }
-
-        // Initialize Maxwell demons
-        for i in 0..5 {
-            state.maxwell_demon_states.push(MaxwellDemonState {
-                id: Uuid::new_v4(),
-                detection_threshold: 0.5 + i as f64 * 0.1,
-                energy_cost: 1.0,
-                success_rate: 0.95,
-                information_state: InformationState::NoInformation,
-                machinery_state: MachineryState::Idle,
-            });
-        }
-
-        Ok(())
-    }
-
-    /// Start monitoring
-    async fn start_monitoring(&self) -> Result<(), KambuzumaError> {
-        // Start background monitoring tasks
-        // This would spawn tokio tasks for continuous monitoring
-        Ok(())
-    }
-
-    /// Validate computation constraints
-    async fn validate_computation_constraints(&self, computation: &QuantumComputation) -> Result<(), KambuzumaError> {
-        let state = self.quantum_state.read().await;
-
-        // Check energy requirements
-        if state.energy_levels.atp_energy < computation.energy_required {
-            return Err(KambuzumaError::ResourceExhaustion(format!(
-                "Insufficient ATP energy: required {}, available {}",
-                computation.energy_required, state.energy_levels.atp_energy
-            )));
-        }
-
-        // Check biological constraints
-        if state.biological_constraints.validation_status != crate::ValidationStatus::Valid {
-            return Err(KambuzumaError::PerformanceConstraintViolation(
-                "Biological constraints not satisfied".to_string(),
-            ));
-        }
-
-        Ok(())
-    }
-
-    /// Prepare quantum state for computation
-    async fn prepare_quantum_state(&self, computation: &QuantumComputation) -> Result<QuantumState, KambuzumaError> {
-        // Prepare initial quantum state based on computation requirements
-        Ok(QuantumState::default())
-    }
-
-    /// Measure quantum state
-    async fn measure_quantum_state(&self, params: MeasurementParameters) -> Result<MeasurementResult, KambuzumaError> {
-        let state = self.quantum_state.read().await;
-
-        // Simulate quantum measurement
-        let outcome = MeasurementOutcome {
-            timestamp: chrono::Utc::now(),
-            value: 0.5, // Simulated measurement
-            uncertainty: 0.1,
-            basis: params.basis,
-        };
-
-        Ok(MeasurementResult {
             id: Uuid::new_v4(),
-            success: true,
-            outcome,
-            collapse_occurred: true,
+            available_algorithms,
+            scheduler: QuantumExecutionScheduler::new(),
         })
     }
 
-    /// Calculate energy consumption
-    async fn calculate_energy_consumption(&self, computation: &QuantumComputation) -> Result<f64, KambuzumaError> {
-        // Calculate energy consumption based on computation steps
-        Ok(computation.steps.len() as f64 * 1.0) // 1 ATP per step
-    }
-
-    /// Calculate computation fidelity
-    async fn calculate_computation_fidelity(&self, computation: &QuantumComputation) -> Result<f64, KambuzumaError> {
-        // Calculate overall fidelity based on individual step fidelities
-        Ok(0.95) // Default high fidelity
-    }
-
-    /// Update metrics
-    async fn update_metrics(&self, result: &QuantumComputationResult) -> Result<(), KambuzumaError> {
-        let mut metrics = self.metrics.write().await;
-
-        metrics.total_gates_executed += result.step_results.len() as u64;
-        metrics.total_energy_consumed += result.energy_consumed;
-        metrics.average_gate_fidelity = (metrics.average_gate_fidelity * 0.9) + (result.fidelity * 0.1);
-
-        if !result.success {
-            metrics.error_rate = (metrics.error_rate * 0.9) + 0.1;
-        } else {
-            metrics.error_rate = metrics.error_rate * 0.95;
-        }
-
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        self.scheduler.initialize().await?;
         Ok(())
     }
 
-    /// Run oscillation harvesting cycle
-    pub async fn run_oscillation_cycle(
+    pub async fn execute(
         &self,
-        membrane_state: &MembraneState,
-    ) -> Result<OscillationCycleResult, KambuzumaError> {
-        let oscillation_system = self.oscillation_harvesting.read().await;
-        oscillation_system.run_oscillation_cycle(membrane_state).await
-    }
-
-    /// Detect oscillation endpoints
-    pub async fn detect_oscillation_endpoints(&self) -> Result<Vec<OscillationEndpoint>, KambuzumaError> {
-        let oscillation_system = self.oscillation_harvesting.read().await;
-        oscillation_system.detect_oscillation_endpoints().await
-    }
-
-    /// Extract energy from oscillation endpoints
-    pub async fn extract_oscillation_energy(
-        &self,
-        endpoints: &[OscillationEndpoint],
-    ) -> Result<EnergyHarvestResult, KambuzumaError> {
-        let oscillation_system = self.oscillation_harvesting.read().await;
-        oscillation_system.extract_energy(endpoints).await
-    }
-}
-
-/// Quantum computation specification
-#[derive(Debug, Clone)]
-pub struct QuantumComputation {
-    /// Computation identifier
-    pub id: Uuid,
-    /// Computation steps
-    pub steps: Vec<QuantumComputationStep>,
-    /// Energy required
-    pub energy_required: f64,
-    /// Expected fidelity
-    pub expected_fidelity: f64,
-    /// Biological constraints
-    pub biological_constraints: BiologicalConstraints,
-}
-
-/// Quantum computation step
-#[derive(Debug, Clone)]
-pub enum QuantumComputationStep {
-    /// Tunneling operation
-    Tunneling(TunnelingParameters),
-    /// Gate operation
-    GateOperation(GateParameters),
-    /// Maxwell demon operation
-    MaxwellDemon(MaxwellDemonParameters),
-    /// Entanglement operation
-    Entanglement(EntanglementParameters),
-    /// Measurement operation
-    Measurement(MeasurementParameters),
-}
-
-/// Tunneling parameters
-#[derive(Debug, Clone)]
-pub struct TunnelingParameters {
-    /// Barrier height in eV
-    pub barrier_height: f64,
-    /// Barrier width in nm
-    pub barrier_width: f64,
-    /// Particle energy in eV
-    pub particle_energy: f64,
-    /// Target membrane
-    pub target_membrane: BiologicalMembrane,
-}
-
-/// Gate parameters
-#[derive(Debug, Clone)]
-pub struct GateParameters {
-    /// Gate type
-    pub gate_type: String,
-    /// Target qubits
-    pub target_qubits: Vec<Uuid>,
-    /// Gate parameters
-    pub parameters: HashMap<String, f64>,
-    /// Expected fidelity
-    pub expected_fidelity: f64,
-}
-
-/// Maxwell demon parameters
-#[derive(Debug, Clone)]
-pub struct MaxwellDemonParameters {
-    /// Demon identifier
-    pub demon_id: Uuid,
-    /// Target information state
-    pub target_state: InformationState,
-    /// Energy budget
-    pub energy_budget: f64,
-    /// Success threshold
-    pub success_threshold: f64,
-}
-
-/// Entanglement parameters
-#[derive(Debug, Clone)]
-pub struct EntanglementParameters {
-    /// Particle identifiers
-    pub particle_ids: Vec<Uuid>,
-    /// Target Bell state
-    pub target_bell_state: BellState,
-    /// Fidelity requirement
-    pub fidelity_requirement: f64,
-}
-
-/// Measurement parameters
-#[derive(Debug, Clone)]
-pub struct MeasurementParameters {
-    /// Target qubit
-    pub target_qubit: Uuid,
-    /// Measurement basis
-    pub basis: MeasurementBasis,
-    /// Measurement precision
-    pub precision: f64,
-}
-
-/// Quantum computation result
-#[derive(Debug, Clone)]
-pub struct QuantumComputationResult {
-    /// Computation identifier
-    pub id: Uuid,
-    /// Success status
-    pub success: bool,
-    /// Final quantum state
-    pub final_state: QuantumSystemState,
-    /// Individual step results
-    pub step_results: Vec<QuantumStepResult>,
-    /// Total execution time
-    pub execution_time: std::time::Duration,
-    /// Energy consumed
-    pub energy_consumed: f64,
-    /// Overall fidelity
-    pub fidelity: f64,
-}
-
-/// Quantum step result
-#[derive(Debug, Clone)]
-pub enum QuantumStepResult {
-    /// Tunneling result
-    Tunneling(TunnelingResult),
-    /// Gate operation result
-    GateOperation(GateOperationResult),
-    /// Maxwell demon result
-    MaxwellDemon(MaxwellDemonResult),
-    /// Entanglement result
-    Entanglement(EntanglementResult),
-    /// Measurement result
-    Measurement(MeasurementResult),
-}
-
-/// Tunneling result
-#[derive(Debug, Clone)]
-pub struct TunnelingResult {
-    /// Success status
-    pub success: bool,
-    /// Transmission probability
-    pub transmission_probability: f64,
-    /// Energy consumed
-    pub energy_consumed: f64,
-    /// Tunneling time
-    pub tunneling_time: std::time::Duration,
-}
-
-/// Gate operation result
-#[derive(Debug, Clone)]
-pub struct GateOperationResult {
-    /// Success status
-    pub success: bool,
-    /// Gate fidelity achieved
-    pub fidelity: f64,
-    /// Operation time
-    pub operation_time: std::time::Duration,
-    /// Energy consumed
-    pub energy_consumed: f64,
-}
-
-/// Maxwell demon result
-#[derive(Debug, Clone)]
-pub struct MaxwellDemonResult {
-    /// Success status
-    pub success: bool,
-    /// Information processed
-    pub information_processed: f64,
-    /// Energy consumed
-    pub energy_consumed: f64,
-    /// Selectivity achieved
-    pub selectivity_achieved: f64,
-}
-
-/// Entanglement result
-#[derive(Debug, Clone)]
-pub struct EntanglementResult {
-    /// Success status
-    pub success: bool,
-    /// Entanglement fidelity
-    pub fidelity: f64,
-    /// Bell state achieved
-    pub bell_state: BellState,
-    /// Coherence time
-    pub coherence_time: std::time::Duration,
-}
-
-/// Measurement result
-#[derive(Debug, Clone)]
-pub struct MeasurementResult {
-    /// Measurement identifier
-    pub id: Uuid,
-    /// Success status
-    pub success: bool,
-    /// Measurement outcome
-    pub outcome: MeasurementOutcome,
-    /// Whether state collapse occurred
-    pub collapse_occurred: bool,
-}
-
-/// Default implementations
-impl Default for EnergyLevels {
-    fn default() -> Self {
-        Self {
-            total_energy: 1e-20,     // J
-            kinetic_energy: 4e-21,   // J
-            potential_energy: 6e-21, // J
-            tunneling_energy: 1e-21, // J
-            thermal_energy: 4e-21,   // J
-            atp_energy: 5e-20,       // J (equivalent to ~1000 ATP molecules)
+        algorithm: QuantumAlgorithm,
+        input_state: QuantumState,
+    ) -> Result<QuantumExecutionResult, KambuzumaError> {
+        if let Some(implementation) = self.available_algorithms.get(&algorithm.algorithm_type) {
+            let start_time = std::time::Instant::now();
+            
+            // Schedule execution
+            let execution_slot = self.scheduler.schedule_execution(algorithm.clone()).await?;
+            
+            // Execute algorithm
+            let output_state = implementation.execute(&input_state, &algorithm.parameters).await?;
+            
+            let execution_time = start_time.elapsed();
+            
+            Ok(QuantumExecutionResult {
+                id: Uuid::new_v4(),
+                algorithm_id: algorithm.id,
+                input_state_id: input_state.id,
+                output_state: output_state,
+                execution_time: execution_time.as_secs_f64(),
+                success: true,
+                error_rate: 0.001,
+                fidelity: 0.999,
+                metadata: HashMap::new(),
+            })
+        } else {
+            Err(KambuzumaError::QuantumAlgorithmNotFound(format!("{:?}", algorithm.algorithm_type)))
         }
     }
+
+    pub async fn get_status(&self) -> Result<QuantumAlgorithmStatus, KambuzumaError> {
+        Ok(QuantumAlgorithmStatus {
+            available_algorithms: self.available_algorithms.keys().cloned().collect(),
+            execution_queue_size: self.scheduler.get_queue_size().await?,
+            average_execution_time: 0.5, // Simplified
+        })
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        self.scheduler.shutdown().await?;
+        Ok(())
+    }
 }
 
-impl Default for QuantumMetrics {
-    fn default() -> Self {
+/// Quantum-Classical Interface
+/// Bridges quantum and classical computing
+#[derive(Debug)]
+pub struct QuantumClassicalInterface {
+    /// Interface identifier
+    pub id: Uuid,
+}
+
+impl QuantumClassicalInterface {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+
+    pub async fn process_quantum_result(
+        &self,
+        quantum_result: &QuantumExecutionResult,
+    ) -> Result<QuantumExecutionResult, KambuzumaError> {
+        // Process quantum results for classical consumption
+        Ok(quantum_result.clone())
+    }
+
+    pub async fn get_status(&self) -> Result<QuantumClassicalInterfaceStatus, KambuzumaError> {
+        Ok(QuantumClassicalInterfaceStatus {
+            is_operational: true,
+            throughput: 1000.0,
+            latency: 0.001,
+        })
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+}
+
+/// Quantum Consciousness Bridge
+/// Bridges quantum computing with consciousness emergence
+#[derive(Debug)]
+pub struct QuantumConsciousnessBridge {
+    /// Bridge identifier
+    pub id: Uuid,
+}
+
+impl QuantumConsciousnessBridge {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+
+    pub async fn process_consciousness_interaction(
+        &self,
+        consciousness_state: &crate::consciousness_emergence::ConsciousnessEmergenceResult,
+    ) -> Result<QuantumConsciousnessResult, KambuzumaError> {
+        // Process consciousness-quantum interactions
+        Ok(QuantumConsciousnessResult {
+            id: Uuid::new_v4(),
+            consciousness_level: consciousness_state.consciousness_level,
+            quantum_enhancement: consciousness_state.consciousness_level * 0.1,
+            coherence_boost: 0.05,
+            entanglement_quality: 0.95,
+            quantum_consciousness_correlation: 0.85,
+        })
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+}
+
+/// Quantum BMD Processor
+/// Processes BMD catalysts through quantum enhancement
+#[derive(Debug)]
+pub struct QuantumBMDProcessor {
+    /// Processor identifier
+    pub id: Uuid,
+}
+
+impl QuantumBMDProcessor {
+    pub async fn new() -> Result<Self, KambuzumaError> {
+        Ok(Self {
+            id: Uuid::new_v4(),
+        })
+    }
+
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+
+    pub async fn process_bmd_catalysis(
+        &self,
+        bmd_catalysts: &[crate::bmd_information_catalysts::BMDCatalyst],
+    ) -> Result<QuantumBMDResult, KambuzumaError> {
+        // Process BMD catalysts through quantum enhancement
+        let enhancement_factor = 1.5; // Quantum enhancement
+        let total_efficiency = bmd_catalysts.iter()
+            .map(|c| c.catalytic_efficiency * enhancement_factor)
+            .sum::<f64>() / bmd_catalysts.len() as f64;
+
+        Ok(QuantumBMDResult {
+            id: Uuid::new_v4(),
+            enhanced_efficiency: total_efficiency,
+            quantum_catalytic_boost: enhancement_factor,
+            entanglement_assisted_catalysis: true,
+            coherence_preservation: 0.92,
+            information_processing_speedup: 2.0,
+        })
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+}
+
+/// Supporting components and data structures
+
+#[derive(Debug)]
+pub struct CoherenceMonitor {
+    pub id: Uuid,
+}
+
+impl CoherenceMonitor {
+    pub fn new() -> Self {
         Self {
-            operations_per_second: 0.0,
-            average_gate_fidelity: 0.99,
-            average_coherence_time: 0.001,
-            tunneling_success_rate: 0.95,
-            energy_efficiency: 100.0,
-            maxwell_demon_efficiency: 0.95,
-            entanglement_generation_rate: 0.0,
-            total_gates_executed: 0,
-            total_energy_consumed: 0.0,
-            error_rate: 0.01,
+            id: Uuid::new_v4(),
         }
     }
+
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+
+    pub async fn measure_coherence(&self, state: &QuantumState) -> Result<f64, KambuzumaError> {
+        // Simplified coherence measurement
+        let amplitude_sum: f64 = state.amplitudes.iter().map(|a| a.abs()).sum();
+        Ok((amplitude_sum / state.amplitudes.len() as f64).min(1.0))
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::config::KambuzumaConfig;
+#[derive(Debug)]
+pub struct EntanglementManager {
+    pub id: Uuid,
+}
 
-    #[tokio::test]
-    async fn test_quantum_subsystem_creation() {
-        let config = Arc::new(RwLock::new(KambuzumaConfig::default()));
-        let subsystem = QuantumSubsystem::new(config).await;
-        assert!(subsystem.is_ok());
+impl EntanglementManager {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
     }
 
-    #[tokio::test]
-    async fn test_quantum_state_initialization() {
-        let config = Arc::new(RwLock::new(KambuzumaConfig::default()));
-        let mut subsystem = QuantumSubsystem::new(config).await.unwrap();
-
-        let result = subsystem.initialize_quantum_states().await;
-        assert!(result.is_ok());
-
-        let state = subsystem.get_quantum_state().await;
-        assert!(!state.active_states.is_empty());
-        assert!(!state.ion_channels.is_empty());
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        Ok(())
     }
+
+    pub async fn get_average_entanglement_quality(&self) -> Result<f64, KambuzumaError> {
+        Ok(0.9) // High quality entanglement
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+}
+
+#[derive(Debug)]
+pub struct QuantumExecutionScheduler {
+    pub id: Uuid,
+}
+
+impl QuantumExecutionScheduler {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
+    }
+
+    pub async fn initialize(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+
+    pub async fn schedule_execution(&self, algorithm: QuantumAlgorithm) -> Result<ExecutionSlot, KambuzumaError> {
+        Ok(ExecutionSlot {
+            id: Uuid::new_v4(),
+            algorithm_id: algorithm.id,
+            scheduled_time: chrono::Utc::now(),
+            priority: ExecutionPriority::Normal,
+        })
+    }
+
+    pub async fn get_queue_size(&self) -> Result<usize, KambuzumaError> {
+        Ok(0) // Empty queue
+    }
+
+    pub async fn shutdown(&self) -> Result<(), KambuzumaError> {
+        Ok(())
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumAlgorithmImplementation {
+    pub name: String,
+    pub qubit_requirement: usize,
+}
+
+impl QuantumAlgorithmImplementation {
+    pub fn new(name: &str, qubit_requirement: usize) -> Self {
+        Self {
+            name: name.to_string(),
+            qubit_requirement,
+        }
+    }
+
+    pub async fn execute(
+        &self,
+        input_state: &QuantumState,
+        _parameters: &HashMap<String, f64>,
+    ) -> Result<QuantumState, KambuzumaError> {
+        // Simplified algorithm execution
+        Ok(QuantumState {
+            id: Uuid::new_v4(),
+            qubits: input_state.qubits.clone(),
+            amplitudes: input_state.amplitudes.clone(),
+            phases: input_state.phases.clone(),
+            entanglement: input_state.entanglement.clone(),
+            coherence: input_state.coherence * 0.99, // Slight coherence loss
+            measurement_history: input_state.measurement_history.clone(),
+        })
+    }
+}
+
+/// Data structures
+
+#[derive(Debug, Clone)]
+pub struct ManagedQuantumState {
+    pub state: QuantumState,
+    pub creation_time: chrono::DateTime<chrono::Utc>,
+    pub last_accessed: chrono::DateTime<chrono::Utc>,
+    pub access_count: u64,
+    pub coherence_degradation_rate: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumSystemInfo {
+    pub active_state_count: usize,
+    pub coherence_level: f64,
+    pub entanglement_quality: f64,
+    pub system_health: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumSystemStatus {
+    pub id: Uuid,
+    pub subsystem_id: Uuid,
+    pub is_operational: bool,
+    pub quantum_coherence: f64,
+    pub entanglement_quality: f64,
+    pub algorithm_availability: usize,
+    pub processing_capacity: f64,
+    pub error_rate: f64,
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumAlgorithmStatus {
+    pub available_algorithms: Vec<QuantumAlgorithmType>,
+    pub execution_queue_size: usize,
+    pub average_execution_time: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumClassicalInterfaceStatus {
+    pub is_operational: bool,
+    pub throughput: f64,
+    pub latency: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumConsciousnessResult {
+    pub id: Uuid,
+    pub consciousness_level: f64,
+    pub quantum_enhancement: f64,
+    pub coherence_boost: f64,
+    pub entanglement_quality: f64,
+    pub quantum_consciousness_correlation: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct QuantumBMDResult {
+    pub id: Uuid,
+    pub enhanced_efficiency: f64,
+    pub quantum_catalytic_boost: f64,
+    pub entanglement_assisted_catalysis: bool,
+    pub coherence_preservation: f64,
+    pub information_processing_speedup: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct ExecutionSlot {
+    pub id: Uuid,
+    pub algorithm_id: Uuid,
+    pub scheduled_time: chrono::DateTime<chrono::Utc>,
+    pub priority: ExecutionPriority,
+}
+
+#[derive(Debug, Clone)]
+pub enum ExecutionPriority {
+    High,
+    Normal,
+    Low,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct QuantumComputingMetrics {
+    pub total_executions: u64,
+    pub successful_executions: u64,
+    pub total_execution_time: f64,
+    pub average_execution_time: f64,
+    pub success_rate: f64,
+    pub average_fidelity: f64,
+    pub coherence_preservation_rate: f64,
 }

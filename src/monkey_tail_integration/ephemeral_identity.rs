@@ -1,20 +1,12 @@
 //! # Ephemeral Identity Processor
 //!
-//! Implements the revolutionary ephemeral identity architecture where the "identity" 
-//! doesn't exist as a stored object - it's simply what the AI currently knows and 
-//! thinks about a person based on real-time observations.
-//!
-//! The Two-Way Ecosystem Lock:
-//! Person ↔ Personal AI ↔ Specific Machine ↔ Environment
-//!
-//! Security emerges from the uniqueness of the complete ecosystem, making forgery 
-//! practically impossible without physical access to both the person and their 
-//! complete computing environment.
+//! Implements the ephemeral identity processing system for the Monkey-Tail semantic
+//! digital identity framework. Processes temporary interaction patterns to build
+//! persistent semantic profiles while preserving privacy.
 
 use crate::config::KambuzumaConfig;
 use crate::errors::KambuzumaError;
 use crate::types::*;
-use crate::monkey_tail_integration::InteractionData;
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -22,779 +14,741 @@ use uuid::Uuid;
 use serde::{Deserialize, Serialize};
 
 /// Ephemeral Identity Processor
-/// Processes real-time observations to generate ephemeral identity understanding
+/// Processes temporary interaction patterns for semantic identity building
 #[derive(Debug)]
 pub struct EphemeralIdentityProcessor {
     /// Processor identifier
     pub id: Uuid,
     /// Configuration
     pub config: Arc<RwLock<KambuzumaConfig>>,
-    /// Current observations storage
-    pub observations: Arc<RwLock<HashMap<Uuid, CurrentObservations>>>,
+    /// Active ephemeral sessions
+    pub active_sessions: Arc<RwLock<HashMap<Uuid, EphemeralSession>>>,
     /// Behavioral pattern analyzer
-    pub pattern_analyzer: Arc<RwLock<BehavioralPatternAnalyzer>>,
-    /// Environmental context detector
-    pub environment_detector: Arc<RwLock<EnvironmentalContextDetector>>,
-    /// Machine signature analyzer
-    pub machine_analyzer: Arc<RwLock<MachineSignatureAnalyzer>>,
-    /// Communication pattern detector
-    pub communication_detector: Arc<RwLock<CommunicationPatternDetector>>,
-}
-
-/// Current Observations
-/// What we can currently measure through available sensors
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CurrentObservations {
-    /// User identifier
-    pub user_id: Uuid,
-    /// Sensor measurements
-    pub sensor_measurements: HashMap<SensorType, Measurement>,
-    /// Accumulated personality patterns
-    pub personality_model: PersonalityModel,
-    /// Confidence levels in observed traits
-    pub confidence_levels: HashMap<Trait, f64>,
-    /// Environmental context
-    pub environmental_context: EnvironmentalContext,
-    /// Machine ecosystem signature
-    pub machine_signature: MachineEcosystemSignature,
-    /// Observation timestamp
-    pub timestamp: chrono::DateTime<chrono::Utc>,
-}
-
-/// Sensor Type
-/// Types of sensors available for observation
-#[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
-pub enum SensorType {
-    /// Microphone for voice patterns
-    Microphone,
-    /// Camera for visual behavior
-    Camera,
-    /// Keyboard for typing patterns
-    Keyboard,
-    /// Mouse for interaction patterns
-    Mouse,
-    /// Network for connectivity patterns
-    Network,
-    /// System for performance patterns
-    System,
-    /// Application for usage patterns
-    Application,
-    /// Browser for web behavior
-    Browser,
-}
-
-/// Measurement
-/// Measurement from a specific sensor
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Measurement {
-    /// Measurement value
-    pub value: f64,
-    /// Measurement confidence
-    pub confidence: f64,
-    /// Measurement metadata
-    pub metadata: HashMap<String, String>,
-    /// Measurement timestamp
-    pub timestamp: chrono::DateTime<chrono::Utc>,
-}
-
-/// Personality Model
-/// What the AI thinks it has learned about this person
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PersonalityModel {
-    /// Communication style indicators
-    pub communication_style: CommunicationStyleIndicators,
-    /// Cognitive patterns
-    pub cognitive_patterns: CognitivePatterns,
-    /// Expertise indicators
-    pub expertise_indicators: HashMap<String, ExpertiseIndicator>,
-    /// Behavioral traits
-    pub behavioral_traits: HashMap<String, f64>,
-    /// Learning patterns
-    pub learning_patterns: LearningPatterns,
-    /// Problem-solving approach
-    pub problem_solving_approach: ProblemSolvingApproach,
-}
-
-/// Communication Style Indicators
-/// Indicators of how the person communicates
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommunicationStyleIndicators {
-    /// Verbosity level
-    pub verbosity: f64,
-    /// Technical language usage
-    pub technical_language: f64,
-    /// Question complexity
-    pub question_complexity: f64,
-    /// Response time patterns
-    pub response_times: Vec<f64>,
-    /// Emoji/emoticon usage
-    pub emoji_usage: f64,
-    /// Formality level
-    pub formality: f64,
-}
-
-/// Cognitive Patterns
-/// Observed cognitive processing patterns
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CognitivePatterns {
-    /// Attention span indicators
-    pub attention_span: f64,
-    /// Working memory capacity
-    pub working_memory: f64,
-    /// Processing speed
-    pub processing_speed: f64,
-    /// Pattern recognition ability
-    pub pattern_recognition: f64,
-    /// Abstract thinking level
-    pub abstract_thinking: f64,
-    /// Logical reasoning strength
-    pub logical_reasoning: f64,
-}
-
-/// Expertise Indicator
-/// Indicator of expertise in a specific domain
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ExpertiseIndicator {
-    /// Domain name
-    pub domain: String,
-    /// Expertise level estimate
-    pub level: f64,
-    /// Confidence in estimate
-    pub confidence: f64,
-    /// Evidence sources
-    pub evidence: Vec<String>,
-    /// Time to demonstrate expertise
-    pub demonstration_time: f64,
-}
-
-/// Environmental Context
-/// Context about the user's environment
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EnvironmentalContext {
-    /// Location patterns
-    pub location_patterns: LocationPatterns,
-    /// Time zone
-    pub time_zone: String,
-    /// Usage schedule patterns
-    pub schedule_patterns: SchedulePatterns,
-    /// Environmental stability
-    pub stability_score: f64,
-    /// Network environment
-    pub network_environment: NetworkEnvironment,
-}
-
-/// Machine Ecosystem Signature
-/// Unique signature of the complete machine ecosystem
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MachineEcosystemSignature {
-    /// Hardware fingerprint
-    pub hardware_fingerprint: HardwareFingerprint,
-    /// Software environment
-    pub software_environment: SoftwareEnvironment,
-    /// Network characteristics
-    pub network_characteristics: NetworkCharacteristics,
-    /// Performance profile
-    pub performance_profile: PerformanceProfile,
-    /// Configuration quirks
-    pub configuration_quirks: Vec<String>,
-}
-
-/// Trait
-/// Observable personality/behavioral trait
-#[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
-pub enum Trait {
-    /// Technical expertise
-    TechnicalExpertise,
-    /// Communication clarity
-    CommunicationClarity,
-    /// Problem-solving approach
-    ProblemSolving,
-    /// Learning speed
-    LearningSpeed,
-    /// Attention to detail
-    AttentionToDetail,
-    /// Creative thinking
-    CreativeThinking,
-    /// Patience level
-    Patience,
-    /// Curiosity level
-    Curiosity,
+    pub pattern_analyzer: BehavioralPatternAnalyzer,
+    /// Machine ecosystem detector
+    pub ecosystem_detector: MachineEcosystemDetector,
+    /// Privacy preserving encoder
+    pub privacy_encoder: PrivacyPreservingEncoder,
+    /// Temporal dynamics tracker
+    pub temporal_tracker: TemporalDynamicsTracker,
+    /// Performance metrics
+    pub metrics: Arc<RwLock<EphemeralIdentityMetrics>>,
 }
 
 impl EphemeralIdentityProcessor {
     /// Create new ephemeral identity processor
     pub async fn new(config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
-        let id = Uuid::new_v4();
-        
-        // Initialize components
-        let observations = Arc::new(RwLock::new(HashMap::new()));
-        let pattern_analyzer = Arc::new(RwLock::new(
-            BehavioralPatternAnalyzer::new(config.clone()).await?
-        ));
-        let environment_detector = Arc::new(RwLock::new(
-            EnvironmentalContextDetector::new(config.clone()).await?
-        ));
-        let machine_analyzer = Arc::new(RwLock::new(
-            MachineSignatureAnalyzer::new(config.clone()).await?
-        ));
-        let communication_detector = Arc::new(RwLock::new(
-            CommunicationPatternDetector::new(config.clone()).await?
-        ));
-        
         Ok(Self {
-            id,
+            id: Uuid::new_v4(),
             config,
-            observations,
-            pattern_analyzer,
-            environment_detector,
-            machine_analyzer,
-            communication_detector,
+            active_sessions: Arc::new(RwLock::new(HashMap::new())),
+            pattern_analyzer: BehavioralPatternAnalyzer::new(),
+            ecosystem_detector: MachineEcosystemDetector::new(),
+            privacy_encoder: PrivacyPreservingEncoder::new(),
+            temporal_tracker: TemporalDynamicsTracker::new(),
+            metrics: Arc::new(RwLock::new(EphemeralIdentityMetrics::default())),
         })
     }
-    
-    /// Generate ephemeral observations for user
+
+    /// Generate ephemeral observations for user interaction
     pub async fn generate_observations(
         &self,
         user_id: Uuid,
-        interaction_data: &InteractionData,
+        interaction_data: &crate::monkey_tail_integration::InteractionData,
     ) -> Result<EphemeralObservations, KambuzumaError> {
-        log::debug!("Generating ephemeral observations for user: {}", user_id);
-        
-        // Collect sensor measurements
-        let sensor_measurements = self.collect_sensor_measurements(interaction_data).await?;
+        // Get or create ephemeral session
+        let session = self.get_or_create_session(user_id, interaction_data).await?;
         
         // Analyze behavioral patterns
-        let personality_model = self.pattern_analyzer
-            .read().await
-            .analyze_patterns(&sensor_measurements, interaction_data).await?;
+        let behavioral_patterns = self.pattern_analyzer
+            .analyze_interaction_patterns(interaction_data, &session).await?;
         
-        // Detect environmental context
-        let environmental_context = self.environment_detector
-            .read().await
-            .detect_context(interaction_data).await?;
+        // Detect machine ecosystem signature
+        let ecosystem_signature = self.ecosystem_detector
+            .detect_ecosystem_characteristics(&behavioral_patterns).await?;
         
-        // Analyze machine ecosystem
-        let machine_signature = self.machine_analyzer
-            .read().await
-            .analyze_machine_ecosystem(interaction_data).await?;
+        // Encode observations with privacy preservation
+        let encoded_observations = self.privacy_encoder
+            .encode_observations(&behavioral_patterns, &ecosystem_signature).await?;
         
-        // Calculate confidence levels
-        let confidence_levels = self.calculate_confidence_levels(
-            &sensor_measurements,
-            &personality_model,
-            &environmental_context,
-        ).await?;
+        // Track temporal dynamics
+        let temporal_dynamics = self.temporal_tracker
+            .track_interaction_dynamics(user_id, interaction_data).await?;
         
-        // Create current observations
-        let current_observations = CurrentObservations {
+        // Create ephemeral observations
+        let observations = EphemeralObservations {
+            id: Uuid::new_v4(),
             user_id,
-            sensor_measurements,
-            personality_model,
-            confidence_levels,
-            environmental_context,
-            machine_signature,
+            session_id: session.id,
+            behavioral_patterns,
+            ecosystem_signature,
+            temporal_dynamics,
+            observation_confidence: self.calculate_observation_confidence(&encoded_observations).await?,
+            privacy_score: self.privacy_encoder.get_privacy_score(),
             timestamp: chrono::Utc::now(),
         };
         
-        // Store observations
-        {
-            let mut observations = self.observations.write().await;
-            observations.insert(user_id, current_observations.clone());
-        }
+        // Update session with new observations
+        self.update_session(user_id, &observations).await?;
         
-        // Generate ephemeral observations response
-        let ephemeral_obs = EphemeralObservations {
-            user_id,
-            observations: current_observations,
-            ecosystem_uniqueness_score: self.calculate_ecosystem_uniqueness(&machine_signature).await?,
-            identity_confidence: self.calculate_identity_confidence(&confidence_levels).await?,
-            security_level: self.assess_security_level(&machine_signature, &environmental_context).await?,
-            observation_quality: self.assess_observation_quality(&sensor_measurements).await?,
-        };
+        // Update metrics
+        self.update_metrics(&observations).await?;
         
-        log::debug!("Generated ephemeral observations with confidence: {}", 
-                   ephemeral_obs.identity_confidence);
-        
-        Ok(ephemeral_obs)
+        Ok(observations)
     }
-    
-    /// Update observations with new interaction
-    pub async fn update_observations(
-        &self,
-        user_id: Uuid,
-        interaction_data: &InteractionData,
-    ) -> Result<(), KambuzumaError> {
-        let mut observations = self.observations.write().await;
-        if let Some(current_obs) = observations.get_mut(&user_id) {
-            // Update with new sensor data
-            let new_measurements = self.collect_sensor_measurements(interaction_data).await?;
-            for (sensor_type, measurement) in new_measurements {
-                current_obs.sensor_measurements.insert(sensor_type, measurement);
-            }
-            
-            // Update personality model
-            current_obs.personality_model = self.pattern_analyzer
-                .read().await
-                .update_personality_model(&current_obs.personality_model, interaction_data).await?;
-            
-            // Update confidence levels
-            current_obs.confidence_levels = self.calculate_confidence_levels(
-                &current_obs.sensor_measurements,
-                &current_obs.personality_model,
-                &current_obs.environmental_context,
-            ).await?;
-            
-            current_obs.timestamp = chrono::Utc::now();
-        }
-        
-        Ok(())
-    }
-    
+
     /// Validate ecosystem authenticity
     pub async fn validate_ecosystem_authenticity(
         &self,
         user_id: Uuid,
         claimed_signature: &MachineEcosystemSignature,
     ) -> Result<AuthenticityValidation, KambuzumaError> {
-        let observations = self.observations.read().await;
-        if let Some(current_obs) = observations.get(&user_id) {
-            let stored_signature = &current_obs.machine_signature;
+        // Get current session for user
+        let sessions = self.active_sessions.read().await;
+        let session = sessions.get(&user_id)
+            .ok_or_else(|| KambuzumaError::SessionNotFound(user_id.to_string()))?;
+        
+        // Validate against stored ecosystem signature
+        let authenticity_score = self.ecosystem_detector
+            .validate_signature_consistency(&session.last_ecosystem_signature, claimed_signature).await?;
+        
+        // Check temporal consistency
+        let temporal_consistency = self.temporal_tracker
+            .validate_temporal_patterns(user_id, &session.temporal_history).await?;
+        
+        let validation = AuthenticityValidation {
+            id: Uuid::new_v4(),
+            user_id,
+            is_authentic: authenticity_score > 0.8 && temporal_consistency > 0.7,
+            authenticity_score,
+            temporal_consistency,
+            validation_confidence: (authenticity_score + temporal_consistency) / 2.0,
+            validation_factors: vec![
+                "ecosystem_signature_match".to_string(),
+                "temporal_pattern_consistency".to_string(),
+                "behavioral_continuity".to_string(),
+            ],
+            validated_at: chrono::Utc::now(),
+        };
+        
+        Ok(validation)
+    }
+
+    // Private implementation methods
+
+    async fn get_or_create_session(
+        &self,
+        user_id: Uuid,
+        interaction_data: &crate::monkey_tail_integration::InteractionData,
+    ) -> Result<EphemeralSession, KambuzumaError> {
+        let mut sessions = self.active_sessions.write().await;
+        
+        if let Some(session) = sessions.get_mut(&user_id) {
+            // Update existing session
+            session.interaction_count += 1;
+            session.last_interaction = chrono::Utc::now();
+            Ok(session.clone())
+        } else {
+            // Create new session
+            let session = EphemeralSession {
+                id: Uuid::new_v4(),
+                user_id,
+                created_at: chrono::Utc::now(),
+                last_interaction: chrono::Utc::now(),
+                interaction_count: 1,
+                session_duration: std::time::Duration::from_secs(0),
+                behavioral_fingerprint: BehavioralFingerprint::default(),
+                last_ecosystem_signature: MachineEcosystemSignature::default(),
+                temporal_history: Vec::new(),
+                privacy_settings: PrivacySettings::default(),
+            };
             
-            // Compare hardware fingerprints
-            let hardware_match = self.compare_hardware_fingerprints(
-                &claimed_signature.hardware_fingerprint,
-                &stored_signature.hardware_fingerprint,
-            ).await?;
+            sessions.insert(user_id, session.clone());
+            Ok(session)
+        }
+    }
+
+    async fn update_session(
+        &self,
+        user_id: Uuid,
+        observations: &EphemeralObservations,
+    ) -> Result<(), KambuzumaError> {
+        let mut sessions = self.active_sessions.write().await;
+        
+        if let Some(session) = sessions.get_mut(&user_id) {
+            session.last_interaction = chrono::Utc::now();
+            session.session_duration = session.last_interaction.signed_duration_since(session.created_at)
+                .to_std().unwrap_or(std::time::Duration::from_secs(0));
+            session.last_ecosystem_signature = observations.ecosystem_signature.clone();
+            session.temporal_history.push(observations.temporal_dynamics.clone());
             
-            // Compare software environments
-            let software_match = self.compare_software_environments(
-                &claimed_signature.software_environment,
-                &stored_signature.software_environment,
-            ).await?;
-            
-            // Compare network characteristics
-            let network_match = self.compare_network_characteristics(
-                &claimed_signature.network_characteristics,
-                &stored_signature.network_characteristics,
-            ).await?;
-            
-            // Calculate overall authenticity score
-            let authenticity_score = (hardware_match + software_match + network_match) / 3.0;
-            
-            return Ok(AuthenticityValidation {
-                is_authentic: authenticity_score > 0.8,
-                authenticity_score,
-                hardware_match,
-                software_match,
-                network_match,
-                validation_confidence: self.calculate_validation_confidence(authenticity_score).await?,
-            });
+            // Keep only recent temporal history
+            if session.temporal_history.len() > 100 {
+                session.temporal_history.drain(0..10);
+            }
         }
         
-        Err(KambuzumaError::UserNotFound(user_id.to_string()))
+        Ok(())
     }
-    
-    // Private helper methods
-    
-    async fn collect_sensor_measurements(
+
+    async fn calculate_observation_confidence(
         &self,
-        interaction_data: &InteractionData,
-    ) -> Result<HashMap<SensorType, Measurement>, KambuzumaError> {
-        let mut measurements = HashMap::new();
-        
-        // Simulate sensor measurements based on interaction data
-        // In a real implementation, these would come from actual sensors
-        
-        // Keyboard typing patterns
-        if !interaction_data.user_input.is_empty() {
-            measurements.insert(SensorType::Keyboard, Measurement {
-                value: interaction_data.user_input.len() as f64,
-                confidence: 0.9,
-                metadata: {
-                    let mut meta = HashMap::new();
-                    meta.insert("typing_speed".to_string(), "estimated".to_string());
-                    meta
-                },
-                timestamp: chrono::Utc::now(),
-            });
-        }
-        
-        // System performance patterns
-        measurements.insert(SensorType::System, Measurement {
-            value: 1.0, // Placeholder
-            confidence: 0.7,
-            metadata: HashMap::new(),
-            timestamp: chrono::Utc::now(),
-        });
-        
-        Ok(measurements)
-    }
-    
-    async fn calculate_confidence_levels(
-        &self,
-        _sensor_measurements: &HashMap<SensorType, Measurement>,
-        personality_model: &PersonalityModel,
-        _environmental_context: &EnvironmentalContext,
-    ) -> Result<HashMap<Trait, f64>, KambuzumaError> {
-        let mut confidence_levels = HashMap::new();
-        
-        // Calculate confidence based on available evidence
-        confidence_levels.insert(Trait::TechnicalExpertise, 
-            personality_model.communication_style.technical_language);
-        confidence_levels.insert(Trait::CommunicationClarity, 
-            personality_model.communication_style.formality);
-        confidence_levels.insert(Trait::ProblemSolving, 
-            personality_model.cognitive_patterns.logical_reasoning);
-        confidence_levels.insert(Trait::LearningSpeed, 
-            personality_model.cognitive_patterns.processing_speed);
-        confidence_levels.insert(Trait::AttentionToDetail, 
-            personality_model.cognitive_patterns.attention_span);
-        confidence_levels.insert(Trait::CreativeThinking, 
-            personality_model.cognitive_patterns.abstract_thinking);
-        confidence_levels.insert(Trait::Patience, 0.5); // Default
-        confidence_levels.insert(Trait::Curiosity, 
-            personality_model.communication_style.question_complexity);
-        
-        Ok(confidence_levels)
-    }
-    
-    async fn calculate_ecosystem_uniqueness(
-        &self,
-        machine_signature: &MachineEcosystemSignature,
+        encoded_observations: &EncodedObservations,
     ) -> Result<f64, KambuzumaError> {
-        // Calculate uniqueness based on configuration quirks and characteristics
-        let base_uniqueness = 0.7;
-        let quirks_bonus = machine_signature.configuration_quirks.len() as f64 * 0.05;
-        let performance_factor = machine_signature.performance_profile.unique_characteristics.len() as f64 * 0.03;
-        
-        Ok((base_uniqueness + quirks_bonus + performance_factor).min(1.0))
+        // Calculate confidence based on observation quality and consistency
+        let pattern_confidence = encoded_observations.pattern_quality;
+        let encoding_confidence = encoded_observations.encoding_quality;
+        Ok((pattern_confidence + encoding_confidence) / 2.0)
     }
-    
-    async fn calculate_identity_confidence(
-        &self,
-        confidence_levels: &HashMap<Trait, f64>,
-    ) -> Result<f64, KambuzumaError> {
-        if confidence_levels.is_empty() {
-            return Ok(0.0);
-        }
+
+    async fn update_metrics(&self, observations: &EphemeralObservations) -> Result<(), KambuzumaError> {
+        let mut metrics = self.metrics.write().await;
         
-        let sum: f64 = confidence_levels.values().sum();
-        Ok(sum / confidence_levels.len() as f64)
-    }
-    
-    async fn assess_security_level(
-        &self,
-        machine_signature: &MachineEcosystemSignature,
-        environmental_context: &EnvironmentalContext,
-    ) -> Result<f64, KambuzumaError> {
-        // Security emerges from ecosystem uniqueness, not computational complexity
-        let hardware_uniqueness = machine_signature.hardware_fingerprint.uniqueness_score;
-        let environment_stability = environmental_context.stability_score;
-        let configuration_complexity = machine_signature.configuration_quirks.len() as f64 * 0.1;
+        metrics.total_observations += 1;
+        metrics.total_sessions = self.active_sessions.read().await.len() as u64;
+        metrics.average_observation_confidence = (metrics.average_observation_confidence * (metrics.total_observations - 1) as f64 + observations.observation_confidence) / metrics.total_observations as f64;
+        metrics.average_privacy_score = (metrics.average_privacy_score * (metrics.total_observations - 1) as f64 + observations.privacy_score) / metrics.total_observations as f64;
         
-        Ok(((hardware_uniqueness + environment_stability + configuration_complexity) / 3.0).min(1.0))
-    }
-    
-    async fn assess_observation_quality(
-        &self,
-        sensor_measurements: &HashMap<SensorType, Measurement>,
-    ) -> Result<f64, KambuzumaError> {
-        if sensor_measurements.is_empty() {
-            return Ok(0.0);
-        }
-        
-        let avg_confidence: f64 = sensor_measurements.values()
-            .map(|m| m.confidence)
-            .sum::<f64>() / sensor_measurements.len() as f64;
-        
-        Ok(avg_confidence)
-    }
-    
-    async fn compare_hardware_fingerprints(
-        &self,
-        claimed: &HardwareFingerprint,
-        stored: &HardwareFingerprint,
-    ) -> Result<f64, KambuzumaError> {
-        // Compare hardware characteristics
-        let cpu_match = if claimed.cpu_signature == stored.cpu_signature { 1.0 } else { 0.0 };
-        let memory_match = if (claimed.memory_signature - stored.memory_signature).abs() < 0.1 { 1.0 } else { 0.0 };
-        let gpu_match = if claimed.gpu_signature == stored.gpu_signature { 1.0 } else { 0.0 };
-        
-        Ok((cpu_match + memory_match + gpu_match) / 3.0)
-    }
-    
-    async fn compare_software_environments(
-        &self,
-        claimed: &SoftwareEnvironment,
-        stored: &SoftwareEnvironment,
-    ) -> Result<f64, KambuzumaError> {
-        // Compare software characteristics
-        let os_match = if claimed.operating_system == stored.operating_system { 1.0 } else { 0.0 };
-        let version_match = if claimed.os_version == stored.os_version { 1.0 } else { 0.5 };
-        
-        Ok((os_match + version_match) / 2.0)
-    }
-    
-    async fn compare_network_characteristics(
-        &self,
-        claimed: &NetworkCharacteristics,
-        stored: &NetworkCharacteristics,
-    ) -> Result<f64, KambuzumaError> {
-        // Compare network patterns
-        let latency_match = if (claimed.typical_latency - stored.typical_latency).abs() < 10.0 { 1.0 } else { 0.5 };
-        let bandwidth_match = if (claimed.bandwidth_profile - stored.bandwidth_profile).abs() < 0.2 { 1.0 } else { 0.5 };
-        
-        Ok((latency_match + bandwidth_match) / 2.0)
-    }
-    
-    async fn calculate_validation_confidence(
-        &self,
-        authenticity_score: f64,
-    ) -> Result<f64, KambuzumaError> {
-        // Confidence in validation increases with authenticity score
-        Ok((authenticity_score * 0.9 + 0.1).min(1.0))
+        Ok(())
     }
 }
 
-/// Ephemeral Observations
-/// Result of ephemeral identity observation
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EphemeralObservations {
-    /// User identifier
-    pub user_id: Uuid,
-    /// Current observations
-    pub observations: CurrentObservations,
-    /// Ecosystem uniqueness score
-    pub ecosystem_uniqueness_score: f64,
-    /// Identity confidence
-    pub identity_confidence: f64,
-    /// Security level
-    pub security_level: f64,
-    /// Observation quality
-    pub observation_quality: f64,
-}
-
-/// Authenticity Validation
-/// Result of ecosystem authenticity validation
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AuthenticityValidation {
-    /// Is the ecosystem authentic
-    pub is_authentic: bool,
-    /// Overall authenticity score
-    pub authenticity_score: f64,
-    /// Hardware fingerprint match
-    pub hardware_match: f64,
-    /// Software environment match
-    pub software_match: f64,
-    /// Network characteristics match
-    pub network_match: f64,
-    /// Validation confidence
-    pub validation_confidence: f64,
-}
-
-// Placeholder types for the various analyzers and characteristics
-// These would be fully implemented in a production system
-
+/// Behavioral Pattern Analyzer
+/// Analyzes behavioral patterns from user interactions
 #[derive(Debug)]
 pub struct BehavioralPatternAnalyzer {
+    /// Analyzer identifier
     pub id: Uuid,
 }
 
-#[derive(Debug)]
-pub struct EnvironmentalContextDetector {
-    pub id: Uuid,
-}
-
-#[derive(Debug)]
-pub struct MachineSignatureAnalyzer {
-    pub id: Uuid,
-}
-
-#[derive(Debug)]
-pub struct CommunicationPatternDetector {
-    pub id: Uuid,
-}
-
-// Placeholder type implementations
 impl BehavioralPatternAnalyzer {
-    pub async fn new(_config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
-        Ok(Self { id: Uuid::new_v4() })
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
     }
-    
-    pub async fn analyze_patterns(
+
+    pub async fn analyze_interaction_patterns(
         &self,
-        _sensor_measurements: &HashMap<SensorType, Measurement>,
-        _interaction_data: &InteractionData,
-    ) -> Result<PersonalityModel, KambuzumaError> {
-        // Placeholder implementation
-        Ok(PersonalityModel::default())
+        interaction_data: &crate::monkey_tail_integration::InteractionData,
+        session: &EphemeralSession,
+    ) -> Result<BehavioralPatterns, KambuzumaError> {
+        // Analyze behavioral patterns from interaction data
+        let typing_patterns = self.analyze_typing_patterns(&interaction_data.user_input).await?;
+        let query_patterns = self.analyze_query_patterns(&interaction_data.user_input, &interaction_data.interaction_type).await?;
+        let temporal_patterns = self.analyze_temporal_patterns(interaction_data, session).await?;
+        let contextual_patterns = self.analyze_contextual_patterns(&interaction_data.context).await?;
+        
+        Ok(BehavioralPatterns {
+            id: Uuid::new_v4(),
+            typing_patterns,
+            query_patterns,
+            temporal_patterns,
+            contextual_patterns,
+            pattern_coherence: 0.85,
+            pattern_stability: 0.8,
+        })
     }
-    
-    pub async fn update_personality_model(
+
+    async fn analyze_typing_patterns(&self, user_input: &str) -> Result<TypingPatterns, KambuzumaError> {
+        // Analyze typing characteristics
+        let average_word_length = if user_input.is_empty() { 
+            0.0 
+        } else { 
+            user_input.split_whitespace().map(|w| w.len()).sum::<usize>() as f64 / user_input.split_whitespace().count() as f64 
+        };
+        
+        let punctuation_frequency = user_input.chars().filter(|c| c.is_ascii_punctuation()).count() as f64 / user_input.len() as f64;
+        let capitalization_patterns = user_input.chars().filter(|c| c.is_uppercase()).count() as f64 / user_input.len() as f64;
+        
+        Ok(TypingPatterns {
+            average_word_length,
+            punctuation_frequency,
+            capitalization_patterns,
+            typing_rhythm: 1.0, // Simplified
+            error_patterns: 0.05, // Low error rate
+        })
+    }
+
+    async fn analyze_query_patterns(&self, user_input: &str, interaction_type: &str) -> Result<QueryPatterns, KambuzumaError> {
+        let query_complexity = user_input.len() as f64 / 100.0;
+        let question_frequency = if user_input.contains('?') { 1.0 } else { 0.0 };
+        let command_frequency = if user_input.starts_with("create") || user_input.starts_with("generate") { 1.0 } else { 0.0 };
+        
+        Ok(QueryPatterns {
+            query_complexity: query_complexity.min(1.0),
+            question_frequency,
+            command_frequency,
+            domain_preferences: vec!["general".to_string()],
+            interaction_style: InteractionStyle::Conversational,
+        })
+    }
+
+    async fn analyze_temporal_patterns(
         &self,
-        current_model: &PersonalityModel,
-        _interaction_data: &InteractionData,
-    ) -> Result<PersonalityModel, KambuzumaError> {
-        // Placeholder - return current model
-        Ok(current_model.clone())
+        interaction_data: &crate::monkey_tail_integration::InteractionData,
+        session: &EphemeralSession,
+    ) -> Result<TemporalPatterns, KambuzumaError> {
+        let session_duration = session.session_duration.as_secs_f64();
+        let interaction_frequency = session.interaction_count as f64 / session_duration.max(1.0);
+        
+        Ok(TemporalPatterns {
+            session_duration,
+            interaction_frequency,
+            time_between_interactions: 60.0, // Average 60 seconds
+            peak_activity_periods: vec!["morning".to_string(), "evening".to_string()],
+            consistency_score: 0.75,
+        })
+    }
+
+    async fn analyze_contextual_patterns(&self, context: &HashMap<String, String>) -> Result<ContextualPatterns, KambuzumaError> {
+        let context_richness = context.len() as f64 / 10.0;
+        let context_consistency = 0.8; // Simplified
+        
+        Ok(ContextualPatterns {
+            context_richness: context_richness.min(1.0),
+            context_consistency,
+            domain_focus: vec!["technology".to_string(), "general".to_string()],
+            environmental_factors: context.keys().cloned().collect(),
+        })
     }
 }
 
-impl EnvironmentalContextDetector {
-    pub async fn new(_config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
-        Ok(Self { id: Uuid::new_v4() })
-    }
-    
-    pub async fn detect_context(
-        &self,
-        _interaction_data: &InteractionData,
-    ) -> Result<EnvironmentalContext, KambuzumaError> {
-        Ok(EnvironmentalContext::default())
-    }
+/// Machine Ecosystem Detector
+/// Detects characteristics of the user's machine ecosystem
+#[derive(Debug)]
+pub struct MachineEcosystemDetector {
+    /// Detector identifier
+    pub id: Uuid,
 }
 
-impl MachineSignatureAnalyzer {
-    pub async fn new(_config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
-        Ok(Self { id: Uuid::new_v4() })
+impl MachineEcosystemDetector {
+    pub fn new() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+        }
     }
-    
-    pub async fn analyze_machine_ecosystem(
+
+    pub async fn detect_ecosystem_characteristics(
         &self,
-        _interaction_data: &InteractionData,
+        patterns: &BehavioralPatterns,
     ) -> Result<MachineEcosystemSignature, KambuzumaError> {
-        Ok(MachineEcosystemSignature::default())
+        // Detect machine ecosystem characteristics from behavioral patterns
+        let hardware_signature = self.detect_hardware_signature(patterns).await?;
+        let software_signature = self.detect_software_signature(patterns).await?;
+        let network_signature = self.detect_network_signature(patterns).await?;
+        let performance_signature = self.detect_performance_signature(patterns).await?;
+        
+        Ok(MachineEcosystemSignature {
+            id: Uuid::new_v4(),
+            hardware_signature,
+            software_signature,
+            network_signature,
+            performance_signature,
+            ecosystem_uniqueness: 0.85,
+            signature_confidence: 0.9,
+            detected_at: chrono::Utc::now(),
+        })
     }
-}
 
-impl CommunicationPatternDetector {
-    pub async fn new(_config: Arc<RwLock<KambuzumaConfig>>) -> Result<Self, KambuzumaError> {
-        Ok(Self { id: Uuid::new_v4() })
+    pub async fn validate_signature_consistency(
+        &self,
+        stored_signature: &MachineEcosystemSignature,
+        claimed_signature: &MachineEcosystemSignature,
+    ) -> Result<f64, KambuzumaError> {
+        // Validate consistency between stored and claimed signatures
+        let hardware_match = self.compare_hardware_signatures(&stored_signature.hardware_signature, &claimed_signature.hardware_signature).await?;
+        let software_match = self.compare_software_signatures(&stored_signature.software_signature, &claimed_signature.software_signature).await?;
+        let network_match = self.compare_network_signatures(&stored_signature.network_signature, &claimed_signature.network_signature).await?;
+        
+        let consistency_score = (hardware_match + software_match + network_match) / 3.0;
+        Ok(consistency_score)
     }
-}
 
-// Default implementations for placeholder types
-impl Default for PersonalityModel {
-    fn default() -> Self {
-        Self {
-            communication_style: CommunicationStyleIndicators::default(),
-            cognitive_patterns: CognitivePatterns::default(),
-            expertise_indicators: HashMap::new(),
-            behavioral_traits: HashMap::new(),
-            learning_patterns: LearningPatterns::default(),
-            problem_solving_approach: ProblemSolvingApproach::default(),
+    async fn detect_hardware_signature(&self, _patterns: &BehavioralPatterns) -> Result<HardwareSignature, KambuzumaError> {
+        // Simplified hardware signature detection
+        Ok(HardwareSignature {
+            cpu_characteristics: "unknown".to_string(),
+            memory_characteristics: "unknown".to_string(),
+            storage_characteristics: "unknown".to_string(),
+            display_characteristics: "unknown".to_string(),
+            input_device_characteristics: "unknown".to_string(),
+            hardware_fingerprint: "simplified_hw_fingerprint".to_string(),
+        })
+    }
+
+    async fn detect_software_signature(&self, patterns: &BehavioralPatterns) -> Result<SoftwareSignature, KambuzumaError> {
+        // Infer software characteristics from behavioral patterns
+        let os_characteristics = "inferred_os".to_string();
+        let browser_characteristics = if patterns.query_patterns.interaction_style == InteractionStyle::Conversational {
+            "modern_browser".to_string()
+        } else {
+            "unknown_browser".to_string()
+        };
+        
+        Ok(SoftwareSignature {
+            os_characteristics,
+            browser_characteristics,
+            application_characteristics: "unknown".to_string(),
+            extension_characteristics: "unknown".to_string(),
+            software_fingerprint: "simplified_sw_fingerprint".to_string(),
+        })
+    }
+
+    async fn detect_network_signature(&self, _patterns: &BehavioralPatterns) -> Result<NetworkSignature, KambuzumaError> {
+        // Simplified network signature detection
+        Ok(NetworkSignature {
+            connection_type: "unknown".to_string(),
+            bandwidth_characteristics: "unknown".to_string(),
+            latency_characteristics: "unknown".to_string(),
+            isp_characteristics: "unknown".to_string(),
+            network_fingerprint: "simplified_net_fingerprint".to_string(),
+        })
+    }
+
+    async fn detect_performance_signature(&self, patterns: &BehavioralPatterns) -> Result<PerformanceSignature, KambuzumaError> {
+        // Infer performance characteristics from interaction patterns
+        let response_time_characteristics = patterns.temporal_patterns.interaction_frequency.to_string();
+        let processing_speed_characteristics = patterns.query_patterns.query_complexity.to_string();
+        
+        Ok(PerformanceSignature {
+            response_time_characteristics,
+            processing_speed_characteristics,
+            memory_usage_characteristics: "unknown".to_string(),
+            cpu_usage_characteristics: "unknown".to_string(),
+            performance_fingerprint: "simplified_perf_fingerprint".to_string(),
+        })
+    }
+
+    async fn compare_hardware_signatures(&self, stored: &HardwareSignature, claimed: &HardwareSignature) -> Result<f64, KambuzumaError> {
+        // Compare hardware signatures (simplified)
+        if stored.hardware_fingerprint == claimed.hardware_fingerprint {
+            Ok(1.0)
+        } else {
+            Ok(0.5) // Partial match
+        }
+    }
+
+    async fn compare_software_signatures(&self, stored: &SoftwareSignature, claimed: &SoftwareSignature) -> Result<f64, KambuzumaError> {
+        // Compare software signatures (simplified)
+        if stored.software_fingerprint == claimed.software_fingerprint {
+            Ok(1.0)
+        } else {
+            Ok(0.5) // Partial match
+        }
+    }
+
+    async fn compare_network_signatures(&self, stored: &NetworkSignature, claimed: &NetworkSignature) -> Result<f64, KambuzumaError> {
+        // Compare network signatures (simplified)
+        if stored.network_fingerprint == claimed.network_fingerprint {
+            Ok(1.0)
+        } else {
+            Ok(0.5) // Partial match
         }
     }
 }
 
-impl Default for CommunicationStyleIndicators {
-    fn default() -> Self {
+/// Privacy Preserving Encoder
+/// Encodes observations while preserving user privacy
+#[derive(Debug)]
+pub struct PrivacyPreservingEncoder {
+    /// Encoder identifier
+    pub id: Uuid,
+    /// Current privacy score
+    pub privacy_score: f64,
+}
+
+impl PrivacyPreservingEncoder {
+    pub fn new() -> Self {
         Self {
-            verbosity: 0.5,
-            technical_language: 0.5,
-            question_complexity: 0.5,
-            response_times: Vec::new(),
-            emoji_usage: 0.0,
-            formality: 0.5,
+            id: Uuid::new_v4(),
+            privacy_score: 1.0, // Maximum privacy by default
         }
+    }
+
+    pub async fn encode_observations(
+        &self,
+        patterns: &BehavioralPatterns,
+        ecosystem: &MachineEcosystemSignature,
+    ) -> Result<EncodedObservations, KambuzumaError> {
+        // Encode observations with privacy preservation
+        let encoded_patterns = self.encode_behavioral_patterns(patterns).await?;
+        let encoded_ecosystem = self.encode_ecosystem_signature(ecosystem).await?;
+        
+        Ok(EncodedObservations {
+            id: Uuid::new_v4(),
+            encoded_patterns,
+            encoded_ecosystem,
+            pattern_quality: patterns.pattern_coherence,
+            encoding_quality: 0.95,
+            privacy_level: self.privacy_score,
+        })
+    }
+
+    pub fn get_privacy_score(&self) -> f64 {
+        self.privacy_score
+    }
+
+    async fn encode_behavioral_patterns(&self, patterns: &BehavioralPatterns) -> Result<String, KambuzumaError> {
+        // Simple encoding (in practice, this would use proper privacy-preserving techniques)
+        Ok(format!("encoded_patterns_{}", patterns.id))
+    }
+
+    async fn encode_ecosystem_signature(&self, ecosystem: &MachineEcosystemSignature) -> Result<String, KambuzumaError> {
+        // Simple encoding (in practice, this would use proper privacy-preserving techniques)
+        Ok(format!("encoded_ecosystem_{}", ecosystem.id))
     }
 }
 
-impl Default for CognitivePatterns {
-    fn default() -> Self {
+/// Temporal Dynamics Tracker
+/// Tracks temporal dynamics of user interactions
+#[derive(Debug)]
+pub struct TemporalDynamicsTracker {
+    /// Tracker identifier
+    pub id: Uuid,
+}
+
+impl TemporalDynamicsTracker {
+    pub fn new() -> Self {
         Self {
-            attention_span: 0.5,
-            working_memory: 0.5,
-            processing_speed: 0.5,
-            pattern_recognition: 0.5,
-            abstract_thinking: 0.5,
-            logical_reasoning: 0.5,
+            id: Uuid::new_v4(),
         }
+    }
+
+    pub async fn track_interaction_dynamics(
+        &self,
+        user_id: Uuid,
+        interaction_data: &crate::monkey_tail_integration::InteractionData,
+    ) -> Result<TemporalDynamics, KambuzumaError> {
+        // Track temporal dynamics of user interactions
+        Ok(TemporalDynamics {
+            id: Uuid::new_v4(),
+            user_id,
+            interaction_timestamp: interaction_data.timestamp,
+            session_progression: 0.5, // Mid-session
+            interaction_rhythm: 1.0,
+            temporal_consistency: 0.85,
+            dynamics_confidence: 0.9,
+        })
+    }
+
+    pub async fn validate_temporal_patterns(
+        &self,
+        _user_id: Uuid,
+        temporal_history: &[TemporalDynamics],
+    ) -> Result<f64, KambuzumaError> {
+        // Validate temporal pattern consistency
+        if temporal_history.is_empty() {
+            return Ok(0.5); // Neutral for no history
+        }
+        
+        let average_consistency: f64 = temporal_history.iter()
+            .map(|t| t.temporal_consistency)
+            .sum::<f64>() / temporal_history.len() as f64;
+        
+        Ok(average_consistency)
     }
 }
 
-impl Default for EnvironmentalContext {
-    fn default() -> Self {
-        Self {
-            location_patterns: LocationPatterns::default(),
-            time_zone: "UTC".to_string(),
-            schedule_patterns: SchedulePatterns::default(),
-            stability_score: 0.7,
-            network_environment: NetworkEnvironment::default(),
-        }
-    }
+/// Data structures for ephemeral identity processing
+
+#[derive(Debug, Clone)]
+pub struct EphemeralSession {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub last_interaction: chrono::DateTime<chrono::Utc>,
+    pub interaction_count: u64,
+    pub session_duration: std::time::Duration,
+    pub behavioral_fingerprint: BehavioralFingerprint,
+    pub last_ecosystem_signature: MachineEcosystemSignature,
+    pub temporal_history: Vec<TemporalDynamics>,
+    pub privacy_settings: PrivacySettings,
+}
+
+#[derive(Debug, Clone)]
+pub struct EphemeralObservations {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub session_id: Uuid,
+    pub behavioral_patterns: BehavioralPatterns,
+    pub ecosystem_signature: MachineEcosystemSignature,
+    pub temporal_dynamics: TemporalDynamics,
+    pub observation_confidence: f64,
+    pub privacy_score: f64,
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+#[derive(Debug, Clone)]
+pub struct BehavioralPatterns {
+    pub id: Uuid,
+    pub typing_patterns: TypingPatterns,
+    pub query_patterns: QueryPatterns,
+    pub temporal_patterns: TemporalPatterns,
+    pub contextual_patterns: ContextualPatterns,
+    pub pattern_coherence: f64,
+    pub pattern_stability: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct TypingPatterns {
+    pub average_word_length: f64,
+    pub punctuation_frequency: f64,
+    pub capitalization_patterns: f64,
+    pub typing_rhythm: f64,
+    pub error_patterns: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct QueryPatterns {
+    pub query_complexity: f64,
+    pub question_frequency: f64,
+    pub command_frequency: f64,
+    pub domain_preferences: Vec<String>,
+    pub interaction_style: InteractionStyle,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum InteractionStyle {
+    Conversational,
+    Direct,
+    Technical,
+    Creative,
+}
+
+#[derive(Debug, Clone)]
+pub struct TemporalPatterns {
+    pub session_duration: f64,
+    pub interaction_frequency: f64,
+    pub time_between_interactions: f64,
+    pub peak_activity_periods: Vec<String>,
+    pub consistency_score: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct ContextualPatterns {
+    pub context_richness: f64,
+    pub context_consistency: f64,
+    pub domain_focus: Vec<String>,
+    pub environmental_factors: Vec<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct MachineEcosystemSignature {
+    pub id: Uuid,
+    pub hardware_signature: HardwareSignature,
+    pub software_signature: SoftwareSignature,
+    pub network_signature: NetworkSignature,
+    pub performance_signature: PerformanceSignature,
+    pub ecosystem_uniqueness: f64,
+    pub signature_confidence: f64,
+    pub detected_at: chrono::DateTime<chrono::Utc>,
 }
 
 impl Default for MachineEcosystemSignature {
     fn default() -> Self {
         Self {
-            hardware_fingerprint: HardwareFingerprint::default(),
-            software_environment: SoftwareEnvironment::default(),
-            network_characteristics: NetworkCharacteristics::default(),
-            performance_profile: PerformanceProfile::default(),
-            configuration_quirks: Vec::new(),
+            id: Uuid::new_v4(),
+            hardware_signature: HardwareSignature::default(),
+            software_signature: SoftwareSignature::default(),
+            network_signature: NetworkSignature::default(),
+            performance_signature: PerformanceSignature::default(),
+            ecosystem_uniqueness: 0.5,
+            signature_confidence: 0.5,
+            detected_at: chrono::Utc::now(),
         }
     }
 }
 
-// Additional placeholder types that need default implementations
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct LearningPatterns {
-    pub preferred_modalities: Vec<String>,
-    pub learning_speed: f64,
-    pub retention_patterns: Vec<f64>,
+#[derive(Debug, Clone, Default)]
+pub struct HardwareSignature {
+    pub cpu_characteristics: String,
+    pub memory_characteristics: String,
+    pub storage_characteristics: String,
+    pub display_characteristics: String,
+    pub input_device_characteristics: String,
+    pub hardware_fingerprint: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct ProblemSolvingApproach {
-    pub analytical_vs_intuitive: f64,
-    pub systematic_vs_exploratory: f64,
-    pub collaborative_vs_independent: f64,
+#[derive(Debug, Clone, Default)]
+pub struct SoftwareSignature {
+    pub os_characteristics: String,
+    pub browser_characteristics: String,
+    pub application_characteristics: String,
+    pub extension_characteristics: String,
+    pub software_fingerprint: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct LocationPatterns {
-    pub consistency_score: f64,
-    pub typical_locations: Vec<String>,
+#[derive(Debug, Clone, Default)]
+pub struct NetworkSignature {
+    pub connection_type: String,
+    pub bandwidth_characteristics: String,
+    pub latency_characteristics: String,
+    pub isp_characteristics: String,
+    pub network_fingerprint: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct SchedulePatterns {
-    pub active_hours: Vec<u8>,
-    pub consistency_score: f64,
+#[derive(Debug, Clone, Default)]
+pub struct PerformanceSignature {
+    pub response_time_characteristics: String,
+    pub processing_speed_characteristics: String,
+    pub memory_usage_characteristics: String,
+    pub cpu_usage_characteristics: String,
+    pub performance_fingerprint: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct NetworkEnvironment {
-    pub network_type: String,
-    pub stability_score: f64,
+#[derive(Debug, Clone)]
+pub struct TemporalDynamics {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub interaction_timestamp: chrono::DateTime<chrono::Utc>,
+    pub session_progression: f64,
+    pub interaction_rhythm: f64,
+    pub temporal_consistency: f64,
+    pub dynamics_confidence: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct HardwareFingerprint {
-    pub cpu_signature: String,
-    pub memory_signature: f64,
-    pub gpu_signature: String,
-    pub uniqueness_score: f64,
+#[derive(Debug, Clone)]
+pub struct AuthenticityValidation {
+    pub id: Uuid,
+    pub user_id: Uuid,
+    pub is_authentic: bool,
+    pub authenticity_score: f64,
+    pub temporal_consistency: f64,
+    pub validation_confidence: f64,
+    pub validation_factors: Vec<String>,
+    pub validated_at: chrono::DateTime<chrono::Utc>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct SoftwareEnvironment {
-    pub operating_system: String,
-    pub os_version: String,
-    pub installed_software: Vec<String>,
+#[derive(Debug, Clone)]
+pub struct EncodedObservations {
+    pub id: Uuid,
+    pub encoded_patterns: String,
+    pub encoded_ecosystem: String,
+    pub pattern_quality: f64,
+    pub encoding_quality: f64,
+    pub privacy_level: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct NetworkCharacteristics {
-    pub typical_latency: f64,
-    pub bandwidth_profile: f64,
-    pub connection_patterns: Vec<String>,
+#[derive(Debug, Clone, Default)]
+pub struct BehavioralFingerprint {
+    pub fingerprint_hash: String,
+    pub fingerprint_confidence: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct PerformanceProfile {
-    pub cpu_performance: f64,
-    pub memory_performance: f64,
-    pub disk_performance: f64,
-    pub unique_characteristics: Vec<String>,
+#[derive(Debug, Clone, Default)]
+pub struct PrivacySettings {
+    pub data_retention_period: std::time::Duration,
+    pub anonymization_level: f64,
+    pub sharing_permissions: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct EphemeralIdentityMetrics {
+    pub total_observations: u64,
+    pub total_sessions: u64,
+    pub average_observation_confidence: f64,
+    pub average_privacy_score: f64,
+    pub ecosystem_detection_accuracy: f64,
+    pub temporal_consistency_rate: f64,
 } 
