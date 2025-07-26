@@ -43,6 +43,13 @@ pub mod anti_algorithm_engine;
 // Revolutionary Monkey-Tail semantic identity integration
 pub mod monkey_tail_integration;
 
+// S-Entropy Framework Modules - Revolutionary Tri-Dimensional S Navigation
+pub mod entropy_solver_service;
+pub mod ridiculous_solution_engine;
+pub mod infinite_zero_duality;
+pub mod universal_s_alignment;
+pub mod bmd_frame_selection; // Core consciousness implementation - frame selection rather than thought generation
+
 // System Infrastructure
 pub mod config;
 pub mod errors;
