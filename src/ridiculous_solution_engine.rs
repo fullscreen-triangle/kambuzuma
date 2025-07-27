@@ -4,704 +4,740 @@
 //! Since finite observers cannot achieve universal knowledge, they must employ
 //! locally impossible solutions to achieve globally viable results.
 
+use crate::global_s_viability::{SViabilityError, Problem};
+use crate::tri_dimensional_s::{TriDimensionalS, SKnowledge, STime, SEntropy};
 use std::collections::HashMap;
+use tokio::time::{Duration, Instant};
 use serde::{Deserialize, Serialize};
-use anyhow::Result;
-use tokio::time::Instant;
+use uuid::Uuid;
 
-use crate::entropy_solver_service::{TriDimensionalS, SKnowledge, STime, SEntropy};
-use crate::types::{Problem, ConsciousnessState};
-
-/// Core engine for generating mathematically necessary ridiculous solutions
-pub struct RidiculousSolutionGenerator {
+/// Revolutionary Ridiculous Solution Generator
+/// Mathematically necessary for finite observers navigating infinite complexity
+/// Core insight: Local impossibility + Global viability = Optimal navigation
+pub struct RidiculousSolutionEngine {
+    /// Impossibility amplifier for generating locally impossible solutions
     impossibility_amplifier: ImpossibilityAmplifier,
+    
+    /// Fictional S constant creator for unknowable regions
     fictional_s_creator: FictionalSCreator,
-    contextual_appropriateness_validator: ContextualValidator,
+    
+    /// Contextual appropriateness validator (not accuracy)
+    contextual_validator: ContextualAppropriateness,
+    
+    /// Global viability checker for impossible solutions
     global_viability_checker: GlobalViabilityChecker,
+    
+    /// Consciousness integration validator
     consciousness_integration_validator: ConsciousnessIntegrationValidator,
-    reality_complexity_analyzer: RealityComplexityAnalyzer,
+    
+    /// Performance metrics for ridiculous solution generation
+    ridiculous_metrics: RidiculousMetrics,
 }
 
-impl RidiculousSolutionGenerator {
+impl RidiculousSolutionEngine {
     pub fn new() -> Self {
         Self {
             impossibility_amplifier: ImpossibilityAmplifier::new(),
             fictional_s_creator: FictionalSCreator::new(),
-            contextual_appropriateness_validator: ContextualValidator::new(),
+            contextual_validator: ContextualAppropriateness::new(),
             global_viability_checker: GlobalViabilityChecker::new(),
             consciousness_integration_validator: ConsciousnessIntegrationValidator::new(),
-            reality_complexity_analyzer: RealityComplexityAnalyzer::new(),
+            ridiculous_metrics: RidiculousMetrics::new(),
         }
     }
-
-    /// Generate ridiculous solutions for impossible tri-dimensional S problems
+    
+    /// Generate ridiculous solutions for impossible consciousness extension problems
+    /// Revolutionary: 0.1% accuracy solutions can be globally viable
     pub async fn generate_impossible_solutions(
-        &self,
+        &mut self,
         tri_dimensional_s_context: TriDimensionalS,
-        impossibility_factor: f64
-    ) -> Result<RidiculousSolutionSet> {
+        impossibility_factor: f64,
+        problem_context: Problem
+    ) -> Result<RidiculousSolutionSet, RidiculousError> {
+        let start_time = Instant::now();
         
-        let generation_start = Instant::now();
-        let mut ridiculous_solutions = Vec::new();
-        
-        // Generate ridiculous S_knowledge solutions
+        // Generate ridiculous solutions across all three S dimensions
         let ridiculous_knowledge_solutions = self.generate_ridiculous_knowledge_solutions(
             tri_dimensional_s_context.s_knowledge.clone(),
             impossibility_factor
         ).await?;
         
-        // Generate ridiculous S_time solutions  
         let ridiculous_time_solutions = self.generate_ridiculous_time_solutions(
             tri_dimensional_s_context.s_time.clone(),
             impossibility_factor
         ).await?;
         
-        // Generate ridiculous S_entropy solutions
         let ridiculous_entropy_solutions = self.generate_ridiculous_entropy_solutions(
             tri_dimensional_s_context.s_entropy.clone(),
             impossibility_factor
         ).await?;
         
-        // Combine into comprehensive ridiculous solutions (massive generation)
-        for knowledge_solution in ridiculous_knowledge_solutions {
-            for time_solution in &ridiculous_time_solutions {
-                for entropy_solution in &ridiculous_entropy_solutions {
-                    let combined_ridiculous = RidiculousSolution {
+        // Combine into comprehensive ridiculous solution matrix
+        let combined_ridiculous = self.combine_ridiculous_solutions(
+            ridiculous_knowledge_solutions,
+            ridiculous_time_solutions,
+            ridiculous_entropy_solutions,
+            impossibility_factor
+        ).await?;
+        
+        // Filter for global viability (even with 0.1% accuracy)
+        let globally_viable_ridiculous = self.filter_globally_viable_ridiculous_solutions(
+            combined_ridiculous
+        ).await?;
+        
+        // Validate consciousness integration potential
+        let consciousness_integrated_ridiculous = self.validate_consciousness_integration(
+            globally_viable_ridiculous,
+            problem_context
+        ).await?;
+        
+        self.ridiculous_metrics.record_generation_cycle(
+            start_time.elapsed(),
+            consciousness_integrated_ridiculous.solutions.len()
+        );
+        
+        Ok(consciousness_integrated_ridiculous)
+    }
+    
+    /// Generate ridiculous S_knowledge solutions
+    async fn generate_ridiculous_knowledge_solutions(
+        &self,
+        s_knowledge: SKnowledge,
+        impossibility_factor: f64
+    ) -> Result<Vec<RidiculousKnowledgeSolution>, RidiculousError> {
+        let mut ridiculous_solutions = Vec::new();
+        
+        // Generate impossible knowledge solutions
+        ridiculous_solutions.extend(vec![
+            RidiculousKnowledgeSolution {
+                id: Uuid::new_v4(),
+                description: "User consciousness directly accesses universal knowledge database without learning".to_string(),
+                impossibility_level: impossibility_factor * 10.0,
+                accuracy: 0.001, // 0.1% accuracy - practically impossible
+                extraction_insight: "Optimize knowledge gap bridging through consciousness extension".to_string(),
+                application_context: "Pre-populate knowledge deficits through extended consciousness range".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_knowledge_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_knowledge_context(&s_knowledge).await?,
+            },
+            
+            RidiculousKnowledgeSolution {
+                id: Uuid::new_v4(),
+                description: "Applications communicate knowledge telepathically without data transfer".to_string(),
+                impossibility_level: impossibility_factor * 8.0,
+                accuracy: 0.005, // 0.5% accuracy
+                extraction_insight: "Optimize inter-component knowledge synchronization efficiency".to_string(),
+                application_context: "Enhance component knowledge coordination protocols".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_knowledge_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_knowledge_context(&s_knowledge).await?,
+            },
+            
+            RidiculousKnowledgeSolution {
+                id: Uuid::new_v4(),
+                description: "Missing information spontaneously manifests from quantum vacuum fluctuations".to_string(),
+                impossibility_level: impossibility_factor * 15.0,
+                accuracy: 0.0001, // 0.01% accuracy - extremely impossible
+                extraction_insight: "Generate missing knowledge through creative synthesis".to_string(),
+                application_context: "Fill knowledge gaps through intelligent extrapolation".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_knowledge_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_knowledge_context(&s_knowledge).await?,
+            },
+            
+            RidiculousKnowledgeSolution {
+                id: Uuid::new_v4(),
+                description: "Consciousness extension enables retroactive knowledge acquisition".to_string(),
+                impossibility_level: impossibility_factor * 12.0,
+                accuracy: 0.002, // 0.2% accuracy
+                extraction_insight: "Access past learning through extended consciousness temporal navigation".to_string(),
+                application_context: "Retrieve knowledge from previous consciousness states".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_knowledge_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_knowledge_context(&s_knowledge).await?,
+            },
+        ]);
+        
+        Ok(ridiculous_solutions)
+    }
+    
+    /// Generate ridiculous S_time solutions
+    async fn generate_ridiculous_time_solutions(
+        &self,
+        s_time: STime,
+        impossibility_factor: f64
+    ) -> Result<Vec<RidiculousTimeSolution>, RidiculousError> {
+        let mut ridiculous_solutions = Vec::new();
+        
+        ridiculous_solutions.extend(vec![
+            RidiculousTimeSolution {
+                id: Uuid::new_v4(),
+                description: "Consciousness processes information faster than light speed".to_string(),
+                impossibility_level: impossibility_factor * 20.0,
+                accuracy: 0.0005, // 0.05% accuracy
+                extraction_insight: "Optimize temporal processing through consciousness extension".to_string(),
+                application_context: "Reduce temporal delays through enhanced consciousness coordination".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_time_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_time_context(&s_time).await?,
+            },
+            
+            RidiculousTimeSolution {
+                id: Uuid::new_v4(),
+                description: "Time flows backwards during consciousness extension operations".to_string(),
+                impossibility_level: impossibility_factor * 25.0,
+                accuracy: 0.0001, // 0.01% accuracy
+                extraction_insight: "Access future solution states through reverse temporal navigation".to_string(),
+                application_context: "Pre-solve problems through temporal consciousness extension".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_time_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_time_context(&s_time).await?,
+            },
+            
+            RidiculousTimeSolution {
+                id: Uuid::new_v4(),
+                description: "Consciousness exists in multiple parallel timestreams simultaneously".to_string(),
+                impossibility_level: impossibility_factor * 18.0,
+                accuracy: 0.001, // 0.1% accuracy
+                extraction_insight: "Process multiple temporal contexts through consciousness extension".to_string(),
+                application_context: "Parallel temporal processing for enhanced solution speed".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_time_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_time_context(&s_time).await?,
+            },
+        ]);
+        
+        Ok(ridiculous_solutions)
+    }
+    
+    /// Generate ridiculous S_entropy solutions  
+    async fn generate_ridiculous_entropy_solutions(
+        &self,
+        s_entropy: SEntropy,
+        impossibility_factor: f64
+    ) -> Result<Vec<RidiculousEntropySolution>, RidiculousError> {
+        let mut ridiculous_solutions = Vec::new();
+        
+        ridiculous_solutions.extend(vec![
+            RidiculousEntropySolution {
+                id: Uuid::new_v4(),
+                description: "Consciousness extension violates second law of thermodynamics".to_string(),
+                impossibility_level: impossibility_factor * 30.0,
+                accuracy: 0.00001, // 0.001% accuracy - thermodynamically impossible
+                extraction_insight: "Optimize entropy navigation through consciousness field effects".to_string(),
+                application_context: "Navigate entropy landscapes through consciousness extension optimization".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_entropy_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_entropy_context(&s_entropy).await?,
+            },
+            
+            RidiculousEntropySolution {
+                id: Uuid::new_v4(),
+                description: "Consciousness directly manipulates quantum vacuum energy for computation".to_string(),
+                impossibility_level: impossibility_factor * 22.0,
+                accuracy: 0.0002, // 0.02% accuracy
+                extraction_insight: "Harness vacuum fluctuations through consciousness extension mechanisms".to_string(),
+                application_context: "Power consciousness extension through quantum vacuum coupling".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_entropy_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_entropy_context(&s_entropy).await?,
+            },
+            
+            RidiculousEntropySolution {
+                id: Uuid::new_v4(),
+                description: "Entropy endpoints spontaneously rearrange for consciousness optimization".to_string(),
+                impossibility_level: impossibility_factor * 16.0,
+                accuracy: 0.003, // 0.3% accuracy
+                extraction_insight: "Navigate to dynamically optimizing entropy endpoints".to_string(),
+                application_context: "Access entropy endpoints that adapt to consciousness extension needs".to_string(),
+                fictional_explanation: self.fictional_s_creator.create_fictional_entropy_explanation().await?,
+                contextual_appropriateness: self.contextual_validator.assess_entropy_context(&s_entropy).await?,
+            },
+        ]);
+        
+        Ok(ridiculous_solutions)
+    }
+    
+    /// Combine ridiculous solutions into comprehensive matrix
+    async fn combine_ridiculous_solutions(
+        &self,
+        knowledge_solutions: Vec<RidiculousKnowledgeSolution>,
+        time_solutions: Vec<RidiculousTimeSolution>,
+        entropy_solutions: Vec<RidiculousEntropySolution>,
+        impossibility_factor: f64
+    ) -> Result<Vec<CombinedRidiculousSolution>, RidiculousError> {
+        let mut combined_solutions = Vec::new();
+        
+        // Create all possible combinations of tri-dimensional ridiculous solutions
+        for knowledge_solution in &knowledge_solutions {
+            for time_solution in &time_solutions {
+                for entropy_solution in &entropy_solutions {
+                    let combined = CombinedRidiculousSolution {
+                        id: Uuid::new_v4(),
                         s_knowledge_component: knowledge_solution.clone(),
                         s_time_component: time_solution.clone(),
                         s_entropy_component: entropy_solution.clone(),
-                        impossibility_level: impossibility_factor,
-                        contextual_appropriateness: self.assess_contextual_appropriateness(
-                            &knowledge_solution, 
-                            &time_solution, 
-                            &entropy_solution
+                        total_impossibility_level: knowledge_solution.impossibility_level + 
+                                                  time_solution.impossibility_level + 
+                                                  entropy_solution.impossibility_level,
+                        combined_accuracy: knowledge_solution.accuracy * 
+                                         time_solution.accuracy * 
+                                         entropy_solution.accuracy, // Extremely low combined accuracy
+                        global_viability_potential: self.assess_global_viability_potential(
+                            knowledge_solution,
+                            time_solution,
+                            entropy_solution
                         ).await?,
-                        global_viability_contribution: self.assess_global_viability_contribution(
-                            &knowledge_solution, 
-                            &time_solution, 
-                            &entropy_solution
+                        contextual_coherence: self.assess_contextual_coherence(
+                            knowledge_solution,
+                            time_solution,
+                            entropy_solution
                         ).await?,
-                        generation_timestamp: generation_start,
                     };
                     
-                    // Only keep ridiculous solutions that are globally viable
-                    if self.global_viability_checker.is_globally_viable(&combined_ridiculous).await? {
-                        ridiculous_solutions.push(combined_ridiculous);
-                    }
+                    combined_solutions.push(combined);
                 }
             }
         }
         
-        Ok(RidiculousSolutionSet {
-            solutions: ridiculous_solutions,
-            total_impossibility_factor: impossibility_factor,
-            global_viability_maintained: true,
-            consciousness_integration_potential: self.assess_consciousness_integration_potential().await?,
-            generation_time: generation_start.elapsed(),
-        })
+        Ok(combined_solutions)
     }
     
-    /// Generate ridiculous S_knowledge solutions (completely impossible but contextually appropriate)
-    async fn generate_ridiculous_knowledge_solutions(
-        &self, 
-        s_knowledge: SKnowledge, 
-        impossibility_factor: f64
-    ) -> Result<Vec<RidiculousKnowledgeSolution>> {
-        
-        Ok(vec![
-            RidiculousKnowledgeSolution {
-                description: "User consciousness directly accesses universal knowledge database without learning".to_string(),
-                impossibility_level: impossibility_factor * 10.0,
-                extraction_insight: "Optimize knowledge gap bridging through consciousness extension".to_string(),
-                application_context: "Pre-populate knowledge deficits through extended consciousness".to_string(),
-                fictional_accuracy: 0.001, // 0.1% accuracy - practically fiction
-                contextual_appropriateness: 0.95, // But highly appropriate contextually
-            },
-            RidiculousKnowledgeSolution {
-                description: "Applications communicate knowledge telepathically without data transfer".to_string(),
-                impossibility_level: impossibility_factor * 8.0,
-                extraction_insight: "Optimize inter-component knowledge synchronization efficiency".to_string(),
-                application_context: "Enhance component knowledge coordination protocols".to_string(),
-                fictional_accuracy: 0.002,
-                contextual_appropriateness: 0.93,
-            },
-            RidiculousKnowledgeSolution {
-                description: "Missing information spontaneously manifests from quantum vacuum fluctuations".to_string(),
-                impossibility_level: impossibility_factor * 15.0,
-                extraction_insight: "Generate missing knowledge through creative synthesis".to_string(),
-                application_context: "Fill knowledge gaps through intelligent extrapolation".to_string(),
-                fictional_accuracy: 0.0005,
-                contextual_appropriateness: 0.97,
-            },
-            RidiculousKnowledgeSolution {
-                description: "User's neurons retroactively learn from future experiences".to_string(),
-                impossibility_level: impossibility_factor * 12.0,
-                extraction_insight: "Implement predictive knowledge acquisition patterns".to_string(),
-                application_context: "Pre-configure neural pathways for anticipated knowledge needs".to_string(),
-                fictional_accuracy: 0.0001,
-                contextual_appropriateness: 0.89,
-            },
-            RidiculousKnowledgeSolution {
-                description: "Information crystallizes directly from user's thoughts into application memory".to_string(),
-                impossibility_level: impossibility_factor * 20.0,
-                extraction_insight: "Direct thought-to-data transfer optimization".to_string(),
-                application_context: "Streamline thought-based information input mechanisms".to_string(),
-                fictional_accuracy: 0.00001,
-                contextual_appropriateness: 0.92,
-            },
-        ])
-    }
-    
-    /// Generate ridiculous S_time solutions 
-    async fn generate_ridiculous_time_solutions(
-        &self, 
-        s_time: STime, 
-        impossibility_factor: f64
-    ) -> Result<Vec<RidiculousTimeSolution>> {
-        
-        Ok(vec![
-            RidiculousTimeSolution {
-                description: "Time flows backwards to pre-complete all temporal processing".to_string(),
-                impossibility_level: impossibility_factor * 25.0,
-                extraction_insight: "Reverse temporal flow optimization for preprocessing".to_string(),
-                application_context: "Pre-buffer temporal processing through reverse-time calculation".to_string(),
-                fictional_accuracy: 0.0001,
-                contextual_appropriateness: 0.88,
-            },
-            RidiculousTimeSolution {
-                description: "Consciousness exists in parallel temporal dimensions simultaneously".to_string(),
-                impossibility_level: impossibility_factor * 18.0,
-                extraction_insight: "Multi-dimensional temporal consciousness coordination".to_string(),
-                application_context: "Process temporal requirements across parallel time streams".to_string(),
-                fictional_accuracy: 0.0003,
-                contextual_appropriateness: 0.91,
-            },
-            RidiculousTimeSolution {
-                description: "User experiences infinite temporal precision through quantum time dilation".to_string(),
-                impossibility_level: impossibility_factor * 30.0,
-                extraction_insight: "Quantum temporal precision enhancement".to_string(),
-                application_context: "Leverage quantum effects for ultra-precise timing".to_string(),
-                fictional_accuracy: 0.0002,
-                contextual_appropriateness: 0.94,
-            },
-            RidiculousTimeSolution {
-                description: "Temporal delay becomes negative through consciousness acceleration".to_string(),
-                impossibility_level: impossibility_factor * 22.0,
-                extraction_insight: "Consciousness-accelerated temporal processing".to_string(),
-                application_context: "Use consciousness acceleration to reduce processing delays".to_string(),
-                fictional_accuracy: 0.0001,
-                contextual_appropriateness: 0.87,
-            },
-        ])
-    }
-    
-    /// Generate ridiculous S_entropy solutions
-    async fn generate_ridiculous_entropy_solutions(
-        &self, 
-        s_entropy: SEntropy, 
-        impossibility_factor: f64
-    ) -> Result<Vec<RidiculousEntropySolution>> {
-        
-        Ok(vec![
-            RidiculousEntropySolution {
-                description: "Entropy flows in reverse to create order from chaos spontaneously".to_string(),
-                impossibility_level: impossibility_factor * 40.0,
-                extraction_insight: "Reverse entropy navigation for optimal endpoint access".to_string(),
-                application_context: "Use entropy reversal patterns for more efficient navigation".to_string(),
-                fictional_accuracy: 0.000001,
-                contextual_appropriateness: 0.85,
-            },
-            RidiculousEntropySolution {
-                description: "Oscillation endpoints exist before oscillations begin".to_string(),
-                impossibility_level: impossibility_factor * 35.0,
-                extraction_insight: "Pre-existing endpoint navigation optimization".to_string(),
-                application_context: "Access predetermined endpoints without oscillation processing".to_string(),
-                fictional_accuracy: 0.000005,
-                contextual_appropriateness: 0.93,
-            },
-            RidiculousEntropySolution {
-                description: "Atomic processors violate thermodynamics to create free energy".to_string(),
-                impossibility_level: impossibility_factor * 50.0,
-                extraction_insight: "Thermodynamic optimization through apparent violation".to_string(),
-                application_context: "Ultra-efficient atomic processing through creative thermodynamics".to_string(),
-                fictional_accuracy: 0.0000001,
-                contextual_appropriateness: 0.78,
-            },
-            RidiculousEntropySolution {
-                description: "Entropy navigation distance becomes imaginary number with real results".to_string(),
-                impossibility_level: impossibility_factor * 28.0,
-                extraction_insight: "Complex entropy navigation for enhanced precision".to_string(),
-                application_context: "Use complex number entropy distances for advanced navigation".to_string(),
-                fictional_accuracy: 0.000002,
-                contextual_appropriateness: 0.89,
-            },
-        ])
-    }
-    
-    async fn assess_contextual_appropriateness(
+    /// Filter for globally viable ridiculous solutions
+    async fn filter_globally_viable_ridiculous_solutions(
         &self,
-        knowledge: &RidiculousKnowledgeSolution,
-        time: &RidiculousTimeSolution,
-        entropy: &RidiculousEntropySolution
-    ) -> Result<f64> {
-        // Calculate combined contextual appropriateness
-        let combined_appropriateness = (
-            knowledge.contextual_appropriateness + 
-            time.contextual_appropriateness + 
-            entropy.contextual_appropriateness
-        ) / 3.0;
+        combined_solutions: Vec<CombinedRidiculousSolution>
+    ) -> Result<Vec<CombinedRidiculousSolution>, RidiculousError> {
+        let mut globally_viable = Vec::new();
         
-        Ok(combined_appropriateness.clamp(0.0, 1.0))
-    }
-    
-    async fn assess_global_viability_contribution(
-        &self,
-        knowledge: &RidiculousKnowledgeSolution,
-        time: &RidiculousTimeSolution,
-        entropy: &RidiculousEntropySolution
-    ) -> Result<f64> {
-        // Even impossible solutions can contribute to global viability
-        // if they're contextually appropriate
-        let contextual_sum = 
-            knowledge.contextual_appropriateness + 
-            time.contextual_appropriateness + 
-            entropy.contextual_appropriateness;
-            
-        let viability_contribution = contextual_sum / 3.0;
-        Ok(viability_contribution.clamp(0.0, 1.0))
-    }
-    
-    async fn assess_consciousness_integration_potential(&self) -> Result<f64> {
-        // High potential since ridiculous solutions bypass observer limitations
-        Ok(0.92)
-    }
-}
-
-/// Enhanced viability checker that handles ridiculous solutions
-pub struct GlobalViabilityChecker {
-    reality_complexity_analyzer: RealityComplexityAnalyzer,
-    impossibility_absorption_calculator: ImpossibilityAbsorptionCalculator,
-    contextual_coherence_validator: ContextualCoherenceValidator,
-    consciousness_integration_assessor: ConsciousnessIntegrationAssessor,
-}
-
-impl GlobalViabilityChecker {
-    pub fn new() -> Self {
-        Self {
-            reality_complexity_analyzer: RealityComplexityAnalyzer::new(),
-            impossibility_absorption_calculator: ImpossibilityAbsorptionCalculator::new(),
-            contextual_coherence_validator: ContextualCoherenceValidator::new(),
-            consciousness_integration_assessor: ConsciousnessIntegrationAssessor::new(),
+        for solution in combined_solutions {
+            // Key insight: Even 0.001% accuracy can be globally viable
+            if self.global_viability_checker.is_globally_viable(&solution).await? {
+                globally_viable.push(solution);
+            }
         }
+        
+        Ok(globally_viable)
     }
     
-    pub async fn is_globally_viable(&self, ridiculous_solution: &RidiculousSolution) -> Result<bool> {
-        // Analyze reality complexity in the problem domain
-        let reality_complexity = self.reality_complexity_analyzer.analyze_complexity(
-            ridiculous_solution.problem_domain()
-        ).await?;
-        
-        // Calculate total impossibility level across all S dimensions
-        let total_impossibility = 
-            ridiculous_solution.s_knowledge_component.impossibility_level +
-            ridiculous_solution.s_time_component.impossibility_level +
-            ridiculous_solution.s_entropy_component.impossibility_level;
-        
-        // Check if reality complexity can absorb the impossibility
-        let can_absorb_impossibility = self.impossibility_absorption_calculator.can_absorb(
-            reality_complexity,
-            total_impossibility
-        ).await?;
-        
-        // Validate contextual coherence (most important for ridiculous solutions)
-        let contextual_coherence = self.contextual_coherence_validator.validate_coherence(
-            ridiculous_solution
-        ).await?;
-        
-        // Assess consciousness integration potential
-        let consciousness_integration = self.consciousness_integration_assessor.assess_integration(
-            ridiculous_solution
-        ).await?;
-        
-        let is_viable = can_absorb_impossibility && 
-                       contextual_coherence.is_coherent() && 
-                       consciousness_integration.is_integrable();
-        
-        Ok(is_viable)
-    }
-    
-    pub async fn calculate_global_s_with_ridiculous_solutions(
+    /// Validate consciousness integration potential
+    async fn validate_consciousness_integration(
         &self,
-        normal_s_components: Vec<SConstant>,
-        ridiculous_solutions: Vec<RidiculousSolution>
-    ) -> Result<GlobalSCalculationResult> {
+        viable_solutions: Vec<CombinedRidiculousSolution>,
+        problem_context: Problem
+    ) -> Result<RidiculousSolutionSet, RidiculousError> {
+        let mut consciousness_integrable = Vec::new();
         
-        // Calculate baseline global S from normal components
-        let baseline_global_s = self.calculate_baseline_global_s(normal_s_components).await?;
+        for solution in viable_solutions {
+            let integration_assessment = self.consciousness_integration_validator.assess_integration_potential(
+                &solution,
+                &problem_context
+            ).await?;
+            
+            if integration_assessment.is_integrable {
+                consciousness_integrable.push(solution);
+            }
+        }
         
-        // Calculate ridiculous solution contributions
-        let ridiculous_contributions = self.calculate_ridiculous_contributions(ridiculous_solutions).await?;
+        Ok(RidiculousSolutionSet {
+            solutions: consciousness_integrable,
+            total_impossibility_factor: 1000.0, // High impossibility maintained
+            global_viability_maintained: true,
+            consciousness_integration_potential: true,
+            generation_timestamp: Instant::now(),
+        })
+    }
+    
+    /// Assess global viability potential for solution combination
+    async fn assess_global_viability_potential(
+        &self,
+        knowledge: &RidiculousKnowledgeSolution,
+        time: &RidiculousTimeSolution,
+        entropy: &RidiculousEntropySolution
+    ) -> Result<f64, RidiculousError> {
+        // Even extremely impossible solutions can have global viability
+        let contextual_appropriateness = (knowledge.contextual_appropriateness + 
+                                        time.contextual_appropriateness + 
+                                        entropy.contextual_appropriateness) / 3.0;
         
-        // Combine with reality complexity buffering
-        let reality_buffered_global_s = self.apply_reality_complexity_buffering(
-            baseline_global_s,
-            ridiculous_contributions
+        // Global viability based on contextual appropriateness, not accuracy
+        Ok(contextual_appropriateness)
+    }
+    
+    /// Assess contextual coherence of solution combination
+    async fn assess_contextual_coherence(
+        &self,
+        knowledge: &RidiculousKnowledgeSolution,
+        time: &RidiculousTimeSolution,
+        entropy: &RidiculousEntropySolution
+    ) -> Result<f64, RidiculousError> {
+        // Coherence based on consistency of fictional explanations
+        let narrative_coherence = self.assess_narrative_coherence(
+            &knowledge.fictional_explanation,
+            &time.fictional_explanation,
+            &entropy.fictional_explanation
         ).await?;
         
-        Ok(GlobalSCalculationResult {
-            final_global_s: reality_buffered_global_s,
-            ridiculous_solution_contribution: ridiculous_contributions.total_contribution,
-            reality_complexity_buffer: reality_buffered_global_s.complexity_buffer,
-            global_viability: reality_buffered_global_s.is_viable(),
-        })
+        Ok(narrative_coherence)
     }
     
-    async fn calculate_baseline_global_s(&self, _components: Vec<SConstant>) -> Result<BaselineGlobalS> {
-        Ok(BaselineGlobalS {
-            value: 0.8,
-            confidence: 0.9,
-        })
+    /// Assess narrative coherence of fictional explanations
+    async fn assess_narrative_coherence(
+        &self,
+        knowledge_explanation: &str,
+        time_explanation: &str,
+        entropy_explanation: &str
+    ) -> Result<f64, RidiculousError> {
+        // Coherence based on thematic consistency rather than factual accuracy
+        let theme_consistency = if knowledge_explanation.contains("consciousness") &&
+                                 time_explanation.contains("consciousness") &&
+                                 entropy_explanation.contains("consciousness") {
+            0.9 // High thematic consistency
+        } else {
+            0.5 // Moderate consistency
+        };
+        
+        Ok(theme_consistency)
     }
     
-    async fn calculate_ridiculous_contributions(&self, solutions: Vec<RidiculousSolution>) -> Result<RidiculousContributions> {
-        let total_contribution = solutions
-            .iter()
-            .map(|sol| sol.global_viability_contribution)
-            .sum::<f64>();
-            
-        Ok(RidiculousContributions {
-            total_contribution,
-            solution_count: solutions.len(),
-            average_impossibility: solutions.iter().map(|s| s.impossibility_level).sum::<f64>() / solutions.len() as f64,
-        })
-    }
-    
-    async fn apply_reality_complexity_buffering(
-        &self, 
-        baseline: BaselineGlobalS, 
-        ridiculous: RidiculousContributions
-    ) -> Result<BufferedGlobalS> {
-        Ok(BufferedGlobalS {
-            buffered_value: baseline.value + (ridiculous.total_contribution * 0.1),
-            complexity_buffer: ridiculous.average_impossibility * 0.001, // Reality absorbs impossibility
-            viability: true,
-        })
+    /// Get performance metrics
+    pub fn get_ridiculous_metrics(&self) -> &RidiculousMetrics {
+        &self.ridiculous_metrics
     }
 }
 
-// Data structures for ridiculous solutions
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RidiculousSolution {
-    pub s_knowledge_component: RidiculousKnowledgeSolution,
-    pub s_time_component: RidiculousTimeSolution,
-    pub s_entropy_component: RidiculousEntropySolution,
-    pub impossibility_level: f64,
-    pub contextual_appropriateness: f64,
-    pub global_viability_contribution: f64,
-    pub generation_timestamp: Instant,
-}
-
-impl RidiculousSolution {
-    pub fn problem_domain(&self) -> String {
-        "tri_dimensional_s_alignment".to_string()
-    }
-}
+/// Ridiculous solution data structures
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RidiculousKnowledgeSolution {
+    pub id: Uuid,
     pub description: String,
     pub impossibility_level: f64,
+    pub accuracy: f64, // Can be 0.001% (extremely low)
     pub extraction_insight: String,
     pub application_context: String,
-    pub fictional_accuracy: f64,
+    pub fictional_explanation: String,
     pub contextual_appropriateness: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RidiculousTimeSolution {
+    pub id: Uuid,
     pub description: String,
     pub impossibility_level: f64,
+    pub accuracy: f64,
     pub extraction_insight: String,
     pub application_context: String,
-    pub fictional_accuracy: f64,
+    pub fictional_explanation: String,
     pub contextual_appropriateness: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RidiculousEntropySolution {
+    pub id: Uuid,
     pub description: String,
     pub impossibility_level: f64,
+    pub accuracy: f64,
     pub extraction_insight: String,
     pub application_context: String,
-    pub fictional_accuracy: f64,
+    pub fictional_explanation: String,
     pub contextual_appropriateness: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CombinedRidiculousSolution {
+    pub id: Uuid,
+    pub s_knowledge_component: RidiculousKnowledgeSolution,
+    pub s_time_component: RidiculousTimeSolution,
+    pub s_entropy_component: RidiculousEntropySolution,
+    pub total_impossibility_level: f64,
+    pub combined_accuracy: f64, // Product of individual accuracies (extremely low)
+    pub global_viability_potential: f64,
+    pub contextual_coherence: f64,
+}
+
+#[derive(Debug, Clone)]
 pub struct RidiculousSolutionSet {
-    pub solutions: Vec<RidiculousSolution>,
+    pub solutions: Vec<CombinedRidiculousSolution>,
     pub total_impossibility_factor: f64,
     pub global_viability_maintained: bool,
-    pub consciousness_integration_potential: f64,
-    pub generation_time: std::time::Duration,
+    pub consciousness_integration_potential: bool,
+    pub generation_timestamp: Instant,
 }
 
-#[derive(Debug, Clone)]
-pub struct SConstant {
-    pub value: f64,
-    pub accuracy: f64,
-    pub viability: f64,
-}
+/// Supporting components
 
-#[derive(Debug, Clone)]
-pub struct GlobalSCalculationResult {
-    pub final_global_s: BufferedGlobalS,
-    pub ridiculous_solution_contribution: f64,
-    pub reality_complexity_buffer: f64,
-    pub global_viability: bool,
-}
-
-#[derive(Debug, Clone)]
-pub struct BaselineGlobalS {
-    pub value: f64,
-    pub confidence: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct RidiculousContributions {
-    pub total_contribution: f64,
-    pub solution_count: usize,
-    pub average_impossibility: f64,
-}
-
-#[derive(Debug, Clone)]
-pub struct BufferedGlobalS {
-    pub buffered_value: f64,
-    pub complexity_buffer: f64,
-    pub viability: bool,
-}
-
-impl BufferedGlobalS {
-    pub fn is_viable(&self) -> bool {
-        self.viability && self.buffered_value > 0.7
-    }
-}
-
-// Supporting structures and implementations
+/// Impossibility Amplifier
 pub struct ImpossibilityAmplifier;
+
 impl ImpossibilityAmplifier {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 }
 
+/// Fictional S Creator for creative S navigation
 pub struct FictionalSCreator;
+
 impl FictionalSCreator {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
+    
+    pub async fn create_fictional_knowledge_explanation(&self) -> Result<String, RidiculousError> {
+        let explanations = vec![
+            "Quantum consciousness field resonance",
+            "Interdimensional knowledge bridging",
+            "Cosmic information crystallization",
+            "Ethereal wisdom channeling",
+            "Universal database telepathic access",
+        ];
+        Ok(explanations[fastrand::usize(..explanations.len())].to_string())
+    }
+    
+    pub async fn create_fictional_time_explanation(&self) -> Result<String, RidiculousError> {
+        let explanations = vec![
+            "Temporal consciousness folding",
+            "Quantum time loop optimization",
+            "Chronodynamic field manipulation",
+            "Consciousness temporal tunneling",
+            "Time dilation consciousness enhancement",
+        ];
+        Ok(explanations[fastrand::usize(..explanations.len())].to_string())
+    }
+    
+    pub async fn create_fictional_entropy_explanation(&self) -> Result<String, RidiculousError> {
+        let explanations = vec![
+            "Consciousness entropy field coupling",
+            "Quantum vacuum consciousness interface",
+            "Thermodynamic consciousness optimization",
+            "Entropy gradient consciousness navigation",
+            "Vacuum energy consciousness harvesting",
+        ];
+        Ok(explanations[fastrand::usize(..explanations.len())].to_string())
+    }
 }
 
-pub struct ContextualValidator;
-impl ContextualValidator {
-    pub fn new() -> Self { Self }
+/// Contextual Appropriateness Validator (not accuracy validator)
+pub struct ContextualAppropriateness;
+
+impl ContextualAppropriateness {
+    pub fn new() -> Self {
+        Self
+    }
+    
+    pub async fn assess_knowledge_context(&self, _s_knowledge: &SKnowledge) -> Result<f64, RidiculousError> {
+        // Assess appropriateness of usage context, not factual accuracy
+        Ok(0.8) // High appropriateness for consciousness extension context
+    }
+    
+    pub async fn assess_time_context(&self, _s_time: &STime) -> Result<f64, RidiculousError> {
+        Ok(0.7) // Good appropriateness for temporal consciousness context
+    }
+    
+    pub async fn assess_entropy_context(&self, _s_entropy: &SEntropy) -> Result<f64, RidiculousError> {
+        Ok(0.9) // Very appropriate for entropy navigation context
+    }
 }
 
+/// Global Viability Checker for impossible solutions
+pub struct GlobalViabilityChecker;
+
+impl GlobalViabilityChecker {
+    pub fn new() -> Self {
+        Self
+    }
+    
+    /// Check if ridiculous solution is globally viable (key: not accuracy)
+    pub async fn is_globally_viable(&self, solution: &CombinedRidiculousSolution) -> Result<bool, RidiculousError> {
+        // Revolutionary insight: 0.001% accuracy can be globally viable
+        // if contextual appropriateness and global coherence are maintained
+        
+        let viability_criteria = solution.global_viability_potential > 0.5 &&
+                               solution.contextual_coherence > 0.4 &&
+                               solution.total_impossibility_level < 100.0; // Even very impossible can be viable
+        
+        Ok(viability_criteria)
+    }
+}
+
+/// Consciousness Integration Validator
 pub struct ConsciousnessIntegrationValidator;
+
 impl ConsciousnessIntegrationValidator {
-    pub fn new() -> Self { Self }
-}
-
-pub struct RealityComplexityAnalyzer;
-impl RealityComplexityAnalyzer {
-    pub fn new() -> Self { Self }
-    pub async fn analyze_complexity(&self, _domain: String) -> Result<RealityComplexity> {
-        Ok(RealityComplexity {
-            simultaneous_processes: 10_u64.pow(23), // Avogadro's number scale
-            absorption_capacity: 10_u64.pow(15),    // Very high impossibility absorption
+    pub fn new() -> Self {
+        Self
+    }
+    
+    pub async fn assess_integration_potential(
+        &self,
+        solution: &CombinedRidiculousSolution,
+        _problem_context: &Problem
+    ) -> Result<IntegrationAssessment, RidiculousError> {
+        let is_integrable = solution.contextual_coherence > 0.3 &&
+                          solution.global_viability_potential > 0.4;
+        
+        Ok(IntegrationAssessment {
+            is_integrable,
+            integration_quality: solution.contextual_coherence,
+            consciousness_extension_potential: solution.global_viability_potential,
         })
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct RealityComplexity {
-    pub simultaneous_processes: u64,
-    pub absorption_capacity: u64,
-}
-
-pub struct ImpossibilityAbsorptionCalculator;
-impl ImpossibilityAbsorptionCalculator {
-    pub fn new() -> Self { Self }
-    pub async fn can_absorb(&self, complexity: RealityComplexity, impossibility: f64) -> Result<bool> {
-        // Reality's massive complexity can absorb significant impossibility
-        let absorption_ratio = complexity.absorption_capacity as f64 / impossibility;
-        Ok(absorption_ratio > 1000.0) // Can absorb if ratio > 1000
-    }
-}
-
-pub struct ContextualCoherenceValidator;
-impl ContextualCoherenceValidator {
-    pub fn new() -> Self { Self }
-    pub async fn validate_coherence(&self, solution: &RidiculousSolution) -> Result<CoherenceResult> {
-        Ok(CoherenceResult {
-            coherent: solution.contextual_appropriateness > 0.8,
-            coherence_score: solution.contextual_appropriateness,
-        })
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct CoherenceResult {
-    pub coherent: bool,
-    pub coherence_score: f64,
-}
-
-impl CoherenceResult {
-    pub fn is_coherent(&self) -> bool {
-        self.coherent
-    }
-}
-
-pub struct ConsciousnessIntegrationAssessor;
-impl ConsciousnessIntegrationAssessor {
-    pub fn new() -> Self { Self }
-    pub async fn assess_integration(&self, solution: &RidiculousSolution) -> Result<IntegrationResult> {
-        Ok(IntegrationResult {
-            integrable: solution.global_viability_contribution > 0.7,
-            integration_quality: solution.global_viability_contribution,
-        })
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct IntegrationResult {
-    pub integrable: bool,
+pub struct IntegrationAssessment {
+    pub is_integrable: bool,
     pub integration_quality: f64,
+    pub consciousness_extension_potential: f64,
 }
 
-impl IntegrationResult {
-    pub fn is_integrable(&self) -> bool {
-        self.integrable
+/// Performance metrics for ridiculous solution generation
+#[derive(Debug, Default)]
+pub struct RidiculousMetrics {
+    pub generation_cycles: u32,
+    pub total_solutions_generated: u64,
+    pub globally_viable_solutions: u64,
+    pub average_impossibility_level: f64,
+    pub average_generation_time: Duration,
+    pub viability_rate: f64,
+}
+
+impl RidiculousMetrics {
+    pub fn new() -> Self {
+        Self::default()
     }
+    
+    pub fn record_generation_cycle(&mut self, generation_time: Duration, solutions_count: usize) {
+        self.generation_cycles += 1;
+        self.total_solutions_generated += solutions_count as u64;
+        self.globally_viable_solutions += solutions_count as u64; // All filtered solutions are viable
+        
+        self.average_generation_time = if self.generation_cycles == 1 {
+            generation_time
+        } else {
+            Duration::from_millis(
+                (self.average_generation_time.as_millis() as u64 + generation_time.as_millis() as u64) / 2
+            )
+        };
+        
+        self.viability_rate = self.globally_viable_solutions as f64 / self.total_solutions_generated as f64;
+    }
+}
+
+/// Errors for ridiculous solution operations
+#[derive(Debug, thiserror::Error)]
+pub enum RidiculousError {
+    #[error("Fictional explanation generation failed: {0}")]
+    FictionalExplanationFailed(String),
+    #[error("Global viability assessment failed: {0}")]
+    GlobalViabilityAssessmentFailed(String),
+    #[error("Consciousness integration validation failed: {0}")]
+    ConsciousnessIntegrationFailed(String),
+    #[error("Impossibility amplification failed: {0}")]
+    ImpossibilityAmplificationFailed(String),
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::entropy_solver_service::{Vector3D, AtomicProcessorState};
+    use crate::tri_dimensional_s::*;
     
     #[tokio::test]
     async fn test_ridiculous_solution_generation() {
-        let generator = RidiculousSolutionGenerator::new();
+        let mut engine = RidiculousSolutionEngine::new();
         
-        let test_tri_s = TriDimensionalS {
+        let tri_s = TriDimensionalS {
             s_knowledge: SKnowledge {
                 information_deficit: 0.5,
-                knowledge_gap_vector: Vector3D { x: 1.0, y: 0.5, z: 0.3 },
+                knowledge_gap_vector: Vector3D::new(0.5, 0.0, 0.0),
                 application_contributions: HashMap::new(),
-                deficit_urgency: 0.8,
+                deficit_urgency: 1.0,
             },
             s_time: STime {
-                temporal_delay_to_completion: 0.2,
-                processing_time_remaining: std::time::Duration::from_millis(200),
-                consciousness_synchronization_lag: 0.05,
-                temporal_precision_requirement: 1e-9,
+                temporal_delay_to_completion: 0.3,
+                processing_time_remaining: Duration::from_millis(100),
+                consciousness_synchronization_lag: 0.1,
+                temporal_precision_requirement: 0.8,
             },
             s_entropy: SEntropy {
-                entropy_navigation_distance: 0.7,
-                oscillation_endpoint_coordinates: vec![0.1, 0.3, 0.5],
-                atomic_processor_state: AtomicProcessorState {
-                    oscillation_frequency: 1e12,
-                    quantum_state_count: 1000,
-                    processing_capacity: 1000000,
-                },
-                entropy_convergence_probability: 0.8,
+                entropy_navigation_distance: 0.4,
+                oscillation_endpoint_coordinates: vec![0.1, 0.2, 0.3],
+                atomic_processor_state: AtomicProcessorState::Individual,
+                entropy_convergence_probability: 0.7,
             },
-            global_viability: 0.9,
+            global_viability: 0.6,
         };
         
-        let ridiculous_solutions = generator.generate_impossible_solutions(
-            test_tri_s,
-            1000.0 // High impossibility factor
-        ).await;
+        let problem = Problem {
+            description: "Test consciousness extension".to_string(),
+            complexity: 0.8,
+            domain: crate::global_s_viability::ProblemDomain::Consciousness,
+        };
         
-        assert!(ridiculous_solutions.is_ok());
-        let solution_set = ridiculous_solutions.unwrap();
-        assert!(solution_set.solutions.len() > 0);
+        let result = engine.generate_impossible_solutions(tri_s, 1000.0, problem).await;
+        assert!(result.is_ok());
+        
+        let solution_set = result.unwrap();
+        assert!(!solution_set.solutions.is_empty());
         assert!(solution_set.global_viability_maintained);
-        assert_eq!(solution_set.total_impossibility_factor, 1000.0);
+        assert!(solution_set.consciousness_integration_potential);
         
-        // Verify that solutions are appropriately ridiculous
+        // Verify ridiculous solutions have very low accuracy but high contextual appropriateness
         for solution in &solution_set.solutions {
-            assert!(solution.impossibility_level > 100.0); // Highly impossible
-            assert!(solution.contextual_appropriateness > 0.7); // But contextually appropriate
-            assert!(solution.global_viability_contribution > 0.0); // Contributes to global viability
+            assert!(solution.combined_accuracy < 0.01); // Very low accuracy
+            assert!(solution.global_viability_potential > 0.0); // But globally viable
         }
+    }
+    
+    #[tokio::test]
+    async fn test_fictional_s_creator() {
+        let creator = FictionalSCreator::new();
+        
+        let knowledge_explanation = creator.create_fictional_knowledge_explanation().await.unwrap();
+        assert!(!knowledge_explanation.is_empty());
+        
+        let time_explanation = creator.create_fictional_time_explanation().await.unwrap();
+        assert!(!time_explanation.is_empty());
+        
+        let entropy_explanation = creator.create_fictional_entropy_explanation().await.unwrap();
+        assert!(!entropy_explanation.is_empty());
     }
     
     #[tokio::test]
     async fn test_global_viability_checker() {
         let checker = GlobalViabilityChecker::new();
         
-        let test_ridiculous_solution = RidiculousSolution {
+        let solution = CombinedRidiculousSolution {
+            id: Uuid::new_v4(),
             s_knowledge_component: RidiculousKnowledgeSolution {
-                description: "Test impossible knowledge solution".to_string(),
-                impossibility_level: 1000.0,
+                id: Uuid::new_v4(),
+                description: "Test".to_string(),
+                impossibility_level: 10.0,
+                accuracy: 0.001, // 0.1% accuracy
                 extraction_insight: "Test insight".to_string(),
                 application_context: "Test context".to_string(),
-                fictional_accuracy: 0.001,
-                contextual_appropriateness: 0.95,
+                fictional_explanation: "Test explanation".to_string(),
+                contextual_appropriateness: 0.8, // High appropriateness
             },
             s_time_component: RidiculousTimeSolution {
-                description: "Test impossible time solution".to_string(),
-                impossibility_level: 800.0,
+                id: Uuid::new_v4(),
+                description: "Test time".to_string(),
+                impossibility_level: 15.0,
+                accuracy: 0.002,
                 extraction_insight: "Test time insight".to_string(),
                 application_context: "Test time context".to_string(),
-                fictional_accuracy: 0.002,
-                contextual_appropriateness: 0.92,
+                fictional_explanation: "Test time explanation".to_string(),
+                contextual_appropriateness: 0.7,
             },
             s_entropy_component: RidiculousEntropySolution {
-                description: "Test impossible entropy solution".to_string(),
-                impossibility_level: 1200.0,
+                id: Uuid::new_v4(),
+                description: "Test entropy".to_string(),
+                impossibility_level: 20.0,
+                accuracy: 0.0005,
                 extraction_insight: "Test entropy insight".to_string(),
                 application_context: "Test entropy context".to_string(),
-                fictional_accuracy: 0.0005,
-                contextual_appropriateness: 0.88,
+                fictional_explanation: "Test entropy explanation".to_string(),
+                contextual_appropriateness: 0.9,
             },
-            impossibility_level: 1000.0,
-            contextual_appropriateness: 0.92,
-            global_viability_contribution: 0.85,
-            generation_timestamp: Instant::now(),
+            total_impossibility_level: 45.0,
+            combined_accuracy: 0.000001, // Extremely low combined accuracy
+            global_viability_potential: 0.8, // But high viability
+            contextual_coherence: 0.8,
         };
         
-        let viability_result = checker.is_globally_viable(&test_ridiculous_solution).await;
-        assert!(viability_result.is_ok());
-        
-        // High contextual appropriateness should lead to global viability
-        // even with extreme impossibility levels
-        let is_viable = viability_result.unwrap();
-        assert!(is_viable); // Should be viable due to high contextual appropriateness
-    }
-    
-    #[tokio::test]
-    async fn test_fictional_accuracy_vs_contextual_appropriateness() {
-        let generator = RidiculousSolutionGenerator::new();
-        
-        // Test the "cryptocurrency principle" - low accuracy but high appropriateness
-        let knowledge_solutions = generator.generate_ridiculous_knowledge_solutions(
-            SKnowledge {
-                information_deficit: 0.3,
-                knowledge_gap_vector: Vector3D { x: 0.5, y: 0.3, z: 0.1 },
-                application_contributions: HashMap::new(),
-                deficit_urgency: 0.6,
-            },
-            1000.0
-        ).await.unwrap();
-        
-        for solution in knowledge_solutions {
-            // Verify the key principle: very low accuracy, high appropriateness
-            assert!(solution.fictional_accuracy < 0.01); // Less than 1% accuracy
-            assert!(solution.contextual_appropriateness > 0.8); // But highly appropriate
-            
-            // Extraction insights should be practical despite impossible descriptions
-            assert!(!solution.extraction_insight.is_empty());
-            assert!(!solution.application_context.is_empty());
-        }
+        let is_viable = checker.is_globally_viable(&solution).await.unwrap();
+        assert!(is_viable); // Should be viable despite extremely low accuracy
     }
 } 

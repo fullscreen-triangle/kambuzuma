@@ -44,6 +44,8 @@ pub mod anti_algorithm_engine;
 pub mod monkey_tail_integration;
 
 // S-Entropy Framework Modules - Revolutionary Tri-Dimensional S Navigation
+pub mod global_s_viability;
+pub mod tri_dimensional_s;
 pub mod entropy_solver_service;
 pub mod ridiculous_solution_engine;
 pub mod infinite_zero_duality;
